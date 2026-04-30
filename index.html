@@ -239,6 +239,40 @@ footer{
     body{background:#fff;color:#000}
     .card,.section,.region-header,.term-card{border-color:#ccc;background:#fff;color:#000}
 }
+
+/* ============================================================
+   AO-STYLE TOPOGRAPHY — two-panel layout + animated zoom
+   ============================================================ */
+.ao-topo-wrap{display:grid;grid-template-columns:1fr 345px;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:590px;box-shadow:var(--shadow)}
+@media(max-width:960px){.ao-topo-wrap{grid-template-columns:1fr}}
+.ao-figure-panel{position:relative;background:linear-gradient(145deg,#060c17,#0e1726);display:flex;align-items:center;justify-content:center;padding:28px 20px;min-height:570px}
+.ao-svg-wrap{width:100%;max-width:285px}
+#aoBodySvg{width:100%;display:block;user-select:none;cursor:crosshair}
+.ao-lm-set{transition:opacity .45s ease}
+#ao-hotspots{transition:opacity .3s ease}
+.ao-toolbar{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:8px;z-index:5}
+.ao-tool-btn{width:36px;height:36px;border-radius:10px;background:rgba(22,33,58,.92);border:1px solid var(--border);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background .15s,color .15s;line-height:1;padding:0}
+.ao-tool-btn:hover{background:var(--panel-2);color:#fff}
+.ao-region-badge{position:absolute;top:14px;right:14px;background:rgba(93,193,255,.15);border:1px solid rgba(93,193,255,.35);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.3px;opacity:0;transition:opacity .3s;pointer-events:none}
+.ao-region-badge.show{opacity:1}
+.ao-hint-bar{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(14,23,38,.9);border:1px solid var(--border);border-radius:999px;padding:5px 16px;font-size:11.5px;color:var(--muted);white-space:nowrap;pointer-events:none;transition:opacity .3s}
+.ao-info-panel{border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--panel)}
+.ao-info-header{padding:20px 22px 16px;border-bottom:1px solid var(--border);background:var(--panel-2)}
+.ao-info-tag{font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
+.ao-region-title-el{font-size:22px;font-weight:700;color:#fff;margin:0;line-height:1.2}
+.ao-info-body{flex:1;overflow-y:auto;padding:16px}
+.ao-sec-row{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.ao-sec-bar{width:3px;height:16px;background:var(--accent);border-radius:2px;flex-shrink:0}
+.ao-sec-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted)}
+.ao-desc{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 16px}
+.ao-sub-card{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:7px;cursor:pointer;background:var(--panel-2);transition:border-color .15s,background .15s;text-decoration:none;color:inherit}
+.ao-sub-card:hover{border-color:var(--accent);background:rgba(93,193,255,.07);text-decoration:none}
+.ao-sub-icon{width:26px;height:26px;border-radius:7px;background:rgba(93,193,255,.1);display:flex;align-items:center;justify-content:center;font-size:12px;margin-right:10px;flex-shrink:0;border:1px solid var(--border)}
+.ao-sub-name{font-size:12.5px;font-weight:600;color:#fff;flex:1}
+.ao-sub-arrow{color:var(--muted);font-size:15px;font-weight:700}
+.ao-info-footer{padding:12px 16px;border-top:1px solid var(--border)}
+.ao-full-link{width:100%;padding:12px;background:var(--accent);color:#021;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;transition:transform .1s;display:block;text-align:center;text-decoration:none}
+.ao-full-link:hover{transform:translateY(-1px);text-decoration:none}
 </style>
 </head>
 <body>
@@ -267,6 +301,220 @@ footer{
    DATA — All anatomical content lives in this single object so the
    whole site is contained in one file (no external JSON, no servers).
    ==================================================================== */
+
+/* ====================================================================
+   AO-STYLE BODY MAP — zoom data + SVG label helpers + animation
+   ==================================================================== */
+const ZOOM_DATA = {
+  head:{
+    vb:[130,0,140,125], fs:4.5,
+    desc:"Scalp, calvarial regions, temporal & infratemporal fossae, skull base. Key surgical corridors for cranial procedures.",
+    icon:"💀",
+    landmarks:[
+      {x:200,y:22,label:"Frontal bone",dir:"r",sub:"#/sub/scalp"},
+      {x:242,y:52,label:"Temporal bone",dir:"l",sub:"#/sub/skull-base"},
+      {x:158,y:52,label:"Parietal bone",dir:"r",sub:"#/sub/scalp"},
+      {x:243,y:88,label:"Mastoid process",dir:"l",sub:"#/sub/skull-base"},
+      {x:200,y:104,label:"Mandible",dir:"r",sub:"#/region/head"},
+    ]
+  },
+  neck:{
+    vb:[140,97,120,120], fs:4,
+    desc:"Anterior & posterior cervical triangles, scalene fissure, laryngeal skeleton, fascial layers and contents.",
+    icon:"⚕",
+    landmarks:[
+      {x:200,y:108,label:"Hyoid bone",dir:"r",sub:"#/sub/anterior-triangle"},
+      {x:200,y:119,label:"Thyroid cart.",dir:"l",sub:"#/sub/anterior-triangle"},
+      {x:200,y:130,label:"Cricoid ring",dir:"r",sub:"#/sub/anterior-triangle"},
+      {x:163,y:122,label:"SCM",dir:"r",sub:"#/sub/posterior-triangle"},
+      {x:181,y:140,label:"Clavicle",dir:"r",sub:"#/sub/scalene-fissure"},
+    ]
+  },
+  chest:{
+    vb:[100,128,200,178], fs:6,
+    desc:"Thoracic wall, intercostal spaces, mediastinum, pleural cavities, axilla. Heart auscultation surface zones.",
+    icon:"🫁",
+    landmarks:[
+      {x:200,y:147,label:"Manubrium",dir:"r",sub:"#/sub/thoracic-wall"},
+      {x:200,y:167,label:"Sternal angle",dir:"l",sub:"#/sub/mediastinum"},
+      {x:200,y:200,label:"Body of sternum",dir:"r",sub:"#/sub/thoracic-wall"},
+      {x:200,y:233,label:"Xiphoid process",dir:"l",sub:"#/sub/thoracic-wall"},
+      {x:148,y:190,label:"Axilla",dir:"r",sub:"#/sub/axilla"},
+    ]
+  },
+  abdomen:{
+    vb:[110,238,180,168], fs:5.5,
+    desc:"Abdominal wall layers, peritoneal cavity, four quadrants, retroperitoneum. Key surface projection points.",
+    icon:"🫃",
+    landmarks:[
+      {x:200,y:262,label:"Transpyloric (L1)",dir:"l",sub:"#/sub/projection-points"},
+      {x:200,y:305,label:"Umbilicus (L3-4)",dir:"r",sub:"#/sub/abdominal-wall"},
+      {x:252,y:308,label:"Murphy's point",dir:"l",sub:"#/sub/abdomen-ruq"},
+      {x:155,y:334,label:"McBurney's pt.",dir:"r",sub:"#/sub/abdomen-rlq"},
+      {x:200,y:380,label:"Pubic crest",dir:"r",sub:"#/sub/inguinal"},
+    ]
+  },
+  pelvis:{
+    vb:[110,362,180,138], fs:5.5,
+    desc:"Male & female pelvis, pelvic floor, perineum, ischioanal fossae. ASIS and inguinal landmarks.",
+    icon:"🦴",
+    landmarks:[
+      {x:154,y:382,label:"ASIS",dir:"r",sub:"#/sub/inguinal"},
+      {x:246,y:382,label:"ASIS",dir:"l",sub:"#/sub/inguinal"},
+      {x:200,y:418,label:"Inguinal lig.",dir:"l",sub:"#/sub/inguinal"},
+      {x:200,y:453,label:"Pubic symphysis",dir:"r",sub:"#/sub/pelvic-floor"},
+      {x:172,y:472,label:"Femoral triangle",dir:"r",sub:"#/sub/anterior-thigh"},
+    ]
+  },
+  "upper-limb":{
+    vb:[58,128,132,232], fs:4.5,
+    desc:"Axilla, brachial plexus, deltoid region, cubital fossa, carpal tunnel — arm, forearm and hand regions.",
+    icon:"💪",
+    landmarks:[
+      {x:130,y:142,label:"Clavicle",dir:"r",sub:"#/sub/axilla-2"},
+      {x:115,y:158,label:"Acromion",dir:"r",sub:"#/sub/axilla-2"},
+      {x:102,y:205,label:"Deltoid region",dir:"r",sub:"#/sub/upper-limb-regions"},
+      {x:87,y:270,label:"Cubital fossa",dir:"r",sub:"#/sub/upper-limb-regions"},
+      {x:80,y:345,label:"Wrist/carpal",dir:"r",sub:"#/sub/upper-limb-regions"},
+    ]
+  },
+  "lower-limb":{
+    vb:[130,456,158,264], fs:5,
+    desc:"Gluteal region, greater trochanter, femoral triangle, adductor canal, popliteal fossa, leg compartments.",
+    icon:"🦵",
+    landmarks:[
+      {x:160,y:480,label:"Greater trochanter",dir:"r",sub:"#/sub/gluteal"},
+      {x:175,y:515,label:"Femoral triangle",dir:"r",sub:"#/sub/anterior-thigh"},
+      {x:174,y:580,label:"Femur shaft",dir:"r",sub:"#/sub/anterior-thigh"},
+      {x:174,y:617,label:"Patella",dir:"r",sub:"#/sub/anterior-thigh"},
+      {x:162,y:640,label:"Head of fibula",dir:"r",sub:"#/sub/anterior-thigh"},
+      {x:170,y:700,label:"Medial malleolus",dir:"r",sub:"#/sub/anterior-thigh"},
+    ]
+  },
+  back:{
+    vb:[140,128,120,345], fs:4,
+    desc:"Vertebral canal, epidural space, spinal cord segments. Landmarks for lumbar puncture and epidural anaesthesia.",
+    icon:"🦴",
+    landmarks:[
+      {x:200,y:162,label:"C7 vert. prom.",dir:"r",sub:"#/sub/vertebral-canal"},
+      {x:200,y:200,label:"T4/5 sternal ∠",dir:"l",sub:"#/sub/vertebral-canal"},
+      {x:200,y:265,label:"L1 (conus)",dir:"r",sub:"#/sub/vertebral-canal"},
+      {x:200,y:356,label:"L4 (iliac crest)",dir:"l",sub:"#/sub/lumbar-puncture"},
+      {x:200,y:415,label:"Sacrum",dir:"r",sub:"#/sub/lumbar-puncture"},
+    ]
+  },
+};
+
+// Generate SVG markup for one region's landmark group
+function makeLmGroup(regionId, zd){
+    const {vb, fs, landmarks} = zd;
+    const pillH = fs + 3.5;
+    const lineLen = fs * 2.8;
+    const charW = fs * 0.58;
+    const items = landmarks.map(lm => {
+        const isL = lm.dir === "l";
+        const dir = isL ? -1 : 1;
+        const lx2 = lm.x + dir * lineLen;
+        const pillW = Math.max(charW * lm.label.length + 7, 18);
+        const rx = isL ? lx2 - pillW : lx2;
+        const ry = lm.y - pillH / 2;
+        const tx = rx + 2.5;
+        const ty = lm.y + fs * 0.36;
+        return `<g onclick="location.hash='${lm.sub}';event.stopPropagation()" style="cursor:pointer">
+          <circle cx="${lm.x.toFixed(1)}" cy="${lm.y.toFixed(1)}" r="${(fs*0.52).toFixed(1)}" style="fill:var(--accent)"/>
+          <line x1="${lm.x.toFixed(1)}" y1="${lm.y.toFixed(1)}" x2="${lx2.toFixed(1)}" y2="${lm.y.toFixed(1)}" style="stroke:var(--accent);stroke-width:${(fs*0.18).toFixed(2)};opacity:.65"/>
+          <rect x="${rx.toFixed(1)}" y="${ry.toFixed(1)}" width="${pillW.toFixed(1)}" height="${pillH.toFixed(1)}" rx="${(pillH*0.45).toFixed(1)}" style="fill:#101c33;stroke:#27375a;stroke-width:${(fs*0.11).toFixed(2)}"/>
+          <text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" font-size="${fs}" font-weight="600" style="fill:#e8eefc" font-family="Inter,-apple-system,sans-serif">${lm.label}</text>
+        </g>`;
+    }).join("\n");
+    return `<g id="ao-lm-${regionId.replace(/\//g,"-")}" class="ao-lm-set" style="opacity:0;pointer-events:none">${items}</g>`;
+}
+
+/* Body map animation state + helpers */
+const bm = { cur:[0,0,400,720], tgt:[0,0,400,720], raf:null, active:null };
+
+function _bmTick(){
+    const spd = 0.13, svg = document.getElementById("aoBodySvg");
+    let moving = false;
+    for(let i=0;i<4;i++){
+        const d = bm.tgt[i]-bm.cur[i];
+        if(Math.abs(d)>0.08){bm.cur[i]+=d*spd;moving=true;}
+        else bm.cur[i]=bm.tgt[i];
+    }
+    if(svg) svg.setAttribute("viewBox",bm.cur.map(n=>n.toFixed(2)).join(" "));
+    bm.raf = moving ? requestAnimationFrame(_bmTick) : null;
+}
+
+function bmSelectRegion(id){
+    if(bm.raf) cancelAnimationFrame(bm.raf);
+    const zd = ZOOM_DATA[id]; if(!zd) return;
+    bm.tgt=[...zd.vb]; bm.active=id;
+    const hs=document.getElementById("ao-hotspots");
+    if(hs){hs.style.opacity="0";hs.style.pointerEvents="none";}
+    document.querySelectorAll(".ao-lm-set").forEach(g=>{g.style.opacity="0";g.style.pointerEvents="none";});
+    setTimeout(()=>{
+        const g=document.getElementById("ao-lm-"+id.replace(/\//g,"-"));
+        if(g){g.style.opacity="1";g.style.pointerEvents="";}
+    },460);
+    const badge=document.getElementById("ao-region-badge");
+    const reg=REGIONS.find(r=>r.id===id);
+    if(badge&&reg){badge.textContent=reg.name;badge.classList.add("show");}
+    const hint=document.getElementById("ao-hint");
+    if(hint) hint.textContent="Click a label to view anatomical detail";
+    bmUpdatePanel(id);
+    bm.raf=requestAnimationFrame(_bmTick);
+}
+
+function bmReset(){
+    if(bm.raf) cancelAnimationFrame(bm.raf);
+    bm.tgt=[0,0,400,720]; bm.active=null;
+    const hs=document.getElementById("ao-hotspots");
+    if(hs){hs.style.opacity="1";hs.style.pointerEvents="";}
+    document.querySelectorAll(".ao-lm-set").forEach(g=>{g.style.opacity="0";g.style.pointerEvents="none";});
+    const badge=document.getElementById("ao-region-badge");
+    if(badge) badge.classList.remove("show");
+    const hint=document.getElementById("ao-hint");
+    if(hint) hint.textContent="Select a region to explore anatomy";
+    bmUpdatePanel(null);
+    bm.raf=requestAnimationFrame(_bmTick);
+}
+
+function bmUpdatePanel(id){
+    const titleEl=document.getElementById("ao-region-title");
+    const descEl=document.getElementById("ao-region-desc");
+    const subsEl=document.getElementById("ao-region-subs");
+    const subsLbl=document.getElementById("ao-subs-label");
+    const footerLink=document.getElementById("ao-full-link");
+    if(!titleEl) return;
+    if(!id){
+        titleEl.textContent="Overview";
+        if(descEl) descEl.textContent="Select a region to drill into subregion anatomy — click any '+' on the figure or choose below.";
+        if(subsLbl) subsLbl.textContent="All Regions";
+        if(footerLink) footerLink.style.display="none";
+        if(subsEl) subsEl.innerHTML=REGIONS.map(r=>{
+            const zd=ZOOM_DATA[r.id];
+            return `<div class="ao-sub-card" onclick="bmSelectRegion('${r.id}')">
+              <div class="ao-sub-icon">${zd?zd.icon:"+"}</div>
+              <span class="ao-sub-name">${r.name}</span>
+              <span class="ao-sub-arrow">›</span>
+            </div>`;
+        }).join("");
+    } else {
+        const zd=ZOOM_DATA[id];
+        const reg=REGIONS.find(r=>r.id===id);
+        if(!zd||!reg) return;
+        titleEl.textContent=reg.name;
+        if(descEl) descEl.textContent=zd.desc;
+        if(subsLbl) subsLbl.textContent="Subregions";
+        if(footerLink){footerLink.href="#/region/"+id;footerLink.textContent="Open Full Region →";footerLink.style.display="block";}
+        if(subsEl&&reg.sub) subsEl.innerHTML=reg.sub.map(s=>`
+            <div class="ao-sub-card" onclick="location.hash='#/sub/${s.id}'">
+              <div class="ao-sub-icon">📋</div>
+              <span class="ao-sub-name">${s.name}</span>
+              <span class="ao-sub-arrow">›</span>
+            </div>`).join("");
+    }
+}
 
 const TERMS = [
   // ---- HEAD & FACE ----
@@ -340,6 +588,253 @@ const TERMS = [
   {name:"Vertebral canal", category:"Back / Spine", borders:"Formed by successive vertebral foramina; extends from foramen magnum to sacral hiatus.", definition:"Contains spinal cord, meninges, spinal roots, epidural fat, and venous plexus. For clinical use: divided into central zone (between medial margins of facet joints) and lateral zones (subarticular / lateral recess, foraminal, extraforaminal)."},
   {name:"Epidural space", category:"Back / Spine", borders:"Between spinal dura mater and the wall of the vertebral canal.", definition:"Contains epidural fat and the internal vertebral venous plexus (Batson's plexus). Site of epidural anesthesia. Entered in the midline posteriorly where it is deepest."},
   {name:"Lumbar cistern", category:"Back / Spine", borders:"Subarachnoid space below conus medullaris (typically L1–L2 in adults), down to S2.", definition:"Contains CSF, cauda equina, filum terminale. Target for lumbar puncture. Needle path: skin → subcutaneous tissue → supraspinous ligament → interspinous ligament → ligamentum flavum → epidural space → dura mater → arachnoid → subarachnoid space."},
+
+  // ---- MORE TOPOGRAPHIES ----
+  {name:"Femoral triangle", category:"Lower Limb", borders:"Superior (base): inguinal ligament. Lateral: medial border of sartorius. Medial: medial border of adductor longus. Floor (lat→med): iliacus, psoas, pectineus, adductor longus. Roof: skin, fascia lata, cribriform fascia.", definition:"Contents (lateral → medial, mnemonic NAVEL): femoral <b>N</b>erve (outside femoral sheath), femoral <b>A</b>rtery, femoral <b>V</b>ein, <b>E</b>mpty space (femoral canal → Cloquet's node), <b>L</b>ymphatics."},
+  {name:"Adductor (Hunter's) canal", category:"Lower Limb", borders:"Anterior: sartorius covered by the vastoadductor membrane. Lateral: vastus medialis. Posteromedial: adductor longus + adductor magnus.", definition:"Continuation of the iliopectineal fossa (apex of femoral triangle). Contains: femoral a., femoral v., saphenous n., n. to vastus medialis. The femoral vessels exit the canal through the adductor hiatus to become the popliteal vessels."},
+  {name:"Cubital fossa", category:"Upper Limb", borders:"Medial: pronator teres. Lateral: brachioradialis. Superior: intercondylar line between medial & lateral humeral epicondyles. Roof: bicipital aponeurosis & skin. Floor: brachialis & supinator.", definition:"Contents (lateral → medial): radial nerve; biceps tendon; brachial artery (bifurcates into radial & ulnar here); median nerve."},
+  {name:"Carpal tunnel", category:"Upper Limb", borders:"Roof: flexor retinaculum (transverse carpal ligament). Floor & walls: carpal bones (concave on their palmar aspect).", definition:"Contains: median nerve + 9 long flexor tendons (4 FDS, 4 FDP, FPL). Carpal tunnel syndrome = compression of the median nerve at the wrist."},
+  {name:"Spermatic cord", category:"Abdomen / Male", borders:"Extends from deep inguinal ring to posterior surface of testis. Coverings (superficial → deep): external spermatic fascia (external oblique), cremaster muscle & fascia (internal oblique), internal spermatic fascia (transversalis fascia).", definition:"Contents (3 arteries, 3 veins, 3 nerves, 3 structures): testicular a., a. to ductus deferens, cremasteric a.; pampiniform plexus, cremasteric v., v. of ductus deferens; genital br. of genitofemoral n., sympathetic fibers, ilioinguinal n. (on the cord); ductus deferens, lymphatics, processus vaginalis remnant."},
+  {name:"Pudendal (Alcock's) canal", category:"Pelvis", borders:"Located in the lateral wall of the ischioanal fossa within the fascia of the obturator internus.", definition:"Contains the pudendal nerve and internal pudendal vessels. The nerve branches here into inferior rectal, perineal, and dorsal nerve of penis/clitoris."},
+  {name:"Pelvic diaphragm", category:"Pelvis", borders:"Forms the inferior boundary of the true pelvis. Components: levator ani (iliococcygeus, pubococcygeus, puborectalis) + coccygeus.", definition:"Innervation: pudendal nerve and anterior rami S2–S4. Supports pelvic contents; maintains anorectal angle (puborectalis sling); elevates pelvic floor and anus."},
+  {name:"Koch's triangle", category:"Heart / Clinical", borders:"Anteroinferior: septal leaflet of tricuspid valve. Posterior: tendon of Todaro. Inferior: opening of coronary sinus.", definition:"Triangle on the interatrial septum (right atrial side). Contains the AV node. Critical surgical landmark during tricuspid valve repair."},
+  {name:"Iliopectineal fossa", category:"Lower Limb", borders:"Depression at the apex of the femoral triangle where iliopsoas and pectineus muscles meet.", definition:"Continues distally as the adductor (subsartorial / Hunter's) canal. The femoral nerve and vessels occupy this fossa."},
+
+  // ---- FORAMINA & OPENINGS ----
+  {name:"Cribriform plate (foramina)", category:"Foramen", borders:"Floor of the anterior cranial fossa (ethmoid bone).", definition:"Transmits: olfactory nerve (CN I) fila olfactoria. Multiple minute foramina through which the 20 olfactory fila pass from the nasal roof into the cranial cavity."},
+  {name:"Optic canal", category:"Foramen", borders:"Located in the lesser wing of the sphenoid bone.", definition:"Transmits: optic nerve (CN II) and ophthalmic artery."},
+  {name:"Superior orbital fissure (SOF)", category:"Foramen", borders:"Between the greater and lesser wings of the sphenoid, communicates between the middle cranial fossa and orbit.", definition:"Transmits: CN III (oculomotor), CN IV (trochlear), CN VI (abducens), V1 branches (lacrimal, frontal, nasociliary), superior ophthalmic vein, sympathetic fibers from cavernous plexus."},
+  {name:"Inferior orbital fissure (IOF)", category:"Foramen", borders:"Between the floor and lateral wall of the orbit, communicating with the pterygopalatine and infratemporal fossae.", definition:"Transmits: CN V2 (maxillary nerve), zygomatic nerve, infraorbital vessels, inferior ophthalmic vein."},
+  {name:"Foramen rotundum", category:"Foramen", borders:"Passes through the greater wing of the sphenoid, connecting the middle cranial fossa to the pterygopalatine fossa.", definition:"Transmits: maxillary nerve (CN V2) and accessory meningeal artery."},
+  {name:"Foramen ovale", category:"Foramen", borders:"Passes through the greater wing of the sphenoid, connecting the middle cranial fossa to the infratemporal fossa.", definition:"Transmits: mandibular nerve (CN V3), lesser petrosal nerve, accessory meningeal branch of maxillary artery, emissary vein."},
+  {name:"Foramen spinosum", category:"Foramen", borders:"In the greater wing of the sphenoid, posterolateral to foramen ovale.", definition:"Transmits: middle meningeal artery and vein; meningeal branch of mandibular nerve (nervus spinosus). The groove of the middle meningeal artery is visible on the inner table of the skull."},
+  {name:"Foramen lacerum", category:"Foramen", borders:"Irregular gap at the junction of the sphenoid, temporal, and occipital bones. In life, mostly occluded by fibrocartilage.", definition:"The internal carotid artery passes over (not through) it; the nerve and artery of pterygoid canal pass through the cartilage. Emissary veins also traverse it."},
+  {name:"Carotid canal", category:"Foramen", borders:"Begins on the inferior surface of the petrous temporal bone and opens into the middle cranial fossa.", definition:"Transmits: internal carotid artery and the carotid (sympathetic) plexus."},
+  {name:"Pterygoid canal (Vidian canal)", category:"Foramen", borders:"Runs through the body of the sphenoid from the foramen lacerum to the pterygopalatine fossa.", definition:"Transmits: nerve of pterygoid canal (Vidian nerve = greater petrosal + deep petrosal nerves), artery of pterygoid canal (from maxillary artery)."},
+  {name:"Sphenopalatine foramen", category:"Foramen", borders:"Opening in the medial wall of the pterygopalatine fossa, communicating with the nasal cavity.", definition:"Transmits: sphenopalatine artery (terminal branch of maxillary artery) and nasopalatine, medial & lateral superior posterior nasal nerves (V2 branches). Common source of posterior epistaxis."},
+  {name:"Greater palatine canal", category:"Foramen", borders:"Descends through the palatine bone and maxilla from the pterygopalatine fossa to the hard palate.", definition:"Transmits: greater palatine nerve and descending palatine artery and vein."},
+  {name:"Lesser palatine canal", category:"Foramen", borders:"Passes through the pyramidal process of the palatine bone.", definition:"Transmits: lesser palatine nerve, artery, and vein."},
+  {name:"Palatovaginal (pharyngeal) canal", category:"Foramen", borders:"Between the sphenoid and the palatine bone, opening into the nasopharynx.", definition:"Transmits: pharyngeal nerve (V2 branch) and pharyngeal branch of maxillary artery."},
+  {name:"Incisive foramen", category:"Foramen", borders:"In the anterior part of the hard palate, behind the central incisors.", definition:"Transmits: nasopalatine nerve (terminal branch) and sphenopalatine artery (terminal anastomosis with greater palatine artery)."},
+  {name:"Mandibular foramen", category:"Foramen", borders:"On the medial surface of the ramus of the mandible.", definition:"Transmits: inferior alveolar nerve, artery, and vein. Site of inferior alveolar nerve block in dentistry."},
+  {name:"Mental foramen", category:"Foramen", borders:"On the anterior body of the mandible, usually below the 2nd premolar.", definition:"Transmits: mental nerve and vessels (terminal branches of inferior alveolar nerve and artery)."},
+  {name:"Stylomastoid foramen", category:"Foramen", borders:"Between the styloid and mastoid processes of the temporal bone.", definition:"Transmits: facial nerve (CN VII, main motor trunk) and stylomastoid artery (branch of posterior auricular artery)."},
+  {name:"Internal acoustic meatus (IAM)", category:"Foramen", borders:"In the posterior surface of the petrous temporal bone, opening into the posterior cranial fossa.", definition:"Transmits: facial nerve (CN VII), vestibulocochlear nerve (CN VIII), and labyrinthine artery."},
+  {name:"Jugular foramen", category:"Foramen", borders:"Between the petrous temporal bone and the occipital bone, in the posterior cranial fossa.", definition:"Transmits (anterior → posterior): inferior petrosal sinus; CN IX (glossopharyngeal); CN X (vagus); CN XI (accessory, descending root); internal jugular vein; meningeal branches of ascending pharyngeal and occipital arteries."},
+  {name:"Hypoglossal canal", category:"Foramen", borders:"In the occipital bone, above the margin of the foramen magnum.", definition:"Transmits: hypoglossal nerve (CN XII)."},
+  {name:"Foramen magnum", category:"Foramen", borders:"Large opening in the base of the occipital bone.", definition:"Transmits: lower medulla, meninges, vertebral arteries, spinal accessory nerve (CN XI ascending root), anterior and posterior spinal arteries, dural veins."},
+  {name:"Condylar canal", category:"Foramen", borders:"In the occipital condyle.", definition:"Transmits: occipital emissary vein."},
+  {name:"Mastoid foramen", category:"Foramen", borders:"In the mastoid part of the temporal bone.", definition:"Transmits: mastoid emissary vein, branch of occipital artery, posterior meningeal artery."},
+  {name:"Petrotympanic fissure", category:"Foramen", borders:"Between the petrous and tympanic parts of the temporal bone.", definition:"Transmits: chorda tympani (CN VII branch), anterior tympanic artery and vein, anterior ligament of malleus."},
+  {name:"Pterygomaxillary fissure", category:"Foramen", borders:"Vertical fissure between the lateral pterygoid plate and the posterior surface of the maxilla.", definition:"Connects the infratemporal fossa with the pterygopalatine fossa. Transmits: maxillary artery (3rd part entering pterygopalatine fossa) and pterygoid venous plexus."},
+  {name:"Caval hiatus (T8)", category:"Foramen", borders:"Opening in the central tendon of the diaphragm at T8.", definition:"Transmits: inferior vena cava and right phrenic nerve. The IVC is fused to the tendon — the hiatus does not expand, preventing transmission of abdominal pressure."},
+  {name:"Esophageal hiatus (T10)", category:"Foramen", borders:"Opening in the muscular part of the diaphragm (right crus) at T10.", definition:"Transmits: esophagus, anterior and posterior vagal trunks, esophageal branches of left gastric artery and vein. Site of hiatal hernias."},
+  {name:"Aortic hiatus (T12)", category:"Foramen", borders:"Opening between the two crura of the diaphragm and the vertebral column at T12.", definition:"Transmits: descending aorta, thoracic duct, and azygos vein. Not a true hiatus — formed between diaphragm and spine, so it is not narrowed by diaphragmatic contractions."},
+
+  // ---- ARTERIES ----
+  {name:"Common carotid artery (CCA)", category:"Artery", borders:"Right: from bifurcation of brachiocephalic trunk. Left: directly from arch of aorta. Ascends the neck in the carotid sheath (lateral to trachea/esophagus). Bifurcates at C4 (superior margin of thyroid cartilage) into ECA and ICA.", definition:"The CCA gives NO branches in the neck. The bifurcation is within the carotid triangle. The carotid sinus (baroreceptor) and carotid body (chemoreceptor) are at the bifurcation."},
+  {name:"External carotid artery (ECA)", category:"Artery", borders:"Originates at the bifurcation of CCA at C4. Ascends posterior to the mandibular neck and anterior to the ear lobule. Terminates within the parotid gland by dividing into superficial temporal and maxillary arteries.", definition:"8 branches (mnemonic — Some Anatomists Like Freaking Out Poor Medical Students): <b>S</b>uperior thyroid, <b>A</b>scending pharyngeal, <b>L</b>ingual, <b>F</b>acial, <b>O</b>ccipital, <b>P</b>osterior auricular, <b>M</b>axillary, <b>S</b>uperficial temporal."},
+  {name:"Internal carotid artery (ICA)", category:"Artery", borders:"Originates at bifurcation of CCA at C4. Cervical segment (no branches); enters skull through carotid canal; cavernous segment (within cavernous sinus); supraclinoid segment; divides into ACA and MCA.", definition:"Branches: ophthalmic a., posterior communicating a., anterior choroidal a., anterior cerebral a. (ACA), middle cerebral a. (MCA). Contributes to Circle of Willis."},
+  {name:"Maxillary artery", category:"Artery", borders:"Terminal branch of ECA (with superficial temporal a.). Arises in the parotid, traverses the infratemporal fossa, enters the pterygopalatine fossa via the pterygomaxillary fissure.", definition:"Three parts: 1st (mandibular) — deep auricular, anterior tympanic, middle meningeal, accessory meningeal, inferior alveolar; 2nd (pterygoid) — masseteric, deep temporal, pterygoid, buccal; 3rd (pterygopalatine) — posterior superior alveolar, infraorbital, descending palatine, artery of pterygoid canal, pharyngeal, sphenopalatine (terminal)."},
+  {name:"Middle meningeal artery", category:"Artery", borders:"Branch of 1st part of maxillary artery. Ascends through foramen spinosum into the middle cranial fossa, runs between the two roots of the auriculotemporal nerve.", definition:"Supplies the dura mater. Most common source of epidural hematoma (with pterion fractures). The groove it makes on the inner table of the skull is an important radiological landmark."},
+  {name:"Inferior alveolar artery", category:"Artery", borders:"Branch of 1st part of maxillary a. Follows the inferior alveolar nerve; enters the mandibular canal through the mandibular foramen.", definition:"Branches: mylohyoid branch (before entering foramen); dental and gingival branches within the canal; terminal mental artery (exits mental foramen). Accompanied by the inferior alveolar vein and nerve."},
+  {name:"Sphenopalatine artery", category:"Artery", borders:"Terminal branch of 3rd part of maxillary artery. Passes through the sphenopalatine foramen into the nasal cavity.", definition:"Supplies the nasal mucosa (lateral wall and septum — Kiesselbach's area). The most common source of posterior epistaxis."},
+  {name:"Infraorbital artery", category:"Artery", borders:"Branch of 3rd part of maxillary a. Passes through the inferior orbital fissure → infraorbital groove → infraorbital canal → exits infraorbital foramen.", definition:"Supplies the lower eyelid, cheek, upper lip, maxillary incisor and canine teeth, and maxillary sinus."},
+  {name:"Superior thyroid artery", category:"Artery", borders:"First anterior branch of ECA. Descends to the thyroid gland.", definition:"Supplies thyroid gland (superior pole), larynx (via superior laryngeal branch), and infrahyoid muscles. Accompanies the external laryngeal nerve."},
+  {name:"Lingual artery", category:"Artery", borders:"Second anterior branch of ECA, at the level of the greater horn of the hyoid. Passes deep to hyoglossus (within Pirogov's triangle).", definition:"Supplies tongue and floor of mouth. Ligated in Pirogov's triangle or Béclard's angle for hemorrhage control."},
+  {name:"Facial artery", category:"Artery", borders:"Third anterior branch of ECA. Loops over the body of the mandible (palpable anterior to the masseter), ascends across the face to the medial canthus (terminates as angular artery).", definition:"Branches: ascending palatine, tonsillar, submental, glandular brs., inferior labial, superior labial, lateral nasal, angular arteries."},
+  {name:"Ascending pharyngeal artery", category:"Artery", borders:"Medial branch of ECA. Ascends between the pharynx and ICA.", definition:"Supplies the pharynx, prevertebral muscles, middle ear, and cranial meninges (posterior meningeal artery)."},
+  {name:"Occipital artery", category:"Artery", borders:"Posterior branch of ECA. Passes under the posterior belly of digastric; enters the scalp at the superior nuchal line.", definition:"Supplies the posterior scalp (occipital region), SCM, dura via the mastoid foramen, and the meninges."},
+  {name:"Posterior auricular artery", category:"Artery", borders:"Small posterior branch of ECA, arising above the occipital artery.", definition:"Branches: stylomastoid artery (enters stylomastoid foramen with CN VII); auricular and occipital branches."},
+  {name:"Superficial temporal artery", category:"Artery", borders:"Smaller terminal branch of ECA (with maxillary a.). Ascends anterior to the ear, palpable in the temporal region.", definition:"Branches: transverse facial a., middle temporal a., zygomatico-orbital a., frontal and parietal terminal branches. Biopsy site for giant-cell (temporal) arteritis diagnosis."},
+  {name:"Vertebral artery", category:"Artery", borders:"First branch of the subclavian artery. Ascends through transverse foramina of C6 to C1, then enters the foramen magnum.", definition:"Joins the contralateral vertebral artery to form the basilar artery. Branches: anterior & posterior spinal arteries, posterior inferior cerebellar artery (PICA)."},
+  {name:"Subclavian artery", category:"Artery", borders:"Right: from brachiocephalic trunk. Left: from arch of aorta. Divided into 3 parts by the anterior scalene muscle (medial, behind, lateral).", definition:"Part 1 (medial): vertebral a., internal thoracic a., thyrocervical trunk (inferior thyroid, suprascapular, transverse cervical aa.). Part 2 (behind scalene): costocervical trunk (deep cervical, supreme intercostal aa.). Part 3 (lateral): dorsal scapular a. (variable). Continues as axillary artery at lateral border of 1st rib."},
+  {name:"Internal thoracic (mammary) artery", category:"Artery", borders:"Branch of 1st part of subclavian. Descends behind clavicle and 1st costal cartilage, then 1 cm lateral to the sternum.", definition:"Branches: pericardiacophrenic a. (with phrenic n.); anterior intercostal aa. (upper 6 spaces); sternal, thymic, mediastinal, perforating branches; terminal branches = superior epigastric and musculophrenic aa. Used as the LIMA (left internal mammary artery) in CABG."},
+  {name:"Thoracic aorta", category:"Artery", borders:"Continuation of the aortic arch from T4. Descends in the posterior mediastinum, left of the vertebral column; enters abdomen through the aortic hiatus at T12.", definition:"Visceral branches: bronchial aa., esophageal aa., pericardial and mediastinal brs. Parietal branches: 9 pairs of posterior intercostal aa. (3rd–11th), subcostal aa., superior phrenic aa."},
+  {name:"Posterior intercostal arteries", category:"Artery", borders:"1st & 2nd from supreme intercostal a. (costocervical trunk). 3rd–11th from posterior surface of thoracic aorta.", definition:"Supplies the thoracic wall including back muscles, vertebral column, spinal cord, and overlying skin."},
+  {name:"Anterior intercostal arteries", category:"Artery", borders:"Upper 6 from internal thoracic a.; 7th–9th from musculophrenic a.", definition:"Supplies the anterior thoracic wall, parietal pleura, intercostal muscles, and overlying skin."},
+  {name:"Right coronary artery (RCA)", category:"Artery", borders:"Arises from the right aortic sinus (sinus of Valsalva). Runs in the right atrioventricular groove.", definition:"Branches: SA nodal branch (60%), atrial branches, right marginal branch, ventricular branches, posterior interventricular (descending) artery (in right-dominant systems). Supplies right atrium, right ventricle, AV node (in right-dominant), inferior wall of left ventricle."},
+  {name:"Left coronary artery (LCA)", category:"Artery", borders:"Arises from the left aortic sinus. Short left main coronary then divides.", definition:"Branches: anterior interventricular artery (LAD — diagonal and ventricular branches), circumflex artery (left marginal, AV branches). Supplies most of the left ventricle, left atrium, and anterior interventricular septum."},
+  {name:"Abdominal aorta", category:"Artery", borders:"Continuation of thoracic aorta after the aortic hiatus (T12). Bifurcates into common iliac arteries at L4.", definition:"Parietal branches (paired): inferior phrenic aa., 4 pairs of lumbar aa. (L1–L4), median sacral a. (unpaired). Visceral paired: middle suprarenal, renal, gonadal aa. Visceral unpaired: celiac trunk (T12), superior mesenteric a. (L1), inferior mesenteric a. (L3)."},
+  {name:"Celiac trunk", category:"Artery", borders:"First unpaired visceral branch of abdominal aorta, arising anteriorly at T12.", definition:"3 branches: left gastric a. (lesser curvature), splenic a. (along superior border of pancreas, supplies spleen & pancreas; gives short gastric and left gastroepiploic aa.), common hepatic a. (→ proper hepatic + gastroduodenal a.). Supplies the foregut."},
+  {name:"Common hepatic artery", category:"Artery", borders:"Branch of celiac trunk.", definition:"Branches: proper hepatic a. (→ right & left hepatic aa., cystic a. [usually from right hepatic], right gastric a.); gastroduodenal a. (→ superior pancreaticoduodenal a. and right gastroepiploic a.)."},
+  {name:"Splenic artery", category:"Artery", borders:"Branch of celiac trunk. Tortuous course along the superior border of the body and tail of pancreas.", definition:"Branches: pancreatic branches, short gastric aa., left gastroepiploic a., terminal splenic branches to the hilum of spleen."},
+  {name:"Left gastric artery", category:"Artery", borders:"Branch of celiac trunk (smallest). Along the lesser curvature of the stomach; anastomoses with the right gastric artery.", definition:"Esophageal branches form a porto-caval anastomosis with the azygos system (esophageal varices in portal hypertension)."},
+  {name:"Gastroduodenal artery", category:"Artery", borders:"Branch of common hepatic artery. Passes posterior to the first part of duodenum (D1).", definition:"Branches: superior pancreaticoduodenal a. (anastomoses with inferior pancreaticoduodenal from SMA); right gastroepiploic (gastro-omental) a. Erosion by a posterior duodenal ulcer causes massive bleeding."},
+  {name:"Superior mesenteric artery (SMA)", category:"Artery", borders:"Originates anteriorly from the abdominal aorta at L1 (just below celiac trunk). Crosses anterior to the horizontal part of the duodenum and the uncinate process of the pancreas.", definition:"Supplies the midgut — from the distal duodenum (past the major papilla) to the proximal 2/3 of the transverse colon (Cannon-Böhm point). Branches: inferior pancreaticoduodenal a., jejunal aa., ileal aa. (with arcades and vasa recta), ileocolic a. (with appendicular a.), right colic a., middle colic a."},
+  {name:"Inferior mesenteric artery (IMA)", category:"Artery", borders:"Originates anteriorly from the abdominal aorta at L3, ~3–4 cm above the bifurcation.", definition:"Supplies the hindgut — distal 1/3 of the transverse colon → upper rectum. Branches: left colic a., sigmoid aa., superior rectal a. (terminal). Splenic flexure is a watershed zone between SMA and IMA territories."},
+  {name:"Marginal artery of Drummond", category:"Artery", borders:"An anastomotic channel along the medial border of the colon, connecting branches of the SMA and IMA.", definition:"Collateral pathway between the SMA and IMA territories. Absent or poorly formed in the splenic flexure in ~5% — watershed zone vulnerable in aortic surgery."},
+  {name:"Common iliac artery", category:"Artery", borders:"Originates at the bifurcation of the abdominal aorta at L4. Bifurcates into external and internal iliac at L5/sacral promontory.", definition:"No branches between the aortic bifurcation and its own bifurcation. Right common iliac crosses anterior to the right ureter, then the right common iliac vein, and then the left common iliac vein."},
+  {name:"External iliac artery", category:"Artery", borders:"From bifurcation of common iliac → passes under inguinal ligament → becomes femoral artery.", definition:"Branches in the pelvis: inferior epigastric a. (forms lateral border of Hesselbach's triangle); deep circumflex iliac a. (runs along the iliac crest)."},
+  {name:"Internal iliac artery", category:"Artery", borders:"Bifurcation of the common iliac artery at L5/sacral promontory. Descends into the pelvis.", definition:"Parietal branches: iliolumbar, lateral sacral, obturator, superior gluteal, inferior gluteal aa. Visceral branches: umbilical a. (→ superior vesical aa.), inferior vesical a. (♂)/vaginal a. (♀), middle rectal a., uterine a. (♀), internal pudendal a."},
+  {name:"Internal pudendal artery", category:"Artery", borders:"Branch of the anterior division of the internal iliac a. Exits via greater sciatic foramen (infrapiriform), loops around the ischial spine, then enters via the lesser sciatic foramen into Alcock's canal.", definition:"Branches: inferior rectal a., perineal a., deep and dorsal arteries of the penis/clitoris, artery of the bulb. Supplies the perineum and external genitalia."},
+  {name:"Superior gluteal artery", category:"Artery", borders:"Largest branch of the internal iliac a. (posterior division). Exits through the suprapiriform foramen of the greater sciatic foramen.", definition:"Supplies gluteus medius, gluteus minimus, tensor fasciae latae, and the hip joint."},
+  {name:"Inferior gluteal artery", category:"Artery", borders:"Branch of anterior division of internal iliac. Exits through the infrapiriform foramen.", definition:"Supplies gluteus maximus, piriformis, obturator internus, gemelli, and quadratus femoris."},
+  {name:"Inferior epigastric artery", category:"Artery", borders:"Branch of external iliac a., arising just above the inguinal ligament. Ascends in the lateral umbilical fold, behind rectus abdominis.", definition:"Forms the lateral border of Hesselbach's triangle — differentiates direct (medial) from indirect (lateral) inguinal hernias. Anastomoses with the superior epigastric artery."},
+  {name:"Superior epigastric artery", category:"Artery", borders:"Terminal branch of the internal thoracic a. Enters the rectus sheath posteriorly.", definition:"Anastomoses with the inferior epigastric artery. Contributes to collateral circulation in coarctation of the aorta."},
+  {name:"Ophthalmic artery", category:"Artery", borders:"First branch of the supraclinoid ICA. Passes through the optic canal into the orbit.", definition:"Branches: central retinal a., lacrimal a., supratrochlear a., supraorbital a., dorsal nasal a., anterior & posterior ethmoidal aa., muscular branches. The central retinal artery is an end-artery (no anastomosis) — occlusion causes sudden painless monocular visual loss."},
+  {name:"Femoral artery", category:"Artery", borders:"Continuation of the external iliac a. as it passes under the inguinal ligament. Passes through the femoral triangle → adductor canal → exits via the adductor hiatus to become the popliteal artery.", definition:"Branches in femoral triangle: superficial epigastric, superficial circumflex iliac, superficial external pudendal, deep external pudendal, profunda femoris (deep femoral a.) — which gives medial and lateral circumflex femoral aa. and 3–4 perforating branches."},
+  {name:"Pericardiacophrenic artery", category:"Artery", borders:"Branch of internal thoracic a. Descends with the phrenic nerve between the mediastinal pleura and pericardium.", definition:"Supplies the pericardium, pleura, and diaphragm."},
+  {name:"Musculophrenic artery", category:"Artery", borders:"Terminal branch of internal thoracic a. Runs along the costal margin.", definition:"Branches: 7th–9th anterior intercostal arteries; also supplies the diaphragm."},
+
+  // ---- VEINS ----
+  {name:"Internal jugular vein (IJV)", category:"Vein", borders:"Begins at the jugular foramen (superior bulb, continuation of sigmoid sinus). Descends in the carotid sheath (lateral to CCA). Joins the subclavian vein posterior to the sternal end of the clavicle → brachiocephalic vein.", definition:"Tributaries: inferior petrosal sinus, pharyngeal vv., common facial v. (facial + anterior retromandibular), lingual v., superior thyroid v., middle thyroid v., occipital v. Contains an inferior bulb with a bicuspid valve at its lower end."},
+  {name:"External jugular vein (EJV)", category:"Vein", borders:"Formed behind the angle of the mandible (posterior auricular v. + posterior division of retromandibular v.). Crosses the SCM obliquely in the superficial fascia. Pierces the deep investing fascia at the root of the neck → drains into the subclavian vein.", definition:"Tributaries: posterior external jugular, transverse cervical, suprascapular veins. A useful IV access site; often visible when venous pressure is raised."},
+  {name:"Retromandibular vein", category:"Vein", borders:"Formed within the parotid gland by the maxillary vein + superficial temporal vein.", definition:"Divides into: anterior division (joins facial v. → common facial v. → IJV) and posterior division (joins posterior auricular v. → EJV)."},
+  {name:"Facial vein", category:"Vein", borders:"Begins at the angular vein (medial canthus). Descends across the face. Joins the anterior division of the retromandibular vein → common facial v. → IJV.", definition:"Clinically important — connects with the cavernous sinus via the ophthalmic veins ('danger area' of the face). The facial vein has no valves, allowing retrograde spread of infection."},
+  {name:"Pterygoid venous plexus", category:"Vein", borders:"Located around the lateral pterygoid muscle in the infratemporal fossa.", definition:"Drains the eye (via ophthalmic veins), paranasal sinuses, deep face, and infratemporal fossa. Forms the maxillary vein → retromandibular vein. Communicates with the cavernous sinus via emissary veins through the foramen ovale — a route for retrograde spread of facial infection to cavernous sinus."},
+  {name:"Cavernous sinus", category:"Vein", borders:"Paired dural venous sinus on either side of the sella turcica (middle cranial fossa).", definition:"Contents: CN III, IV, V1, V2 (in lateral wall); CN VI and ICA (within the sinus); sympathetic plexus. Communications: superior & inferior ophthalmic vv.; pterygoid plexus; superior petrosal sinus → transverse sinus; inferior petrosal sinus → IJV; intercavernous sinuses. Thrombosis → multiple cranial nerve palsies."},
+  {name:"Diploic veins", category:"Vein", borders:"Within the diploë (cancellous bone) of the cranial bones.", definition:"Connect intracranially with dural venous sinuses and extracranially with emissary veins and scalp veins. Include frontal, anterior temporal, posterior temporal, and occipital diploic veins."},
+  {name:"Emissary veins", category:"Vein", borders:"Pass through foramina in the skull, connecting extracranial veins with intracranial dural sinuses.", definition:"Valveless (bidirectional). Examples: mastoid emissary (sigmoid sinus → posterior auricular v.); parietal emissary (superior sagittal sinus → superficial temporal v.); foramen ovale emissary (cavernous sinus → pterygoid plexus). Route for spread of infection between intracranial and extracranial compartments."},
+  {name:"Subclavian vein", category:"Vein", borders:"Continuation of the axillary vein at the lateral border of the 1st rib. Passes anterior to the anterior scalene muscle (unlike the artery, which passes posterior to it). Joins IJV behind the sternal end of the clavicle → brachiocephalic vein.", definition:"Important central venous access site. Subclavian venous catheterization risks pneumothorax and arterial puncture."},
+  {name:"Brachiocephalic veins", category:"Vein", borders:"Formed on each side by subclavian + IJV. The right and left brachiocephalic veins unite at the right border of the manubrium to form the SVC.", definition:"The left brachiocephalic vein is longer (~6 cm) and crosses the midline — vulnerable in mediastinal surgery."},
+  {name:"Superior vena cava (SVC)", category:"Vein", borders:"Formed by union of right and left brachiocephalic veins. Descends in the superior mediastinum to open into the right atrium.", definition:"Only major tributary: the azygos vein (arches over the right pulmonary hilum at T4). SVC syndrome (compression) → facial oedema, dilated neck and arm veins."},
+  {name:"Azygos vein", category:"Vein", borders:"Ascends right of vertebral bodies (through aortic hiatus); arches over the right pulmonary hilum at T4 (azygos arch) → drains into SVC.", definition:"Tributaries: 4th–11th right posterior intercostal vv., hemiazygos and accessory hemiazygos vv., bronchial vv., esophageal vv., pericardial vv. Important collateral pathway if SVC or IVC is obstructed."},
+  {name:"Hemiazygos vein", category:"Vein", borders:"Ascends on the left of the vertebral column; crosses behind the aorta at T7–T9 to join the azygos vein.", definition:"Tributaries: lower left posterior intercostal veins; accessory hemiazygos vein (drains middle left intercostal veins). Together drain all left-sided posterior chest wall."},
+  {name:"Inferior vena cava (IVC)", category:"Vein", borders:"Formed at the confluence of common iliac veins at L5. Ascends right of the abdominal aorta. Passes through the caval hiatus (T8) → right atrium.", definition:"Tributaries: common iliac vv., lumbar vv., right gonadal v. (left → left renal v.), renal vv., right suprarenal v. (left → left renal v.), inferior phrenic vv., hepatic vv. The IVC is the largest vein in the body."},
+  {name:"Hepatic portal vein", category:"Vein", borders:"Formed behind the neck of the pancreas by the splenic vein + superior mesenteric vein.", definition:"Carries nutrient-rich blood from the GI tract and spleen to the liver. Within the hepatoduodenal ligament (portal triad). Porto-caval anastomoses (dilate in portal hypertension): esophageal varices, hemorrhoids, caput medusae (paraumbilical)."},
+  {name:"Splenic vein", category:"Vein", borders:"Emerges from the splenic hilum. Runs along the posterior surface of the body of the pancreas. Receives the inferior mesenteric vein, then joins the SMV behind the neck of the pancreas → portal vein.", definition:"The close relationship with the pancreas means splenic vein thrombosis can occur in pancreatitis — causing sinistral (left-sided) portal hypertension."},
+  {name:"Superior mesenteric vein (SMV)", category:"Vein", borders:"Ascends to the right of the SMA in the mesentery. Passes behind the neck of the pancreas to join the splenic vein → portal vein.", definition:"Tributaries mirror those of the SMA: jejunal, ileal, ileocolic, right colic, middle colic veins + right gastroepiploic and inferior pancreaticoduodenal veins."},
+  {name:"Inferior mesenteric vein (IMV)", category:"Vein", borders:"Ascends in the left infracolic compartment. Usually drains into the splenic vein (sometimes SMV or the junction).", definition:"Tributaries: superior rectal v., sigmoid vv., left colic v."},
+  {name:"Porto-caval anastomoses", category:"Vein / Clinical", borders:"Sites where the portal venous system communicates with the systemic venous system.", definition:"1) Esophageal (left gastric v. ↔ esophageal vv. ↔ azygos) → esophageal varices. 2) Rectal (superior rectal v. ↔ middle/inferior rectal vv.) → hemorrhoids. 3) Paraumbilical (paraumbilical vv. ↔ epigastric vv.) → caput medusae. 4) Retroperitoneal (veins of Retzius). All dilate in portal hypertension."},
+  {name:"Pampiniform plexus", category:"Vein", borders:"Network of veins in the spermatic cord, draining the testis.", definition:"Forms the testicular vein: right → IVC; left → left renal vein. Thermoregulation (countercurrent heat exchange with testicular artery). Left varicocele more common — left testicular vein drains at right angle into left renal vein, +/- nutcracker compression by SMA."},
+  {name:"Cardiac veins", category:"Vein / Heart", borders:"Run alongside the coronary arteries.", definition:"Great cardiac v. (anterior interventricular groove → coronary sinus); middle cardiac v. (posterior interventricular groove); small cardiac v. (right AV groove); oblique vein of Marshall (posterior LA); Thebesian (smallest cardiac) vv. (drain directly into cardiac chambers). All drain to the coronary sinus → right atrium."},
+  {name:"Thoraco-epigastric veins", category:"Vein", borders:"In the subcutaneous tissue of the anterolateral thoracic and abdominal walls.", definition:"Drain into the lateral thoracic vein → axillary vein. Important collateral pathway in IVC obstruction."},
+
+  // ---- CRANIAL NERVES (in Term Library) ----
+  {name:"CN I — Olfactory", category:"Nerve — Cranial", borders:"Origin: olfactory receptors in nasal mucosa. Opening: cribriform plate of ethmoid.", definition:"Special visceral afferent (smell). Fila olfactoria → olfactory bulb → olfactory tract → periamygdaloid & piriform cortex. Lesion → anosmia."},
+  {name:"CN II — Optic", category:"Nerve — Cranial", borders:"Origin: retinal ganglion cells. Opening: optic canal.", definition:"Special somatic afferent (vision). Retina → optic chiasm (partial decussation of nasal fibres) → optic tract → LGN → optic radiation → primary visual cortex (area 17)."},
+  {name:"CN III — Oculomotor", category:"Nerve — Cranial", borders:"Origin: anterior midbrain. Opening: superior orbital fissure.", definition:"GSE + GVE (parasympathetic). Supplies SR, IR, MR, IO, LPS (motor); sphincter pupillae & ciliary muscle via ciliary ganglion (parasympathetic). Lesion → dilated pupil, ptosis, 'down & out' eye."},
+  {name:"CN IV — Trochlear", category:"Nerve — Cranial", borders:"Origin: dorsal midbrain (only CN leaving dorsal surface; only CN with full decussation). Opening: superior orbital fissure.", definition:"GSE. Supplies superior oblique (depresses, intorts, abducts). Lesion → vertical diplopia, head tilt away from affected side."},
+  {name:"CN V — Trigeminal", category:"Nerve — Cranial", borders:"Origin: pons. V1 — SOF; V2 — foramen rotundum; V3 — foramen ovale (motor root).", definition:"GSA (facial sensation) + SVE (muscles of mastication). V1: upper face, scalp to vertex, cornea. V2: middle face, maxillary teeth, palate. V3: lower face, mandibular teeth, anterior 2/3 tongue sensation, mastication muscles."},
+  {name:"CN VI — Abducens", category:"Nerve — Cranial", borders:"Origin: lower pons. Opening: superior orbital fissure (passes through Dorello's canal & cavernous sinus).", definition:"GSE. Supplies lateral rectus (abduction). Longest intracranial course — vulnerable in raised ICP. Lesion → medial squint, diplopia on lateral gaze."},
+  {name:"CN VII — Facial", category:"Nerve — Cranial", borders:"Origin: pons. Opens: internal acoustic meatus → facial canal → stylomastoid foramen (motor root).", definition:"SVE (facial expression, stapedius, digastric posterior belly) + GVE (lacrimal, submandibular, sublingual glands via pterygopalatine & submandibular ganglia) + SVA (taste anterior 2/3 tongue via chorda tympani) + GSA (external acoustic meatus). Branches in parotid: temporal, zygomatic, buccal, marginal mandibular, cervical (Two Zebras Bit My Cookie)."},
+  {name:"CN VIII — Vestibulocochlear", category:"Nerve — Cranial", borders:"Origin: cerebellopontine angle. Opening: internal acoustic meatus.", definition:"SSA. Cochlear component: hearing. Vestibular component: balance and head position. Lesion → sensorineural hearing loss, tinnitus, vertigo."},
+  {name:"CN IX — Glossopharyngeal", category:"Nerve — Cranial", borders:"Origin: medulla. Opening: jugular foramen.", definition:"SVE (stylopharyngeus) + GVE (parotid via otic ganglion) + SVA (taste posterior 1/3 tongue) + GSA (oropharynx, middle ear) + GVA (carotid body & sinus). Tympanic branch (Jacobson's) → tympanic plexus → lesser petrosal → otic ganglion → parotid."},
+  {name:"CN X — Vagus", category:"Nerve — Cranial", borders:"Origin: medulla. Opening: jugular foramen.", definition:"SVE (pharynx, larynx, palate) + GVE (parasympathetic thoracic & abdominal viscera to splenic flexure) + SVA (taste epiglottis) + GSA (external acoustic meatus, Arnold's nerve) + GVA (thoracic & abdominal viscera). RLN loops around right subclavian a. (right) and aortic arch (left)."},
+  {name:"CN XI — Accessory", category:"Nerve — Cranial", borders:"Spinal root: upper cervical cord → foramen magnum → jugular foramen. Cranial root: nucleus ambiguus → jugular foramen.", definition:"SVE (spinal root). Supplies SCM and trapezius. Cranial root functionally part of vagus. Lesion → weakness of SCM (turning head) and trapezius (shoulder shrug)."},
+  {name:"CN XII — Hypoglossal", category:"Nerve — Cranial", borders:"Origin: medulla. Opening: hypoglossal canal.", definition:"GSE. Supplies all intrinsic + most extrinsic tongue muscles (not palatoglossus = CN X). LMN lesion → tongue deviates toward the affected side on protrusion."},
+
+  // ---- NERVES — PERIPHERAL ----
+  {name:"Cervical plexus (C1–C4)", category:"Nerve — Peripheral", borders:"Anterior rami of C1–C4. Surface branches emerge at the punctum nervosum (posterior border of SCM, junction of upper and middle thirds).", definition:"Cutaneous: greater auricular, lesser occipital, transverse cervical, supraclavicular nn. Motor: ansa cervicalis (sternohyoid, sternothyroid, omohyoid); phrenic n. (C3–5); direct branches to prevertebral muscles."},
+  {name:"Phrenic nerve (C3–C5)", category:"Nerve — Peripheral", borders:"Originates from cervical plexus (C3, C4, C5). Crosses the anterior surface of the anterior scalene → enters thorax, passing anterior to the subclavian artery → between mediastinal pleura and pericardium → diaphragm.", definition:"Sole motor supply to the diaphragm. Sensory to mediastinal pleura, pericardium, central diaphragm, and inferior diaphragmatic peritoneum. Mnemonic: 'C3, 4, 5 keep the diaphragm alive.'"},
+  {name:"Brachial plexus (C5–T1)", category:"Nerve — Peripheral", borders:"Roots C5–T1 between anterior and middle scalene muscles (within the scalene fissure). Trunks in the posterior triangle. Divisions behind the clavicle. Cords in the axilla around the axillary artery.", definition:"Organisation (mnemonic RTDCB — Real Texans Drink Cold Beer): Roots → Trunks (superior C5+C6, middle C7, inferior C8+T1) → Divisions (6) → Cords (lateral, posterior, medial) → Branches. Terminal branches: musculocutaneous, median, ulnar, axillary, radial nerves."},
+  {name:"Lumbar plexus (L1–L4)", category:"Nerve — Peripheral", borders:"Formed within the psoas major from the ventral rami of L1–L4.", definition:"Mnemonic — I, I Get Lots Of Fun: <b>I</b>liohypogastric (L1), <b>I</b>lioinguinal (L1), <b>G</b>enitofemoral (L1–L2), <b>L</b>ateral femoral cutaneous (L2–L3), <b>O</b>bturator (L2–L4), <b>F</b>emoral (L2–L4). Supplies anterior thigh and medial leg."},
+  {name:"Sacral plexus (L4–S4)", category:"Nerve — Peripheral", borders:"Formed on the anterior surface of the piriformis muscle from the lumbosacral trunk (L4–L5) and sacral ventral rami S1–S4.", definition:"Branches: sciatic n. (L4–S3, largest nerve in body), superior gluteal n. (L4–S1), inferior gluteal n. (L5–S2), pudendal n. (S2–S4), posterior femoral cutaneous n. (S1–S3), nerves to quadratus femoris, obturator internus, piriformis."},
+  {name:"Pudendal nerve (S2–S4)", category:"Nerve — Peripheral", borders:"Exits through the greater sciatic foramen (infrapiriform), loops around the ischial spine, re-enters via the lesser sciatic foramen → pudendal canal (Alcock's).", definition:"Branches: inferior rectal n., perineal n. (deep & superficial branches), dorsal nerve of penis/clitoris. Motor to external urethral & anal sphincters, perineal muscles. Sensory to perineum and external genitalia. Blocked for perineal surgery (pudendal block at the ischial spine)."},
+  {name:"Auriculotemporal nerve", category:"Nerve — Peripheral", borders:"Branch of posterior division of V3. Two roots encircle the middle meningeal artery. Passes between the mandibular condyle and external acoustic meatus.", definition:"Carries postganglionic parasympathetic fibers from the otic ganglion (originally CN IX via lesser petrosal) to the parotid gland. Sensory: anterior auricle, lateral temple, anterior external acoustic meatus, anterior tympanic membrane, TMJ."},
+  {name:"Chorda tympani", category:"Nerve — Peripheral", borders:"Branch of CN VII (facial nerve) within the facial canal. Enters the tympanic cavity, exits via the petrotympanic fissure, joins the lingual nerve in the infratemporal fossa.", definition:"Carries: taste fibers (anterior 2/3 tongue) + preganglionic parasympathetic fibers → submandibular ganglion → submandibular & sublingual glands. Damaged in middle ear surgery, temporomandibular joint surgery, or parotidectomy."},
+  {name:"Lingual nerve", category:"Nerve — Peripheral", borders:"Branch of posterior division of V3. Descends into the floor of the mouth, passes below the submandibular duct (hooks around it).", definition:"Carries general sensation to the anterior 2/3 of tongue, floor of mouth, and lingual gingiva. Joined by chorda tympani (CN VII) which adds taste and parasympathetic fibers to submandibular ganglion."},
+  {name:"Inferior alveolar nerve", category:"Nerve — Peripheral", borders:"Branch of posterior division of V3. Gives off the mylohyoid nerve before entering the mandibular foramen → travels in the mandibular canal → terminates as the mental nerve.", definition:"Sensation to mandibular teeth, gingiva, lower lip, and chin (mental branch). Motor via mylohyoid nerve to mylohyoid and anterior belly of digastric. Blocked at the mandibular foramen for dental anesthesia."},
+  {name:"Recurrent laryngeal nerve (RLN)", category:"Nerve — Peripheral", borders:"Branch of CN X. Right RLN loops around the right subclavian artery. Left RLN loops around the arch of aorta. Both ascend in the tracheoesophageal groove to the larynx.", definition:"Motor: all intrinsic muscles of the larynx except cricothyroid. Sensory: laryngeal mucosa below the vocal folds. Injury (e.g. thyroidectomy) → hoarseness; bilateral injury → airway emergency requiring intubation."},
+  {name:"Greater petrosal nerve", category:"Nerve — Peripheral", borders:"Branch of CN VII from the geniculate ganglion. Exits through the hiatus for the greater petrosal nerve → crosses the middle cranial fossa → enters the pterygoid canal (fuses with deep petrosal n. to form Vidian nerve).", definition:"Carries preganglionic parasympathetic fibers (superior salivatory nucleus) → pterygopalatine ganglion → lacrimal gland, nasal, palatine, and pharyngeal glands. Also carries taste fibers from the soft palate."},
+  {name:"Lesser petrosal nerve", category:"Nerve — Peripheral", borders:"Branch of CN IX (via tympanic plexus). Exits through the hiatus for the lesser petrosal nerve → foramen ovale → otic ganglion.", definition:"Carries preganglionic parasympathetic fibers (inferior salivatory nucleus) → otic ganglion → auriculotemporal nerve → parotid gland."},
+  {name:"Nerve of pterygoid canal (Vidian nerve)", category:"Nerve — Peripheral", borders:"Formed at the foramen lacerum by fusion of greater petrosal (parasympathetic) + deep petrosal (sympathetic). Traverses the pterygoid canal → pterygopalatine fossa.", definition:"Synapse in pterygopalatine ganglion (parasympathetic only — sympathetic fibers pass through). Postganglionic fibers distributed via V2 branches."},
+  {name:"Pelvic splanchnic nerves (S2–S4)", category:"Nerve — Peripheral", borders:"Arise from sacral ventral rami S2–S4 (not from the sympathetic chain). Emerge through pelvic sacral foramina → inferior hypogastric plexus.", definition:"Preganglionic parasympathetic fibers. Supply distal 1/3 transverse colon → rectum (from Cannon-Böhm point); urinary bladder (detrusor contraction); erectile bodies; internal genitalia (except gonads)."},
+  {name:"Thoracic splanchnic nerves", category:"Nerve — Peripheral", borders:"Greater splanchnic (T5–T9), lesser splanchnic (T10–T11), least splanchnic (T12). Pierce the diaphragm and synapse in prevertebral ganglia.", definition:"Preganglionic sympathetic fibers. Synapse in celiac, superior mesenteric, and aorticorenal ganglia. Uniquely, fibers to adrenal medulla pass without synapsing (chromaffin cells are modified neurons)."},
+
+  // ---- GANGLIA & ANS ----
+  {name:"Ciliary ganglion", category:"Ganglion / ANS", borders:"Located in the orbit between the optic nerve and lateral rectus muscle.", definition:"Parasympathetic ganglion. Preganglionic: CN III (Edinger-Westphal nucleus). Postganglionic: short ciliary nerves → sphincter pupillae (pupil constriction) and ciliary muscle (accommodation). Sympathetic and sensory fibers pass through without synapsing."},
+  {name:"Pterygopalatine ganglion", category:"Ganglion / ANS", borders:"Located in the pterygopalatine fossa, attached to V2.", definition:"Largest parasympathetic ganglion. Preganglionic: CN VII (greater petrosal nerve via Vidian nerve). Postganglionic: lacrimal gland (via zygomatic → lacrimal nerves), nasal, palatine, and pharyngeal glands (via V2 branches)."},
+  {name:"Submandibular ganglion", category:"Ganglion / ANS", borders:"Suspended from the lingual nerve above the submandibular gland.", definition:"Parasympathetic ganglion. Preganglionic: CN VII via chorda tympani → lingual nerve. Postganglionic: submandibular and sublingual glands."},
+  {name:"Otic ganglion", category:"Ganglion / ANS", borders:"Located in the infratemporal fossa, just below the foramen ovale, medial to V3.", definition:"Parasympathetic ganglion. Preganglionic: CN IX via lesser petrosal nerve. Postganglionic: auriculotemporal nerve (V3) → parotid gland."},
+  {name:"Sympathetic trunk", category:"Ganglion / ANS", borders:"Paired paravertebral chain extending from the skull base to the coccyx (ganglion impar).", definition:"3 cervical ganglia (superior, middle, inferior — the inferior often fused with T1 as the stellate/cervicothoracic ganglion), 11–12 thoracic, 4–5 lumbar, 4–5 sacral ganglia. Connected to spinal nerves by white (preganglionic) and gray (postganglionic) rami communicantes."},
+  {name:"Celiac plexus (solar plexus)", category:"Ganglion / ANS", borders:"Dense network of sympathetic ganglia and nerves surrounding the celiac trunk, anterior to the abdominal aorta at T12.", definition:"Receives preganglionic sympathetic fibers from greater & lesser splanchnic nerves. Parasympathetic fibers from vagal trunks pass through without synapsing. Supplies the foregut viscera. Celiac plexus block used for pain management in pancreatic cancer."},
+  {name:"Superior mesenteric plexus", category:"Ganglion / ANS", borders:"Around the origin of the superior mesenteric artery.", definition:"Sympathetic (lesser splanchnic nn. + lumbar splanchnics) and parasympathetic (vagus). Supplies midgut organs."},
+  {name:"Inferior mesenteric plexus", category:"Ganglion / ANS", borders:"Around the inferior mesenteric artery.", definition:"Sympathetic (lumbar splanchnics → inferior mesenteric ganglion). Parasympathetic (pelvic splanchnics — ascend retrograde). Supplies hindgut from Cannon-Böhm point distally."},
+  {name:"Superior hypogastric plexus", category:"Ganglion / ANS", borders:"Anterior to the L5 vertebra and sacral promontory ('presacral nerve').", definition:"Mostly sympathetic (from aortic plexus and lumbar splanchnics). Sends hypogastric nerves to the inferior hypogastric plexus. Damaged in anterior L5/S1 disc surgery → ejaculatory failure."},
+  {name:"Inferior hypogastric plexus", category:"Ganglion / ANS", borders:"On the lateral walls of the rectum and other pelvic viscera.", definition:"Contains sympathetic (sacral splanchnics), parasympathetic (pelvic splanchnics), and visceral afferent fibers. Supplies pelvic viscera (bladder, rectum, internal genitalia). Damage → sexual and bladder dysfunction."},
+  {name:"Enteric nervous system", category:"Ganglion / ANS", borders:"Intrinsic nervous system within the wall of the gastrointestinal tract.", definition:"Myenteric plexus (Auerbach's) — between longitudinal and circular muscle layers, controls peristalsis. Submucosal plexus (Meissner's) — within submucosa, controls secretion and local blood flow. Largely autonomous; the 'second brain'."},
+  {name:"Cannon-Böhm point", category:"ANS / Clinical", borders:"Junction of the middle and left thirds of the transverse colon, at the splenic flexure.", definition:"Boundary between vagal (CN X) parasympathetic supply and pelvic splanchnic (S2–S4) supply; marks the midgut–hindgut embryological transition."},
+
+  // ---- LIGAMENTS & PERITONEAL FOLDS ----
+  {name:"Falciform ligament", category:"Ligament", borders:"Double fold of peritoneum connecting the anterior surface of the liver to the anterior abdominal wall and diaphragm.", definition:"Free edge contains the ligamentum teres hepatis (round ligament — remnant of the left umbilical vein). In portal hypertension, the ligamentum teres may recanalize."},
+  {name:"Ligamentum teres hepatis (round ligament of liver)", category:"Ligament", borders:"Free edge of the falciform ligament, from the umbilicus to the porta hepatis.", definition:"Fibrous remnant of the left umbilical vein. Can recanalize in portal hypertension."},
+  {name:"Ligamentum venosum", category:"Ligament", borders:"In the fissure for the ligamentum venosum on the visceral surface of the liver, from the porta hepatis to the IVC.", definition:"Fibrous remnant of the ductus venosus."},
+  {name:"Lesser omentum", category:"Ligament", borders:"Double fold of peritoneum from the lesser curvature of the stomach and first 2 cm of duodenum to the liver.", definition:"Components: hepatogastric ligament (liver → lesser curvature) and hepatoduodenal ligament (liver → duodenum). The hepatoduodenal ligament contains the portal triad: common bile duct (anterior right), proper hepatic artery (anterior left), and portal vein (posterior)."},
+  {name:"Greater omentum", category:"Ligament", borders:"Four layers of visceral peritoneum descending from the greater curvature of the stomach and the transverse colon.", definition:"Apron-like structure; acts as the 'abdominal policeman' (migrates to sites of infection/inflammation). Subdivisions: gastrophrenic ligament (stomach → diaphragm), gastrosplenic ligament (stomach → spleen, contains short gastric & left gastroepiploic vessels), gastrocolic ligament (stomach → transverse colon)."},
+  {name:"Splenorenal (lienorenal) ligament", category:"Ligament", borders:"Connects the spleen and tail of the pancreas to the left kidney.", definition:"Contains the splenic artery and vein, and the tail of the pancreas."},
+  {name:"Round ligament of uterus", category:"Ligament", borders:"From the uterine horn → broad ligament → deep inguinal ring → inguinal canal → labium majus.", definition:"Maintains the uterus in anteversion. Homologue of the gubernaculum testis. Accompanied by the ilioinguinal nerve in the inguinal canal."},
+  {name:"Broad ligament of uterus", category:"Ligament", borders:"Double fold of peritoneum from the lateral margins of the uterus to the lateral pelvic wall.", definition:"Three parts: mesometrium (lower — uterus), mesosalpinx (upper — uterine tubes), mesovarium (posterior — ovary). Contains the round ligament, uterine tube, ovarian ligament, uterine and ovarian vessels, and nerves."},
+  {name:"Cardinal (Mackenrodt's) ligament", category:"Ligament", borders:"The basal part of the broad ligament, from the cervix and isthmus to the lateral pelvic wall.", definition:"Provides the most important support for the uterine cervix. Contains the uterine artery and ureter (the ureter passes beneath the uterine artery — 'water under the bridge')."},
+  {name:"Uterosacral (rectouterine) ligament", category:"Ligament", borders:"From the cervix → sacrum; forms the rectouterine fold of peritoneum.", definition:"Maintains uterine position. Involved in endometriosis-associated pelvic pain. Forms the lateral borders of the Pouch of Douglas."},
+  {name:"Suspensory ligament of ovary (infundibulopelvic ligament)", category:"Ligament", borders:"From the upper pole of the ovary to the pelvic brim/lateral pelvic wall.", definition:"Contains the ovarian artery and vein. Divided in surgical oophorectomy."},
+  {name:"Inguinal ligament (Poupart's)", category:"Ligament", borders:"Reflected lower border of the external oblique aponeurosis, from ASIS to pubic tubercle.", definition:"Forms the floor of the inguinal canal and the upper boundary of the femoral triangle. Differentiates inguinal hernia (above) from femoral hernia (below)."},
+  {name:"Lacunar ligament (Gimbernat's)", category:"Ligament", borders:"Triangular medial reflection of the inguinal ligament onto the pectineal line of the pubis.", definition:"Forms the medial border of the femoral ring. Notoriously sharp medial edge — may need to be incised during reduction of a strangulated femoral hernia."},
+  {name:"Pectineal ligament (Cooper's)", category:"Ligament", borders:"Along the pectineal line of the superior pubic ramus, continuous with the lacunar ligament.", definition:"Strong ligament used as an anchor for repair of hernias (Cooper's ligament repair / McVay repair)."},
+  {name:"Sacrotuberous ligament", category:"Ligament", borders:"From the sacrum, coccyx, and posterior superior iliac spine → ischial tuberosity.", definition:"Converts the greater sciatic notch into the greater sciatic foramen (with the sacrospinous ligament). Resists nutation of the sacrum."},
+  {name:"Sacrospinous ligament", category:"Ligament", borders:"From the sacrum and coccyx → ischial spine.", definition:"Converts the lesser sciatic notch into the lesser sciatic foramen (with the sacrotuberous ligament). Site of the pudendal nerve block (injected near the ischial spine)."},
+  {name:"Coronary ligament (of liver)", category:"Ligament", borders:"Peritoneal reflections from the liver to the diaphragm and right kidney/adrenal. Forms the margins of the bare area of the liver.", definition:"Right and left triangular ligaments are formed at the lateral extremes of the coronary ligament where its leaves fuse."},
+
+  // ---- LYMPHATICS ----
+  {name:"Thoracic duct", category:"Lymphatic", borders:"Begins as the cisterna chyli (~L1–L2 behind the aorta). Ascends through the aortic hiatus → posterior mediastinum between the aorta and azygos vein → crosses left at T5 → arches over the left subclavian artery → drains into the left venous angle.", definition:"Largest lymphatic vessel. Drains everything except the right upper quadrant of the body (right upper limb, right hemithorax, right head & neck). Damage during left-sided neck surgery → chylothorax."},
+  {name:"Right lymphatic duct", category:"Lymphatic", borders:"Short trunk at the root of the neck formed by the right jugular, right subclavian, and right bronchomediastinal trunks. Drains into the right venous angle.", definition:"Drains: right upper limb, right hemithorax, right side of the head and neck."},
+  {name:"Cisterna chyli", category:"Lymphatic", borders:"Dilated sac at the origin of the thoracic duct, at L1–L2, posterior to the abdominal aorta between the two crura of the diaphragm.", definition:"Receives: right and left lumbar trunks (from lower limbs and pelvic organs) and the intestinal trunk (from gut). Starting point of the thoracic duct."},
+  {name:"Axillary lymph nodes", category:"Lymphatic", borders:"Five groups within the axilla, arranged around the axillary vessels.", definition:"Groups (mnemonic APICAL): <b>A</b>pical (level III — medial to pec minor), <b>P</b>ectoral (level I — anterior), <b>I</b>nfraclavicular, <b>C</b>entral (level II), <b>A</b>xillary (humeral / lateral, level I), <b>L</b>ymph nodes (subscapular / posterior, level I). Drain upper limb and breast."},
+  {name:"Virchow's node (sentinel for gastric/abdominal cancer)", category:"Lymphatic / Clinical", borders:"Left supraclavicular lymph node, at the junction of the thoracic duct and the left subclavian vein.", definition:"Enlargement (Troisier's sign) indicates metastatic spread of thoracic or abdominal malignancy (especially gastric cancer). Named after Rudolf Virchow."},
+  {name:"Deep cervical lymph nodes", category:"Lymphatic", borders:"A chain of nodes along the internal jugular vein, from the skull base to the root of the neck.", definition:"Final common pathway for lymph drainage from the head and neck → jugular trunk → venous angle. Subdivided into superior and inferior groups relative to the omohyoid."},
+
+  // ---- SURFACE PROJECTIONS (additional) ----
+  {name:"Transpyloric plane (of Addison)", category:"Projection / Clinical", borders:"Horizontal plane halfway between the jugular notch and the pubic symphysis (~L1). Corresponds to the lower margin of 9th costal cartilages bilaterally.", definition:"Crosses: pylorus, neck of pancreas, SMA origin, formation of portal vein, duodenojejunal junction, fundus of gallbladder, hila of kidneys, 1st lumbar vertebra."},
+  {name:"Heart — auscultation areas", category:"Projection / Clinical", borders:"Aortic valve: 2nd right intercostal space, parasternal. Pulmonary valve: 2nd left intercostal space, parasternal. Tricuspid valve: 4th–5th left, lower sternal border. Mitral valve: 5th left intercostal space at midclavicular line (apex).", definition:"Mnemonic: 'All Physicians Take Money'. Sound radiates toward the great vessel from each valve — so the aortic area is superior right and mitral area is at the apex."},
+  {name:"Sternal angle (angle of Louis)", category:"Projection / Clinical", borders:"Manubriosternal joint at the level of the T4–T5 intervertebral disc.", definition:"Marks: attachment of 2nd costal cartilage (landmark for rib counting); division between superior and inferior mediastinum; level of tracheal bifurcation (carina); aortic arch begins and ends; azygos vein drains into SVC."},
+
+  // ---- CLINICAL LANDMARKS ----
+  {name:"Pterion", category:"Clinical", borders:"H-shaped junction of the frontal, parietal, greater wing of sphenoid, and squamous temporal bones.", definition:"Thinnest part of the skull vault. Underlying middle meningeal artery — fracture here causes rupture → epidural hematoma. Surgical landmark for burr holes."},
+  {name:"Calot's triangle (cystohepatic)", category:"Clinical", borders:"Cystic duct (lateral), common hepatic duct (medial), and inferior surface of the liver (superior).", definition:"Contains the cystic artery (usually from right hepatic a.) and the cystic lymph node of Lund. The 'critical view of safety' during laparoscopic cholecystectomy must be achieved within this triangle before clipping."},
+  {name:"Esophageal constrictions", category:"Clinical", borders:"1. Upper (pharyngoesophageal) — behind cricoid cartilage at C6. 2. Middle (bronchoaortic) — where aortic arch and left main bronchus cross the esophagus. 3. Lower (diaphragmatic) — esophageal hiatus at T10.", definition:"Sites where foreign bodies lodge and strictures form (caustic ingestion, malignancy). Radiologically visible as 3 indentations on barium swallow."},
+  {name:"Pringle maneuver", category:"Clinical", borders:"Manual or clamp compression of the hepatoduodenal ligament at the epiploic foramen of Winslow.", definition:"Temporarily occludes all inflow to the liver (hepatic artery + portal vein) to control hemorrhage during hepatic surgery. Normal liver can tolerate 15–20 minutes warm ischaemia."},
+  {name:"Macewen's triangle", category:"Clinical", borders:"Superior: posterior root of the zygomatic arch. Anterior: posterior border of the EAM. Posterior: a horizontal line through the superior border of the EAM.", definition:"Surface marking of the mastoid antrum. Landmark for cortical mastoidectomy and approach to the middle ear."},
+  {name:"Sella turcica", category:"Clinical / Bone", borders:"On the body of the sphenoid bone. Components: tuberculum sellae, pituitary fossa (hypophysial fossa), dorsum sellae, and posterior clinoid processes.", definition:"Contains the pituitary gland (hypophysis). Enlarged in pituitary tumors. Seen on lateral skull X-rays and MRI. Transsphenoidal approach for pituitary surgery passes through the nasal cavity, sphenoid sinus, and sella floor."},
+
+  // ---- MUSCLES (TOPOGRAPHIC ONLY) ----
+  {name:"Sternocleidomastoid (SCM)", category:"Muscle", borders:"Origin: manubrium of sternum + medial third of clavicle. Insertion: mastoid process + superior nuchal line.", definition:"Innervation: spinal accessory nerve (CN XI) + C2–C3 proprioception. Action: ipsilateral lateral flexion + contralateral rotation; bilateral — neck flexion and elevation of thorax. Divides neck into anterior and posterior triangles."},
+  {name:"Trapezius", category:"Muscle", borders:"Origin: external occipital protuberance, superior nuchal line, nuchal ligament, C7–T12 spinous processes. Insertion: posterior border of lateral clavicle, acromion, spine of scapula.", definition:"Innervation: spinal accessory nerve (CN XI) + C3–C4 proprioception. Action: upper fibres elevate scapula; middle retract; lower depress and rotate. Forms the posterior border of the posterior triangle."},
+  {name:"Digastric", category:"Muscle", borders:"Two bellies: Anterior — digastric fossa of mandible → intermediate tendon on hyoid. Posterior — mastoid notch → intermediate tendon.", definition:"Anterior belly: innervation V3 (mylohyoid nerve). Posterior belly: innervation CN VII. Action: depresses mandible, elevates hyoid. Forms the superior borders of submandibular and carotid triangles."},
+  {name:"Mylohyoid", category:"Muscle", borders:"Origin: mylohyoid line of mandible. Insertion: median raphe and body of hyoid.", definition:"Innervation: mylohyoid nerve (V3). Action: elevates floor of mouth and tongue; depresses mandible. Forms the muscular floor of the mouth (oral diaphragm)."},
+  {name:"Hyoglossus", category:"Muscle", borders:"Origin: greater horn and body of hyoid bone. Insertion: side of tongue.", definition:"Innervation: CN XII (hypoglossal nerve). Action: depresses and retracts the tongue. The lingual artery passes deep to hyoglossus; the lingual nerve and submandibular ganglion are superficial to it."},
+  {name:"Omohyoid", category:"Muscle", borders:"Two bellies joined at an intermediate tendon (attached to clavicle). Superior belly: hyoid → tendon. Inferior belly: tendon → superior border of scapula.", definition:"Innervation: ansa cervicalis (C1–C3). Action: depresses hyoid bone (after swallowing); tenses infrahyoid fascia; subdivides the anterior and posterior triangles."},
+  {name:"Anterior scalene", category:"Muscle", borders:"Origin: anterior tubercles of transverse processes C3–C6. Insertion: scalene tubercle of the first rib.", definition:"Innervation: anterior rami C4–C6. Separates the subclavian vein (anterior) from the subclavian artery and brachial plexus (posterior). Forms the anterior wall of the scalene fissure. Surgical landmark in subclavian vessel exposure."},
+  {name:"Middle scalene", category:"Muscle", borders:"Origin: posterior tubercles of transverse processes C2–C7. Insertion: upper surface of 1st rib (posterior to subclavian groove).", definition:"Forms the posterior wall of the scalene fissure. With the anterior scalene, it bounds the passage of the brachial plexus and subclavian artery."},
+  {name:"Temporalis", category:"Muscle of Mastication", borders:"Origin: temporal fossa and temporal fascia. Insertion: coronoid process of mandible and anterior border of ramus.", definition:"Innervation: deep temporal nerves (anterior and posterior, from V3). Action: elevates mandible (closes mouth); posterior fibres retract the mandible. Strongest jaw elevator."},
+  {name:"Masseter", category:"Muscle of Mastication", borders:"Origin: zygomatic arch. Insertion: lateral surface of mandibular ramus and angle.", definition:"Innervation: masseteric nerve (V3). Action: elevates mandible (closes mouth). Palpable when clenching. Hypertrophy in bruxism."},
+  {name:"Lateral pterygoid", category:"Muscle of Mastication", borders:"Superior head: greater wing of sphenoid. Inferior head: lateral pterygoid plate. Insertion: pterygoid fovea of mandibular condyle + articular disc of TMJ.", definition:"Innervation: V3. Action: protrusion and depression (opening) of mandible; lateral grinding movements. The only jaw muscle active during opening."},
+  {name:"Medial pterygoid", category:"Muscle of Mastication", borders:"Superficial head: maxillary tuberosity. Deep head: medial surface of lateral pterygoid plate. Insertion: medial surface of mandibular ramus and angle.", definition:"Innervation: V3. Action: elevates mandible; protrudes mandible; lateral grinding. Forms the medial part of the pterygoid sling with masseter."},
+  {name:"Levator palpebrae superioris (LPS)", category:"Muscle", borders:"Origin: lesser wing of sphenoid. Insertion: upper eyelid (tarsal plate and skin).", definition:"Innervation: CN III (superior branch — striated muscle) + superior tarsal muscle (smooth muscle within LPS — sympathetic). Action: elevates upper eyelid. Paralysis → ptosis (CN III lesion — complete ptosis; Horner's syndrome — partial ptosis)."},
+  {name:"Extraocular muscles (EOMs)", category:"Muscle", borders:"All arise from the common tendinous ring (annulus of Zinn) at the apex of the orbit, except the inferior oblique.", definition:"LR6, SO4, rest 3: Lateral rectus — CN VI (abduction); Superior oblique — CN IV (depression, intorsion, abduction); Superior, inferior recti, inferior oblique, LPS — CN III. Clinical testing: each muscle acts in a specific gaze position; RAPD assesses afferent pupillary defect (CN II)."},
+  {name:"Levator ani", category:"Muscle / Pelvic Floor", borders:"Origin: body of pubis + tendinous arch of obturator fascia + ischial spine. Insertion: perineal body, coccyx, anococcygeal ligament.", definition:"Components: pubococcygeus (pubovaginalis, puboprostaticus, puborectalis), iliococcygeus. Forms the pelvic diaphragm. Innervation: pudendal nerve + direct branches S3–S4. Puborectalis sling maintains the anorectal angle (~90° at rest)."},
+  {name:"Gluteus maximus", category:"Muscle", borders:"Origin: posterior gluteal line, dorsum of sacrum & coccyx, sacrotuberous ligament. Insertion: gluteal tuberosity of femur + iliotibial tract.", definition:"Innervation: inferior gluteal nerve (L5, S1, S2). Largest muscle in the body. Action: powerful extension and external rotation of hip. Main 'antigravity' muscle for rising from seated and climbing stairs."},
+  {name:"Gluteus medius & minimus", category:"Muscle", borders:"Origin: gluteal surface of ilium (between anterior and posterior gluteal lines for medius; between anterior and inferior gluteal lines for minimus). Insertion: greater trochanter.", definition:"Innervation: superior gluteal nerve (L4, L5, S1). Action: hip abduction and internal rotation; maintain level pelvis during single-leg stance (Trendelenburg sign if damaged). Key muscles for intramuscular injections."},
+  {name:"Piriformis", category:"Muscle", borders:"Origin: anterior sacrum (between S1–S4 foramina). Insertion: greater trochanter.", definition:"Innervation: branches from L5, S1, S2. Action: external rotation, abduction (when flexed), extension of hip. Divides the greater sciatic foramen into suprapiriform and infrapiriform compartments. Piriformis syndrome can compress the sciatic nerve."},
+
+  // ---- GLANDS & DUCTS ----
+  {name:"Parotid gland", category:"Gland", borders:"Lies in the parotidomasseteric region — superficial to masseter, anterior to the ear. Extends to the posterior belly of digastric.", definition:"Purely serous gland. Duct (Stensen's) pierces buccinator and opens opposite the 2nd upper molar. Structures within parotid: facial nerve (5 terminal branches), retromandibular vein, ECA (terminates). Innervation: parasympathetic via CN IX → lesser petrosal → otic ganglion → auriculotemporal nerve."},
+  {name:"Submandibular gland", category:"Gland", borders:"In the submandibular triangle. Superficial part below mylohyoid; deep part wraps around the posterior border of mylohyoid.", definition:"Mixed (mostly serous) gland. Duct (Wharton's) opens at the sublingual papilla beside the frenulum. Innervation: parasympathetic via chorda tympani → submandibular ganglion. Stones (calculi) most common here."},
+  {name:"Sublingual gland", category:"Gland", borders:"Beneath the floor of the mouth in the sublingual fossa.", definition:"Mixed (mostly mucous) gland. Many small ducts open onto the sublingual fold. Innervation: as submandibular (chorda tympani via submandibular ganglion)."},
+  {name:"Lacrimal gland", category:"Gland", borders:"In the lacrimal fossa of the frontal bone, superolateral orbit.", definition:"Serous gland, ~12 ducts open into the superior conjunctival fornix. Innervation: parasympathetic via CN VII — greater petrosal → pterygopalatine ganglion → zygomatic branch of V2 → lacrimal nerve of V1. Sympathetic (dries secretion) from superior cervical ganglion."},
+  {name:"Thyroid gland", category:"Gland", borders:"In the anterior neck (muscular / omotracheal triangle), at C5–T1 level. Butterfly-shaped, 2 lobes joined by isthmus over the 2nd–4th tracheal rings.", definition:"Arterial supply: superior thyroid a. (ECA) + inferior thyroid a. (thyrocervical trunk). Veins: superior, middle → IJV; inferior thyroid v. → brachiocephalic v. RLN at risk in thyroidectomy. Parathyroid glands embedded posteriorly."},
+  {name:"Parathyroid glands", category:"Gland", borders:"Usually 4 glands on the posterior surface of the thyroid gland (superior and inferior pairs).", definition:"Secrete PTH (parathyroid hormone) — raises serum calcium. Superior parathyroid glands from 4th pharyngeal pouch (with thyroid); inferior from 3rd pouch (with thymus). At risk during thyroidectomy (hypoparathyroidism → hypocalcaemia → tetany)."},
+  {name:"Adrenal (suprarenal) glands", category:"Gland", borders:"Supreromedial to each kidney. Right is pyramidal; left is semilunar.", definition:"Arterial supply: superior suprarenal a. (inferior phrenic), middle suprarenal a. (aorta), inferior suprarenal a. (renal a.). Right suprarenal v. → IVC (directly); left suprarenal v. → left renal v. Medulla: chromaffin cells, secretes epinephrine & norepinephrine. Cortex: zona glomerulosa (aldosterone), zona fasciculata (cortisol), zona reticularis (sex steroids)."},
+  {name:"Pancreas", category:"Gland", borders:"Secondarily retroperitoneal (except the tail). Head within the duodenal C-loop (anterior to L2), neck over the SMV, body crosses L1, tail in the splenorenal ligament reaching the splenic hilum.", definition:"Arterial supply: superior pancreaticoduodenal a. (from gastroduodenal), inferior pancreaticoduodenal a. (from SMA), pancreatic branches of splenic a. Ducts: main (Wirsung) joins bile duct at major duodenal papilla; accessory (Santorini) opens at minor papilla."},
+  {name:"Gallbladder", category:"Gland / Organ", borders:"In the gallbladder fossa on the inferior surface of the liver (between right and quadrate lobes). Parts: fundus (Murphy's point), body, neck, cystic duct.", definition:"Stores and concentrates bile. Arterial supply: cystic artery (usually from right hepatic a., within Calot's triangle). Cystic vein → right branch of portal vein (or right hepatic vein). Parasympathetic stimulation contracts the gallbladder."},
+  {name:"Spleen", category:"Gland / Organ", borders:"In the LUQ behind ribs 9–11 on the left. Long axis follows the 10th rib. Contacts the stomach, left kidney, left adrenal gland, and tail of pancreas.", definition:"Arterial supply: splenic artery (celiac trunk). Splenic vein → portal system. Intraperitoneal. Splenomegaly — various causes (haematological, infective, portal hypertension). Notched anterior border helps distinguish palpable spleen from kidney."},
+  {name:"Bile duct (common bile duct)", category:"Gland / Organ", borders:"Formed by union of cystic duct + common hepatic duct. Descends through the hepatoduodenal ligament (anterior right in portal triad), passes posterior to D1, traverses the head of pancreas, and joins the pancreatic duct at the major duodenal papilla.", definition:"Normal diameter <8 mm on ultrasound (or <10 mm post-cholecystectomy). Dilates in distal obstruction (gallstone, pancreatic cancer). The ampulla of Vater is surrounded by the sphincter of Oddi."},
+
+  // ---- HEART ----
+  {name:"Right atrium", category:"Heart", borders:"Forms the right border of the heart.", definition:"Features: right auricle; fossa ovalis (embryological foramen ovale); crista terminalis (SA node at its superior end); openings of SVC, IVC (with Eustachian valve), coronary sinus (with Thebesian valve); pectinate muscles; tricuspid valve orifice. Koch's triangle contains the AV node."},
+  {name:"Right ventricle", category:"Heart", borders:"Anterior-most cardiac chamber, inferior right heart.", definition:"Features: tricuspid valve (3 leaflets — anterior, posterior, septal); papillary muscles (anterior, posterior, septal) with chordae tendineae; trabeculae carneae; trabecula septomarginalis (moderator band — carries right bundle branch). Pumps to pulmonary circulation through pulmonary valve."},
+  {name:"Left atrium", category:"Heart", borders:"Posterior-most cardiac chamber; forms the posterior surface of the heart.", definition:"Features: left auricle; openings of 4 pulmonary veins (2 right, 2 left); mitral valve orifice; smooth wall (unlike the right atrium). The oblique sinus is posterior to the left atrium. Most commonly involved in AF."},
+  {name:"Left ventricle", category:"Heart", borders:"Forms the apex and left border of the heart.", definition:"Features: mitral valve (bicuspid — anterior + posterior leaflets); aortic valve (semilunar — right, left, non-coronary cusps); papillary muscles (anterior, posterior); chordae tendineae; much thicker myocardium than RV. Wall motion abnormalities indicate ischemia."},
+  {name:"Cardiac conducting system", category:"Heart", borders:"From the SA node at the superior end of the crista terminalis → AV node (Koch's triangle) → bundle of His (interventricular septum) → right and left bundle branches → Purkinje fibres.", definition:"SA node: pacemaker, 60–100 bpm. AV node: delay 0.1 s. Right bundle branch → right ventricle. Left bundle branch divides into anterior and posterior fascicles. Blood supply: SA node — right coronary a. (60%) or left circumflex (40%); AV node — right coronary a. (right-dominant)."},
+  {name:"Pericardium", category:"Heart", borders:"Fibroserous sac enclosing the heart and roots of great vessels.", definition:"Layers: fibrous pericardium (tough outer sac, fused with central tendon of diaphragm + great vessels); serous pericardium — parietal (lines inside of fibrous) + visceral (epicardium, lines heart). Pericardial cavity contains ~50 mL fluid. Sinuses: transverse sinus (between arterial and venous ends) and oblique sinus (behind left atrium). Cardiac tamponade → Becks triad (hypotension, muffled heart sounds, raised JVP)."},
+
+  // ---- BONES & JOINTS ----
+  {name:"Iliac crest", category:"Bone / Landmark", borders:"Superior margin of the ilium, from ASIS (anterior) to PSIS (posterior).", definition:"Highest point corresponds to L4/L5 disc level — landmark for lumbar puncture (Tuffier's line). Palpable along its entire length. Bone graft harvested here. Origin of external oblique, internal oblique, and transversus abdominis muscles."},
+  {name:"Anterior superior iliac spine (ASIS)", category:"Bone / Landmark", borders:"Palpable projection at the anterior end of the iliac crest.", definition:"Anchor of inguinal ligament (with pubic tubercle). Reference point for McBurney's (appendix) and Lanz (appendix, pelvic position) points. Anterior superior iliac spine + umbilicus line = McBurney's line."},
+  {name:"Pubic tubercle", category:"Bone / Landmark", borders:"Small prominence on the superior surface of the pubic body, ~2.5 cm from the midline.", definition:"Medial attachment of the inguinal ligament. Key landmark: inguinal hernia passes above and medial to pubic tubercle; femoral hernia passes below and lateral to it."},
+  {name:"Xiphisternal joint", category:"Bone / Landmark", borders:"Cartilaginous joint between the body of the sternum and the xiphoid process.", definition:"Level of T9. Lower limit of the thoracic cage anteriorly. Landmark for CPR (heel of hand 2 finger-breadths above this joint)."},
+  {name:"Pubic symphysis", category:"Bone / Landmark", borders:"Secondary cartilaginous joint (symphysis) between the right and left pubic bones in the midline.", definition:"Anterior boundary of the pelvis and perineum. Separated in pelvic girdle instability (diastasis pubis). Anterior approach to hip joint (Smith-Petersen) passes near it."},
+  {name:"Greater sciatic notch", category:"Bone / Landmark", borders:"C-shaped notch in the posterior ilium, from posterior inferior iliac spine to the ischial spine. Converted to the greater sciatic foramen by the sacrospinous and sacrotuberous ligaments.", definition:"The piriformis passes through it. Suprapiriform and infrapiriform compartments transmit gluteal vessels and nerves."},
 ];
 
 /* ====================================================================
@@ -1558,82 +2053,122 @@ function renderTermList(){
     `).join("");
 }
 
-/* -------- Topography (body map) -------- */
+/* -------- Topography (body map — AO-style animated) -------- */
 function viewTopography(){
-    const legendHTML = REGIONS.map(r=>`
-        <li onclick="location.hash='#/region/${r.id}'">
-            <b>${r.name}</b><br>
-            <span class="muted">${r.short}</span>
-        </li>`).join("");
+    // Pre-generate all landmark SVG groups for every region
+    const lmGroups = Object.entries(ZOOM_DATA).map(([id,zd])=>makeLmGroup(id,zd)).join("\n");
 
     return `
-    <h1>Topography</h1>
-    <p class="muted">Click a "+" on the body or pick a region from the list. Each region opens to its subregions and their full anatomical detail.</p>
+<div class="ao-topo-wrap">
 
-    <div class="bodymap-wrap">
-        <div>
-            <svg class="bodymap" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg" aria-label="Human body map">
-                <!-- Head -->
-                <ellipse cx="200" cy="60" rx="42" ry="50" class="silhouette"/>
-                <!-- Neck -->
-                <rect x="180" y="105" width="40" height="30" class="silhouette"/>
-                <!-- Torso -->
-                <path d="M 130 135 Q 150 130 200 130 Q 250 130 270 135 L 280 250 L 285 380 Q 270 430 260 460 L 240 470 L 160 470 L 140 460 Q 130 430 115 380 L 120 250 Z" class="silhouette"/>
-                <!-- Arms -->
-                <path d="M 130 140 L 90 240 L 75 360 L 80 370 L 100 360 L 110 250 L 125 160 Z" class="silhouette-2"/>
-                <path d="M 270 140 L 310 240 L 325 360 L 320 370 L 300 360 L 290 250 L 275 160 Z" class="silhouette-2"/>
-                <!-- Legs -->
-                <path d="M 165 470 L 160 600 L 155 700 L 175 700 L 185 600 L 195 470 Z" class="silhouette-2"/>
-                <path d="M 235 470 L 240 600 L 245 700 L 225 700 L 215 600 L 205 470 Z" class="silhouette-2"/>
-
-                <!-- HOTSPOTS with + markers -->
-                <g onclick="location.hash='#/region/head'" style="cursor:pointer">
-                    <circle cx="200" cy="60" r="20" class="hot"/>
-                    <text class="plus" x="200" y="68">+</text>
-                </g>
-                <g onclick="location.hash='#/region/neck'" style="cursor:pointer">
-                    <circle cx="200" cy="120" r="14" class="hot"/>
-                    <text class="plus" x="200" y="127">+</text>
-                </g>
-                <g onclick="location.hash='#/region/chest'" style="cursor:pointer">
-                    <circle cx="200" cy="200" r="22" class="hot"/>
-                    <text class="plus" x="200" y="208">+</text>
-                </g>
-                <g onclick="location.hash='#/region/abdomen'" style="cursor:pointer">
-                    <circle cx="200" cy="320" r="22" class="hot"/>
-                    <text class="plus" x="200" y="328">+</text>
-                </g>
-                <g onclick="location.hash='#/region/pelvis'" style="cursor:pointer">
-                    <circle cx="200" cy="430" r="20" class="hot"/>
-                    <text class="plus" x="200" y="438">+</text>
-                </g>
-                <g onclick="location.hash='#/region/upper-limb'" style="cursor:pointer">
-                    <circle cx="103" cy="220" r="16" class="hot"/>
-                    <text class="plus" x="103" y="227">+</text>
-                </g>
-                <g onclick="location.hash='#/region/upper-limb'" style="cursor:pointer">
-                    <circle cx="297" cy="220" r="16" class="hot"/>
-                    <text class="plus" x="297" y="227">+</text>
-                </g>
-                <g onclick="location.hash='#/region/lower-limb'" style="cursor:pointer">
-                    <circle cx="178" cy="540" r="16" class="hot"/>
-                    <text class="plus" x="178" y="547">+</text>
-                </g>
-                <g onclick="location.hash='#/region/lower-limb'" style="cursor:pointer">
-                    <circle cx="222" cy="540" r="16" class="hot"/>
-                    <text class="plus" x="222" y="547">+</text>
-                </g>
-                <g onclick="location.hash='#/region/back'" style="cursor:pointer">
-                    <rect x="225" y="270" width="55" height="100" rx="12" class="hot"/>
-                    <text class="plus" x="252" y="324">+</text>
-                </g>
-            </svg>
-        </div>
-        <div class="legend">
-            <h3>Body regions</h3>
-            <ul>${legendHTML}</ul>
-        </div>
+  <!-- ── LEFT: animated figure panel ─────────────────────── -->
+  <div class="ao-figure-panel">
+    <div class="ao-toolbar">
+      <button class="ao-tool-btn" onclick="bmReset()" title="Reset to overview">↩</button>
     </div>
+    <div id="ao-region-badge" class="ao-region-badge"></div>
+
+    <div class="ao-svg-wrap">
+      <svg id="aoBodySvg" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive human body map">
+
+        <!-- Body silhouette -->
+        <ellipse cx="200" cy="60" rx="42" ry="50" class="silhouette"/>
+        <rect x="180" y="105" width="40" height="30" class="silhouette"/>
+        <path d="M 130 135 Q 150 130 200 130 Q 250 130 270 135 L 280 250 L 285 380 Q 270 430 260 460 L 240 470 L 160 470 L 140 460 Q 130 430 115 380 L 120 250 Z" class="silhouette"/>
+        <path d="M 130 140 L 90 240 L 75 360 L 80 370 L 100 360 L 110 250 L 125 160 Z" class="silhouette-2"/>
+        <path d="M 270 140 L 310 240 L 325 360 L 320 370 L 300 360 L 290 250 L 275 160 Z" class="silhouette-2"/>
+        <path d="M 165 470 L 160 600 L 155 700 L 175 700 L 185 600 L 195 470 Z" class="silhouette-2"/>
+        <path d="M 235 470 L 240 600 L 245 700 L 225 700 L 215 600 L 205 470 Z" class="silhouette-2"/>
+
+        <!-- Anatomical detail overlays -->
+        <!-- Clavicles -->
+        <path d="M 185 136 Q 162 144 130 142" fill="none" stroke="#3a5587" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M 215 136 Q 238 144 270 142" fill="none" stroke="#3a5587" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Ribcage -->
+        <ellipse cx="200" cy="232" rx="57" ry="70" fill="none" stroke="#3a5587" stroke-width="1.2" opacity="0.4"/>
+        <!-- Spine indicator -->
+        <line x1="200" y1="135" x2="200" y2="425" stroke="#3a5587" stroke-width="2" stroke-dasharray="4 7" opacity="0.3"/>
+        <!-- Pelvis arch -->
+        <path d="M 145 432 Q 145 410 167 406 L 233 406 Q 255 410 255 432" fill="none" stroke="#3a5587" stroke-width="1.4" opacity="0.4"/>
+        <!-- Sternum highlight -->
+        <line x1="200" y1="140" x2="200" y2="298" stroke="#3a5587" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+
+        <!-- ── Overview hotspots (visible when not zoomed) ── -->
+        <g id="ao-hotspots">
+          <g onclick="bmSelectRegion('head')" style="cursor:pointer">
+            <circle cx="200" cy="60" r="19" class="hot"/>
+            <text class="plus" x="200" y="68">+</text>
+          </g>
+          <g onclick="bmSelectRegion('neck')" style="cursor:pointer">
+            <circle cx="200" cy="120" r="13" class="hot"/>
+            <text class="plus" x="200" y="127">+</text>
+          </g>
+          <g onclick="bmSelectRegion('chest')" style="cursor:pointer">
+            <circle cx="200" cy="200" r="21" class="hot"/>
+            <text class="plus" x="200" y="208">+</text>
+          </g>
+          <g onclick="bmSelectRegion('abdomen')" style="cursor:pointer">
+            <circle cx="200" cy="318" r="21" class="hot"/>
+            <text class="plus" x="200" y="326">+</text>
+          </g>
+          <g onclick="bmSelectRegion('pelvis')" style="cursor:pointer">
+            <circle cx="200" cy="430" r="19" class="hot"/>
+            <text class="plus" x="200" y="438">+</text>
+          </g>
+          <g onclick="bmSelectRegion('upper-limb')" style="cursor:pointer">
+            <circle cx="100" cy="222" r="15" class="hot"/>
+            <text class="plus" x="100" y="229">+</text>
+          </g>
+          <g onclick="bmSelectRegion('upper-limb')" style="cursor:pointer">
+            <circle cx="300" cy="222" r="15" class="hot"/>
+            <text class="plus" x="300" y="229">+</text>
+          </g>
+          <g onclick="bmSelectRegion('lower-limb')" style="cursor:pointer">
+            <circle cx="178" cy="542" r="15" class="hot"/>
+            <text class="plus" x="178" y="549">+</text>
+          </g>
+          <g onclick="bmSelectRegion('lower-limb')" style="cursor:pointer">
+            <circle cx="222" cy="542" r="15" class="hot"/>
+            <text class="plus" x="222" y="549">+</text>
+          </g>
+          <g onclick="bmSelectRegion('back')" style="cursor:pointer">
+            <circle cx="252" cy="285" r="17" class="hot"/>
+            <text class="plus" x="252" y="293">+</text>
+          </g>
+        </g>
+
+        <!-- ── Anatomical landmark groups (one per region, zoomed) ── -->
+        ${lmGroups}
+      </svg>
+    </div>
+
+    <div id="ao-hint" class="ao-hint-bar">Select a region to explore anatomy</div>
+  </div>
+
+  <!-- ── RIGHT: info panel ────────────────────────────────── -->
+  <div class="ao-info-panel">
+    <div class="ao-info-header">
+      <span class="ao-info-tag">Anatomical Region</span>
+      <div class="ao-region-title-el" id="ao-region-title">Overview</div>
+    </div>
+    <div class="ao-info-body">
+      <div class="ao-sec-row">
+        <div class="ao-sec-bar"></div>
+        <span class="ao-sec-lbl">Description</span>
+      </div>
+      <p class="ao-desc" id="ao-region-desc">Select a region to drill into subregion anatomy — click any '+' on the figure or choose a region below.</p>
+      <div class="ao-sec-row" style="margin-top:8px">
+        <div class="ao-sec-bar"></div>
+        <span class="ao-sec-lbl" id="ao-subs-label">All Regions</span>
+      </div>
+      <div id="ao-region-subs"></div>
+    </div>
+    <div class="ao-info-footer">
+      <a id="ao-full-link" class="ao-full-link" href="#/topography" style="display:none">Open Full Region →</a>
+    </div>
+  </div>
+
+</div>
     `;
 }
 
@@ -2154,6 +2689,13 @@ function route(){
     }
     app.innerHTML = html;
     setActiveNav();
+
+    // Initialize body map panel after topography HTML is injected
+    if(h==="#/topography"){
+        bm.cur=[0,0,400,720]; bm.tgt=[0,0,400,720]; bm.active=null;
+        if(bm.raf){cancelAnimationFrame(bm.raf);bm.raf=null;}
+        bmUpdatePanel(null);
+    }
 
     // Wire up Term Library search
     if(h==="#/terms"){

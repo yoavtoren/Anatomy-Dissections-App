@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interactive Anatomy — Topography, Terms & CNS/PNS</title>
+<style>
+/* ============================================================
+   GLOBAL STYLES
+   ============================================================ */
+:root{
+    --bg:#0e1726;
+    --panel:#16213a;
+    --panel-2:#1d2c4a;
+    --ink:#e8eefc;
+    --muted:#9fb0d0;
+    --accent:#5dc1ff;
+    --accent-2:#79f1c4;
+    --warn:#ffd166;
+    --danger:#ff7373;
+    --border:#27375a;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header.site{
+    position:sticky;top:0;z-index:20;
+    background:linear-gradient(180deg,rgba(14,23,38,.95),rgba(14,23,38,.85));
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+}
+.nav{max-width:1240px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:18px}
+.brand{font-weight:700;font-size:18px;letter-spacing:.3px;display:flex;align-items:center;gap:10px;color:#fff}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+nav.menu{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+nav.menu a{
+    padding:8px 14px;border-radius:10px;color:var(--muted);font-weight:500;font-size:14px;
+    border:1px solid transparent;
+}
+nav.menu a:hover{background:var(--panel);color:#fff;text-decoration:none}
+nav.menu a.active{background:var(--panel-2);color:#fff;border-color:var(--border)}
+main{max-width:1240px;margin:0 auto;padding:32px 22px 80px}
+h1,h2,h3,h4{color:#fff;line-height:1.25}
+h1{font-size:34px;margin:0 0 12px}
+h2{font-size:24px;margin:32px 0 12px;border-bottom:1px solid var(--border);padding-bottom:8px}
+h3{font-size:18px;margin:20px 0 8px;color:var(--accent-2)}
+h4{font-size:15px;margin:14px 0 4px;color:var(--accent)}
+p{margin:8px 0}
+ul,ol{margin:8px 0 14px 22px}
+li{margin:3px 0}
+hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+.muted{color:var(--muted)}
+.kbd{background:var(--panel-2);padding:2px 6px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--panel);font-size:12px;color:var(--muted);margin-right:6px}
+.tag.green{color:#0c2;border-color:#1f5}
+.tag.blue{color:#5cf;border-color:#39c}
+.tag.red{color:#f88;border-color:#a44}
+.tag.amber{color:#ffd166;border-color:#a78b3a}
+.card{
+    background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px;
+    box-shadow:var(--shadow);
+}
+.card + .card{margin-top:14px}
+.btn{
+    display:inline-block;padding:10px 18px;border-radius:10px;
+    background:var(--accent);color:#021;font-weight:600;border:none;cursor:pointer;
+    transition:transform .1s ease;
+}
+.btn:hover{transform:translateY(-1px);text-decoration:none}
+.btn.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn.small{padding:6px 12px;font-size:13px}
+.grid{display:grid;gap:18px}
+.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:900px){.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.grid{grid-template-columns:1fr !important}}
+
+/* ============================================================
+   WELCOME / HERO
+   ============================================================ */
+.hero{
+    background:radial-gradient(1200px 500px at 0% 0%, rgba(93,193,255,.18), transparent 60%),
+               radial-gradient(900px 500px at 100% 0%, rgba(121,241,196,.12), transparent 55%),
+               linear-gradient(180deg, var(--panel), var(--panel-2));
+    border:1px solid var(--border);border-radius:18px;padding:42px 32px;margin-bottom:28px;
+    box-shadow:var(--shadow);
+}
+.hero h1{font-size:42px;margin-bottom:6px}
+.hero p.lead{font-size:17px;color:var(--muted);max-width:780px}
+.tile{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:24px;cursor:pointer;transition:transform .15s ease, border-color .2s;
+    display:block;color:inherit;
+}
+.tile:hover{transform:translateY(-3px);border-color:var(--accent);text-decoration:none}
+.tile h3{margin:0 0 6px;color:#fff;font-size:20px}
+.tile p{margin:0;color:var(--muted);font-size:14px}
+.tile .icon{
+    width:48px;height:48px;border-radius:12px;
+    background:linear-gradient(135deg,rgba(93,193,255,.25),rgba(121,241,196,.25));
+    display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;
+    border:1px solid var(--border);
+}
+
+/* ============================================================
+   BODY MAP (SVG)
+   ============================================================ */
+.bodymap-wrap{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+    display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:flex-start;
+}
+@media(max-width:900px){.bodymap-wrap{grid-template-columns:1fr}}
+.bodymap{width:100%;max-width:360px;margin:0 auto;display:block;user-select:none}
+.bodymap .silhouette{fill:#22335a;stroke:#3a5587;stroke-width:1.3}
+.bodymap .silhouette-2{fill:#1a2643;stroke:#3a5587;stroke-width:1.1}
+.bodymap .hot{
+    fill:rgba(93,193,255,.16);stroke:var(--accent);stroke-width:1.4;
+    cursor:pointer;transition:fill .15s, stroke-width .15s;
+}
+.bodymap .hot:hover{fill:rgba(93,193,255,.45);stroke-width:2.2}
+.bodymap .plus{
+    fill:#fff;font-weight:700;font-size:22px;text-anchor:middle;
+    pointer-events:none;
+}
+.bodymap .pulse{
+    fill:var(--accent);
+    animation:pulse 1.8s ease-out infinite;
+    transform-origin:center;
+}
+@keyframes pulse{
+    0%{opacity:.65;r:13}
+    50%{opacity:.25;r:18}
+    100%{opacity:.65;r:13}
+}
+.legend{font-size:13px;color:var(--muted)}
+.legend ul{list-style:none;padding:0;margin:0}
+.legend li{padding:8px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--panel-2);cursor:pointer;transition:background .2s}
+.legend li:hover{background:#243962;color:#fff}
+.legend li b{color:#fff}
+
+.subregion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+.subregion-card{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:12px;
+    padding:14px;cursor:pointer;transition:transform .12s, border-color .2s;
+}
+.subregion-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.subregion-card h4{margin:0 0 4px;color:#fff;font-size:15px}
+.subregion-card p{margin:0;color:var(--muted);font-size:12.5px}
+
+/* ============================================================
+   TERM LIBRARY
+   ============================================================ */
+.term-search{
+    display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 16px;
+}
+.term-search input{
+    flex:1 1 280px;padding:12px 14px;border-radius:10px;background:var(--panel-2);
+    border:1px solid var(--border);color:#fff;font-size:15px;outline:none;
+}
+.term-search input:focus{border-color:var(--accent)}
+.term-search select{
+    padding:10px 12px;border-radius:10px;background:var(--panel-2);
+    border:1px solid var(--border);color:#fff;font-size:14px;
+}
+.term-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.term-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;
+    transition:border-color .2s;
+}
+.term-card:hover{border-color:var(--accent)}
+.term-card h3{margin:0 0 6px;font-size:16px}
+.term-card .cat{font-size:11px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.5px}
+.term-card .borders{margin-top:8px;font-size:13.5px}
+.term-card .borders b{color:var(--accent)}
+.no-results{padding:30px;text-align:center;color:var(--muted)}
+
+/* ============================================================
+   REGION DETAIL PAGES
+   ============================================================ */
+.region-detail{display:grid;grid-template-columns:1fr;gap:18px}
+.crumbs{font-size:13px;color:var(--muted);margin-bottom:6px}
+.crumbs a{color:var(--accent)}
+.region-header{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);border-radius:var(--radius);padding:24px;
+}
+.region-header h1{margin:0 0 6px}
+.region-header p{margin:0;color:var(--muted)}
+.section{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+}
+.section h2{margin-top:0}
+.section h3{margin-top:14px}
+.callout{
+    border-left:3px solid var(--accent);background:rgba(93,193,255,.08);
+    padding:10px 14px;border-radius:8px;margin:12px 0;font-size:14px;
+}
+.callout.warn{border-left-color:var(--warn);background:rgba(255,209,102,.08)}
+.callout.danger{border-left-color:var(--danger);background:rgba(255,115,115,.08)}
+
+/* ============================================================
+   IMAGE PLACEHOLDER
+   ============================================================ */
+.imgbox{
+    margin:14px 0;border:2px dashed var(--border);border-radius:12px;
+    padding:18px;text-align:center;background:var(--panel-2);color:var(--muted);
+    transition:border-color .2s;
+}
+.imgbox img{max-width:100%;border-radius:8px;display:block;margin:0 auto}
+.imgbox.empty::before{
+    content:"";display:inline-block;width:48px;height:48px;border-radius:8px;
+    background:linear-gradient(135deg,#2a3d68,#1a2643);margin-bottom:10px;
+}
+.imgbox .ph-label{font-size:13px;color:var(--muted)}
+.imgbox .ph-label code{
+    background:var(--panel);padding:2px 6px;border-radius:4px;color:var(--accent-2);
+    border:1px solid var(--border);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+    margin-top:60px;padding:24px;color:var(--muted);font-size:13px;
+    text-align:center;border-top:1px solid var(--border);
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print{
+    header.site,.hero,nav.menu{display:none}
+    body{background:#fff;color:#000}
+    .card,.section,.region-header,.term-card{border-color:#ccc;background:#fff;color:#000}
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+    <div class="nav">
+        <a class="brand" href="#/welcome"><span class="dot"></span> Anatomy Atlas</a>
+        <nav class="menu" id="topnav">
+            <a href="#/welcome">Welcome</a>
+            <a href="#/topography">Topography</a>
+            <a href="#/cns-pns">CNS / PNS</a>
+            <a href="#/terms">Term Library</a>
+        </nav>
+    </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+    <div>An interactive anatomy study atlas — built for the dissection workshop.</div>
+    <div style="margin-top:6px">Content adapted from the provided regional anatomy and dissection workshop resources.</div>
+</footer>
+
+<script>
+/* ====================================================================
+   DATA — All anatomical content lives in this single object so the
+   whole site is contained in one file (no external JSON, no servers).
+   ==================================================================== */
+
+const TERMS = [
+  // ---- HEAD & FACE ----
+  {name:"Scalp", category:"Head", borders:"Anteriorly: supraorbital fissure. Posteriorly: superior nuchal line / external occipital protuberance. Laterally: superior temporal line.", definition:"Tissue covering the skull. Five layers (mnemonic SCALP): Skin, dense Connective tissue, Aponeurosis (galea), Loose connective tissue, Pericranium."},
+  {name:"Temporal fossa", category:"Head", borders:"Lateral: zygomatic arch. Superior: superior temporal line. Ventral: temporal process of zygomatic bone. Inferior: infratemporal crest of greater wing. Medial: squamous part of temporal bone & temporal surface of greater wing.", definition:"Lateral aspect of the skull. Contains temporal n., anterior/posterior/middle temporal a. & v., zygomaticotemporal n."},
+  {name:"Infratemporal fossa", category:"Head", borders:"Cranial: infratemporal surface of greater wing of sphenoid + squamous part of temporal bone. Ventral: maxillary tuberosity. Dorsal: continuous with pre-styloid space. Medial: lateral plate of pterygoid process. Lateral: ramus of mandible.", definition:"Irregularly shaped depression below the temporal fossa, medial and inferior to the zygomatic arch. Not fully enclosed by bone. Communicates with temporal fossa, pterygopalatine fossa (via pterygomaxillary fissure), and middle cranial fossa (via foramen ovale, foramen spinosum)."},
+  {name:"Pterygopalatine fossa", category:"Head", borders:"Cranial: maxillary surface of greater wing of sphenoid. Ventral: infratemporal surface of maxilla. Dorsal: pterygoid process of sphenoid. Medial: perpendicular plate of palatine bone. Lateral: pterygomaxillary fissure (connects to infratemporal fossa). Caudal: continues as greater palatine canal.", definition:"Narrow pyramidal gap between the posterior wall of the maxilla and the pterygoid process, with apex pointing downward. Hub for V2 and the pterygopalatine ganglion."},
+  {name:"Orbital region", category:"Head", borders:"Extent of orbicularis oculi muscle; includes eyelids (palpebrae) and orbital septum.", definition:"Surrounds the orbit. Contains lacrimal pathway (caruncle, puncta, sac). Supplied by superior & inferior palpebral arches; V1 (upper eyelid) and V2 (lower eyelid)."},
+  {name:"Nasal region", category:"Head", borders:"Defined by the bony and cartilaginous skeleton of the nose.", definition:"Contains nasalis and procerus muscles. Supplied by angular a., dorsal nasal a., infraorbital a.; drained by facial v. and nasofrontal v.; innervated by V1 and V2."},
+  {name:"Oral region", category:"Head", borders:"Bounded by the nasolabial and mentolabial grooves; formed by upper and lower lips.", definition:"Muscles: orbicularis oris and modiolus. Arteries: superior & inferior labial (from facial a.). Vein: facial v. Glands: submandibular & submental. Nerves: V2 (upper lip), mental n. (lower lip)."},
+  {name:"Buccal region", category:"Head", borders:"Between the oral and parotidomasseteric regions.", definition:"Thick skin and buccal fat pads. Supplied by facial a./v.; innervated by facial nerve (motor) and buccal n. (sensory)."},
+  {name:"Parotidomasseteric region", category:"Head", borders:"Zygomatic arch superiorly; between masseter and infratemporal region.", definition:"Thick skin overlying the parotid gland, masseter muscle, and the temporomandibular joint."},
+  {name:"Mental region", category:"Head", borders:"The chin.", definition:"Chin group of facial expression muscles. Palpation point for V3 (mental nerve)."},
+  {name:"Infraorbital region", category:"Head", borders:"Below the orbit, lateral to nasal region.", definition:"Palpation point of V2 (infraorbital nerve, exits the infraorbital foramen)."},
+
+  // ---- BASE OF SKULL ----
+  {name:"External cranial base — anterior part", category:"Base of Skull", borders:"From superior incisor teeth to choanae.", definition:"Composed of alveolar processes of maxilla, choanae, and bony palate. Foramina: incisive (nasopalatine n., sphenopalatine a.), greater palatine, lesser palatine."},
+  {name:"External cranial base — middle part", category:"Base of Skull", borders:"From the choanae to the anterior margin of foramen magnum.", definition:"Body of sphenoid, petrous parts of temporal bones, basilar part of occipital bone. Openings: foramen lacerum, pterygomaxillary fissure, foramen ovale, foramen spinosum, carotid canal."},
+  {name:"External cranial base — posterior part", category:"Base of Skull", borders:"Formed by the occipital bone.", definition:"Contains foramen magnum (medulla, meninges, vertebral aa., CN XI), jugular foramen (CN IX, X, XI; IJV; inferior petrosal sinus), hypoglossal canal (CN XII), condylar canal (occipital emissary v.), canaliculus for tympanic n., mastoid canaliculus (Arnold's canal — CN X auricular branch)."},
+  {name:"External cranial base — lateral part", category:"Base of Skull", borders:"Includes zygomatic arch, infratemporal & mandibular fossae, tympanic plate, styloid & mastoid processes.", definition:"Openings: petrotympanic fissure (chorda tympani), stylomastoid foramen (CN VII, stylomastoid a.), external acoustic opening, musculotubal canal, fossula petrosa, cochlear canaliculus."},
+  {name:"Anterior cranial fossa", category:"Base of Skull", borders:"Frontal bone (anterolaterally), cribriform plate & crista galli of ethmoid (medially), orbital plate of frontal bone (inferiorly), lesser wings of sphenoid (posteriorly).", definition:"Houses frontal lobe, olfactory bulb & tract, orbital gyri. Openings: anterior ethmoidal foramen (anterior ethmoidal vessels & n.), cribriform foramina (olfactory nn.)."},
+  {name:"Middle cranial fossa", category:"Base of Skull", borders:"Body and greater wings of sphenoid; squamous and petrous parts of temporal bone.", definition:"Houses pituitary gland, temporal lobes. Openings: optic canal (CN II, ophthalmic a.), superior orbital fissure (CN III, IV, VI, V1, ophthalmic vv., sympathetics), foramen rotundum (V2), foramen ovale (V3, lesser petrosal n., accessory meningeal a., emissary v.), foramen spinosum (middle meningeal a./v., meningeal br. of V3), foramen lacerum, carotid canal (ICA), hiatus for greater & lesser petrosal nn."},
+  {name:"Posterior cranial fossa", category:"Base of Skull", borders:"Dorsum sellae anteriorly, groove for transverse sinus posteriorly. Petrous portion of temporal bone and basilar part of occipital bone.", definition:"Houses cerebellum and brainstem. Openings: internal acoustic meatus (CN VII, VIII, labyrinthine a.), foramen magnum (medulla, vertebral aa., CN XI ascending, dural vv., spinal aa.), opening of vestibular canaliculus, mastoid foramen, hypoglossal canal (CN XII), condylar canal, jugular foramen (CN IX, X, XI descending; IJV; inferior petrosal sinus; sigmoid sinus)."},
+
+  // ---- NECK TRIANGLES ----
+  {name:"Anterior triangle of neck", category:"Neck", borders:"Lateral: sternocleidomastoid (SCM). Medial: midline of neck. Superior: lower border of mandible.", definition:"Subdivided into the muscular, carotid, submandibular, and submental triangles by the omohyoid and digastric muscles."},
+  {name:"Posterior triangle of neck", category:"Neck", borders:"Anterior: SCM. Posterior: trapezius. Inferior: clavicle.", definition:"Subdivided into the occipital and subclavian (omoclavicular) triangles by the inferior belly of omohyoid."},
+  {name:"Submandibular triangle", category:"Neck", borders:"Superior: lower part of body of mandible. Inferoposterior: posterior belly of digastric. Inferoanterior: anterior belly of digastric. Floor: mylohyoid & hyoglossus muscles. Roof: skin, superficial fascia with platysma, deep cervical fascia.", definition:"Contains: submandibular gland, inferior portion of parotid gland, submandibular lymph nodes; mylohyoid & hypoglossal nerves; facial, sublingual & submental arteries and veins."},
+  {name:"Lesser's (Pirogov's) triangle", category:"Neck", borders:"Superior: hypoglossal nerve. Inferior: anterior & posterior bellies of digastric.", definition:"Small triangle inside the submandibular triangle. Aids identifying the lingual artery (especially for ligation)."},
+  {name:"Carotid triangle", category:"Neck", borders:"Lateral: SCM. Cranial: posterior belly of digastric. Caudoanterior: superior belly of omohyoid.", definition:"Contains common carotid (bifurcates into ECA & ICA within the triangle), IJV, hypoglossal n., spinal accessory n., ansa cervicalis, sympathetic trunk, internal & external laryngeal nn., larynx, thyroid."},
+  {name:"Subclavian (omoclavicular) triangle", category:"Neck", borders:"Superior: inferior belly of omohyoid. Inferior: clavicle. Anterior: SCM.", definition:"Part of the lateral neck region, the subclavian a. and brachial plexus traverse this region en route to the upper limb."},
+  {name:"Occipital triangle", category:"Neck", borders:"Inferior: inferior belly of omohyoid. Anterior: SCM. Posterior: trapezius.", definition:"Part of the lateral cervical region. Contains spinal accessory nerve (CN XI), cervical plexus branches, and the cervical lymph nodes."},
+  {name:"Scalene fissure (interscalene triangle)", category:"Neck", borders:"Anterior: anterior scalene m. Posterior: middle scalene m. Inferior: first rib.", definition:"Triangular gap in the neck. Contains the brachial plexus and subclavian artery. Note: the subclavian vein runs anterior to the anterior scalene."},
+
+  // ---- THORAX / AXILLA / ABDOMINAL WALL ----
+  {name:"Axilla", category:"Thorax / Limb", borders:"Pyramidal region with apex (cervicoaxillary canal — between clavicle, 1st rib, and superior border of scapula), base (axillary fascia and skin), 4 walls — anterior (pec major/minor), posterior (subscapularis, teres major, latissimus dorsi), medial (serratus anterior over upper ribs), lateral (intertubercular sulcus of humerus).", definition:"Region beneath the glenohumeral joint of the upper limb and thorax. Contents: axillary a. & v., brachial plexus, axillary lymph nodes (mnemonic APICAL: Apical, Pectoral, Infraclavicular, Central, Axillary [humeral / lateral], Subscapular [posterior])."},
+  {name:"Mediastinum", category:"Thorax", borders:"Anterior: thoracic wall (sternum & costal cartilages 1–5). Posterior: superior thoracic vertebral bodies. Lateral: parietal pleura. Superior: superior thoracic aperture. Inferior: diaphragm.", definition:"Region between the pleural cavities. Divided into superior mediastinum (above the sternal angle / T4-T5 disc) and inferior mediastinum (subdivided into anterior, middle, and posterior)."},
+  {name:"Intercostal space", category:"Thorax", borders:"Between two adjacent ribs (11 intercostal spaces per side, named for the rib above).", definition:"Contains the neurovascular bundle (intercostal vein, artery, nerve — VAN, from superior to inferior), intercostal lymph nodes, and the intercostal muscles (external, internal, innermost)."},
+  {name:"Inguinal canal", category:"Abdominal Wall", borders:"Anterior wall: aponeurosis of external oblique. Posterior wall: conjoint tendon and transversalis fascia. Floor: inguinal ligament. Roof: transversalis fascia, internal oblique, transversus abdominis.", definition:"Oblique passageway in the lower abdominal wall connecting deep inguinal ring (lateral, transversalis fascia → internal spermatic fascia) and superficial inguinal ring (aponeurosis of external oblique). Transmits spermatic cord (males) / round ligament of uterus (females), ilioinguinal n., genital br. of genitofemoral n."},
+  {name:"Hesselbach's (inguinal) triangle", category:"Abdominal Wall", borders:"Medial: lateral margin of rectus abdominis. Lateral: inferior epigastric artery and vein. Inferior: inguinal ligament.", definition:"Site of direct inguinal hernias. Differentiates direct (medial to inferior epigastric vessels) from indirect hernias (lateral to inferior epigastric vessels)."},
+  {name:"Rectus sheath", category:"Abdominal Wall", borders:"Anterior lamina + posterior lamina formed by aponeuroses of external oblique, internal oblique, and transversus abdominis. Posterior lamina is deficient below the umbilicus — its inferior margin is the arcuate line.", definition:"Fibrous sheath enveloping rectus abdominis. The midline crossing of fibers forms the linea alba, running from xiphoid process to pubic symphysis."},
+
+  // ---- CLINICAL PROJECTION POINTS ----
+  {name:"Labbé triangle", category:"Projection / Clinical", borders:"Transpyloric line (left costal arch 9th rib → right costal arch 9th rib) and the right 9th costal arch → left 8th costal arch.", definition:"Surface projection of the stomach onto the anterior abdominal wall."},
+  {name:"Desjardin's point", category:"Projection / Clinical", borders:"On the line from apex of right axilla → umbilicus, ~6–7 cm from umbilicus.", definition:"Surface projection of the head of the pancreas and major duodenal papilla."},
+  {name:"Murphy's point", category:"Projection / Clinical", borders:"Intersection of the right costal arch with the right midclavicular line.", definition:"Surface projection of the fundus of the gallbladder. Murphy's sign: pain on inspiration during palpation here suggests acute cholecystitis."},
+  {name:"McBurney point", category:"Projection / Clinical", borders:"On the line from anterior superior iliac spine (ASIS) → umbilicus, at the lateral one-third (i.e. ~one-third from ASIS).", definition:"Surface projection of the root of the vermiform appendix. Tenderness here is the classic sign of acute appendicitis."},
+  {name:"Lanz point", category:"Projection / Clinical", borders:"On the interspinous line (between right & left ASIS), 5 cm to the right of midline.", definition:"Surface projection of the appendix in pelvic position."},
+  {name:"Pouch of Douglas (rectouterine pouch)", category:"Pelvis", borders:"Anterior: posterior fornix of vagina / posterior wall of uterus. Posterior: anterior surface of rectum. Lateral: rectouterine folds.", definition:"Most dependent peritoneal recess in females, between the uterus and rectum. Common site of fluid accumulation (blood in ectopic pregnancy, pus in pelvic abscess); accessible through the posterior vaginal fornix (culdocentesis)."},
+  {name:"Vesicouterine pouch", category:"Pelvis", borders:"Anterior: posterior surface of urinary bladder. Posterior: anterior surface of uterus.", definition:"Peritoneal recess between bladder and uterus in females."},
+  {name:"Rectovesical pouch", category:"Pelvis", borders:"Anterior: posterior surface of urinary bladder. Posterior: anterior surface of rectum.", definition:"Most dependent peritoneal recess in males, between the bladder and rectum."},
+
+  // ---- PERITONEAL CAVITY ----
+  {name:"Greater sac (peritoneal cavity)", category:"Peritoneum", borders:"From diaphragm above to the pelvic cavity below; bounded by the parietal peritoneum.", definition:"The main and largest part of the peritoneal cavity. Contains all peritoneal organs except those in the lesser sac."},
+  {name:"Lesser sac (omental bursa)", category:"Peritoneum", borders:"Anterior: stomach + lesser omentum. Posterior: pancreas (and retroperitoneal structures). Communicates with the greater sac through the epiploic (omental) foramen of Winslow.", definition:"Recess of the peritoneal cavity behind the stomach and in front of the pancreas. Allows free movement of the stomach."},
+  {name:"Epiploic foramen (foramen of Winslow)", category:"Peritoneum", borders:"Anterior: hepatoduodenal ligament (containing portal triad — bile duct, hepatic artery, portal vein). Posterior: IVC. Superior: caudate lobe of liver. Inferior: superior part of duodenum.", definition:"Sole communication between the greater and lesser sacs. Pringle maneuver compresses the hepatoduodenal ligament here to control bleeding from hepatic vessels."},
+  {name:"Supramesocolic compartment", category:"Peritoneum", borders:"Above the transverse mesocolon.", definition:"Contains liver, gallbladder, stomach, duodenum, pancreas, spleen, lesser omentum (hepatoduodenal & hepatogastric ligaments)."},
+  {name:"Inframesocolic compartment", category:"Peritoneum", borders:"Below the transverse mesocolon. Divided by the mesentery root into right and left infracolic spaces.", definition:"Contains the small intestine and large intestine; horizontal & ascending parts of duodenum."},
+
+  // ---- GLUTEAL / PELVIC FLOOR ----
+  {name:"Gluteal region", category:"Lower Limb", borders:"Roof: iliac crest. Floor: lower border of gluteus maximus.", definition:"Posterolateral region of the pelvic girdle. Superficial muscles: gluteus maximus, tensor fasciae latae. Deep muscles: gluteus medius, gluteus minimus, piriformis, quadratus femoris, triceps coxae (gemellus superior, gemellus inferior, obturator internus). Supplied by superior & inferior gluteal arteries (from internal iliac)."},
+  {name:"Greater sciatic foramen", category:"Pelvis", borders:"Suprapiriform: above the piriformis. Infrapiriform: below the piriformis.", definition:"Suprapiriform: superior gluteal n. & vessels. Infrapiriform: inferior gluteal n. & vessels, sciatic n., posterior femoral cutaneous n., n. to quadratus femoris, pudendal n., internal pudendal vessels, n. to obturator internus."},
+  {name:"Lesser sciatic foramen", category:"Pelvis", borders:"Bordered by the lesser sciatic notch; mostly filled by the gemelli muscles' origins.", definition:"Transmits: tendon of obturator internus, pudendal nerve, internal pudendal vessels."},
+  {name:"Ischioanal (ischiorectal) fossa", category:"Pelvis", borders:"Lateral: obturator internus muscle and ischial tuberosity. Medial: external anal sphincter and levator ani. Superior: pelvic diaphragm. Inferior: skin.", definition:"Wedge-shaped fat-filled space lateral to the anal canal. Allows expansion of the anal canal during defecation. Contains the pudendal canal (Alcock's canal) on its lateral wall — pudendal n. and internal pudendal vessels."},
+  {name:"Perineum", category:"Pelvis", borders:"Anterior: pubic symphysis. Posterior: tip of coccyx. Lateral: inferior pubic & ischial rami, sacrotuberous ligament. Roof: pelvic floor. Base: skin and fascia.", definition:"Diamond-shaped region forming the inferior outlet of the pelvis. Divided by a transverse line between the ischial tuberosities into the urogenital triangle (anterior) and anal triangle (posterior)."},
+  {name:"Urogenital triangle", category:"Pelvis", borders:"Pubic symphysis (anterior), ischiopubic rami (lateral), interischial line (posterior).", definition:"Anterior half of the perineum. Contains external genitalia and urethra. Has an additional layer of strong deep fascia, the perineal membrane."},
+  {name:"Anal triangle", category:"Pelvis", borders:"Coccyx (posterior), sacrotuberous ligaments (lateral), interischial line (anterior).", definition:"Posterior half of the perineum. Contents: anal aperture, external anal sphincter, ischioanal fossae (×2), and the pudendal nerve supplying perineum sensation."},
+  {name:"Perineal body (central tendon of perineum)", category:"Pelvis", borders:"Located in the centre of the perineum, between the urogenital and anal triangles.", definition:"Fibromuscular node — common attachment for: bulbospongiosus, superficial & deep transverse perineal muscles, external anal sphincter, levator ani (puborectalis), and external urethral sphincter (in part)."},
+
+  // ---- VERTEBRAL CANAL ----
+  {name:"Vertebral canal", category:"Back / Spine", borders:"Formed by successive vertebral foramina; extends from foramen magnum to sacral hiatus.", definition:"Contains spinal cord, meninges, spinal roots, epidural fat, and venous plexus. For clinical use: divided into central zone (between medial margins of facet joints) and lateral zones (subarticular / lateral recess, foraminal, extraforaminal)."},
+  {name:"Epidural space", category:"Back / Spine", borders:"Between spinal dura mater and the wall of the vertebral canal.", definition:"Contains epidural fat and the internal vertebral venous plexus (Batson's plexus). Site of epidural anesthesia. Entered in the midline posteriorly where it is deepest."},
+  {name:"Lumbar cistern", category:"Back / Spine", borders:"Subarachnoid space below conus medullaris (typically L1–L2 in adults), down to S2.", definition:"Contains CSF, cauda equina, filum terminale. Target for lumbar puncture. Needle path: skin → subcutaneous tissue → supraspinous ligament → interspinous ligament → ligamentum flavum → epidural space → dura mater → arachnoid → subarachnoid space."},
+];
+
+/* ====================================================================
+   REGIONS — main top-level regions with subregions and detailed pages
+   ==================================================================== */
+
+const REGIONS = [
+  {
+    id:"head",
+    name:"Head",
+    short:"Scalp, skull regions, fossae, base of the skull",
+    coord:[200, 60],
+    sub:[
+      {id:"scalp", name:"Scalp & calvarial regions", brief:"Layers of scalp; frontal, temporal, parietal, occipital regions"},
+      {id:"face-superficial", name:"Superficial face regions", brief:"Orbital, nasal, oral, buccal, parotidomasseteric, mental, infraorbital"},
+      {id:"infratemporal", name:"Infratemporal & pterygopalatine fossae", brief:"Deep fossae of the head; foramen ovale, foramen rotundum"},
+      {id:"skull-base", name:"Cranial base — external & internal", brief:"Foramina, anterior/middle/posterior cranial fossae"},
+      {id:"cranial-nerves", name:"Cranial nerves I–XII", brief:"Origin, course, and openings in the skull"},
+    ]
+  },
+  {
+    id:"neck",
+    name:"Neck",
+    short:"Anterior & posterior triangles, scalene fissure, fascial layers",
+    coord:[200, 130],
+    sub:[
+      {id:"anterior-triangle", name:"Anterior triangle of neck", brief:"Carotid, submandibular, submental, muscular triangles"},
+      {id:"posterior-triangle", name:"Posterior (lateral) triangle of neck", brief:"Occipital and subclavian triangles"},
+      {id:"scalene-fissure", name:"Scalene fissure", brief:"Brachial plexus and subclavian artery passage"},
+    ]
+  },
+  {
+    id:"chest",
+    name:"Chest",
+    short:"Thoracic wall, mediastinum, pleural cavities, axilla",
+    coord:[200, 230],
+    sub:[
+      {id:"thoracic-wall", name:"Thoracic wall topography", brief:"Layers, intercostal space, surface projections of heart and lungs"},
+      {id:"mediastinum", name:"Mediastinum", brief:"Borders and divisions of the mediastinum"},
+      {id:"axilla", name:"Axilla", brief:"Boundaries, contents, lymph nodes"},
+    ]
+  },
+  {
+    id:"abdomen",
+    name:"Abdomen",
+    short:"Abdominal wall, peritoneal cavity, retroperitoneum",
+    coord:[200, 340],
+    sub:[
+      {id:"abdomen-ruq", name:"Right Upper Quadrant (RUQ)", brief:"Liver (right lobe), gallbladder, pylorus, duodenum, head of pancreas, right kidney/adrenal, hepatic flexure"},
+      {id:"abdomen-luq", name:"Left Upper Quadrant (LUQ)", brief:"Stomach, spleen, body & tail of pancreas, left kidney/adrenal, splenic flexure"},
+      {id:"abdomen-rlq", name:"Right Lower Quadrant (RLQ)", brief:"Cecum, vermiform appendix, ascending colon, ileum, right ovary/uterine tube, right ureter"},
+      {id:"abdomen-llq", name:"Left Lower Quadrant (LLQ)", brief:"Sigmoid colon, descending colon, left ovary/uterine tube, left ureter"},
+      {id:"abdominal-wall", name:"Abdominal wall & rectus sheath", brief:"Layers, surgical incisions, blood supply, innervation"},
+      {id:"inguinal", name:"Inguinal region", brief:"Inguinal canal, Hesselbach's triangle, hernias"},
+      {id:"peritoneum", name:"Peritoneal cavity", brief:"Greater & lesser sacs, supra/infra-mesocolic compartments"},
+      {id:"duodenum-pancreas", name:"Duodenum & pancreas", brief:"Topography of the C-loop and pancreatic regions"},
+      {id:"retroperitoneum", name:"Retroperitoneum", brief:"Organs, vessels and nerves of the retroperitoneal space"},
+      {id:"projection-points", name:"Surface projection points", brief:"Labbé triangle, Desjardin's, Murphy's, McBurney, Lanz"},
+    ]
+  },
+  {
+    id:"pelvis",
+    name:"Pelvis & Perineum",
+    short:"Male & female pelvis, pelvic floor, perineum, ischioanal fossa",
+    coord:[200, 430],
+    sub:[
+      {id:"male-pelvis", name:"Male pelvis", brief:"Sagittal anatomy and topography"},
+      {id:"female-pelvis", name:"Female pelvis", brief:"Sagittal anatomy and continence mechanism"},
+      {id:"pelvic-floor", name:"Pelvic floor & ischioanal fossa", brief:"Pelvic diaphragm, urogenital diaphragm, ischioanal fossa"},
+      {id:"perineum", name:"Perineum", brief:"Urogenital and anal triangles, perineal body"},
+    ]
+  },
+  {
+    id:"back",
+    name:"Back & Vertebral Canal",
+    short:"Vertebral canal, spinal taps, epidural anesthesia",
+    coord:[200, 320],
+    sub:[
+      {id:"vertebral-canal", name:"Vertebral canal", brief:"Topography of the canal"},
+      {id:"lumbar-puncture", name:"Lumbar puncture & epidural", brief:"Anatomy and technique"},
+    ]
+  },
+  {
+    id:"upper-limb",
+    name:"Upper Limb",
+    short:"Axilla, brachial plexus, regions of arm/forearm/hand",
+    coord:[105, 230],
+    sub:[
+      {id:"axilla-2", name:"Axilla", brief:"Boundaries, contents and lymph nodes"},
+      {id:"upper-limb-regions", name:"Limb regions", brief:"Brachial, antebrachial, and palmar regions"},
+    ]
+  },
+  {
+    id:"lower-limb",
+    name:"Lower Limb",
+    short:"Gluteal, anterior thigh, popliteal fossa",
+    coord:[170, 530],
+    sub:[
+      {id:"gluteal", name:"Gluteal region", brief:"Greater & lesser sciatic foramina, intramuscular injection sites"},
+      {id:"anterior-thigh", name:"Anterior thigh", brief:"Iliopectineal fossa, femoral triangle"},
+    ]
+  },
+];
+
+/* ====================================================================
+   SUBREGION DETAILS — full text content (deeply nested anatomy data)
+   ==================================================================== */
+
+const DETAILS = {
+  // -------------------- HEAD --------------------
+  "scalp":{
+    title:"Scalp & calvarial regions",
+    parent:"head",
+    body:[
+      {h:"Scalp — overview",
+       p:"The scalp is the tissue that covers the skull. It is highly vascularized, sensitive to touch, pain and temperature, and rich in hair follicles and sebaceous glands."},
+      {h:"Borders",
+       list:["Anteriorly: from the supraorbital fissure",
+             "Posteriorly: to the superior nuchal line / external occipital protuberance",
+             "Laterally: to the superior temporal line"]},
+      {h:"Layers (mnemonic — SCALP, outer → inner)",
+       list:["<b>S</b>kin — thin epidermis with thick dermis; hair follicles & sebaceous glands; highly vascular and innervated",
+             "<b>C</b>onnective tissue (subcutaneous, dense) — connects skin to galea; contains the neurovascular bundle",
+             "<b>A</b>poneurosis — galea aponeurotica, a strong tendinous sheet connecting frontalis and occipitalis bellies (occipitofrontalis muscle)",
+             "<b>L</b>oose connective tissue (subgaleal) — the 'danger area'; contains emissary veins linking scalp to diploic veins and intracranial venous sinuses",
+             "<b>P</b>ericranium — dense external periosteum of the calvarium"]},
+      {img:"scalp-layers.jpg", caption:"Layers of the scalp (SCALP mnemonic)"},
+      {h:"Calvarial regions",
+       list:["Frontal region — overlying frontal bone; frontalis muscle (CN VII), supraorbital & supratrochlear neurovasculature (V1)",
+             "Temporal region — overlying squamous temporal bone; temporalis fascia and muscle; superficial temporal vessels",
+             "Parietal region — overlying parietal bones; covered by galea",
+             "Occipital region — overlying occipital bone; occipitalis muscle; greater & lesser occipital nerves; occipital artery"]},
+      {h:"Temporal fossa",
+       p:"Located on the lateral aspect of the skull and is in continuity with the infratemporal fossa below the zygomatic arch."},
+      {h:"Borders of temporal fossa",
+       list:["Lateral: zygomatic arch",
+             "Superior: superior temporal line",
+             "Ventral: temporal process of zygomatic bone",
+             "Inferior: infratemporal crest of greater wing",
+             "Medial: squamous part of temporal bone & temporal surface of greater wing of sphenoid"]},
+      {h:"Contents of temporal fossa",
+       list:["Temporalis muscle",
+             "Temporal n. (branch of facial n.)",
+             "Anterior and posterior deep temporal a. and v. (from maxillary a. & v.)",
+             "Middle temporal a. & v. (superficial temporal — from external carotid a.)",
+             "Zygomaticotemporal branch of zygomatic n."]},
+      {img:"temporal-fossa.jpg", caption:"Temporal fossa borders and contents"},
+    ]
+  },
+  "face-superficial":{
+    title:"Superficial face regions",
+    parent:"head",
+    body:[
+      {h:"Overview",
+       p:"The viscerocranium / splanchnocranium forms the facial part of the skull, derived mainly from the 1st and 2nd pharyngeal arches. Several superficial regions are recognized for clinical and topographical analysis."},
+      {h:"Orbital region",
+       list:["Extent of orbicularis oculi muscle; includes eyelids (palpebrae) and orbital septum",
+             "In medial corner: lacrimal pathway — caruncle, puncta, sac",
+             "Neurovascular: superior & inferior palpebral arches",
+             "Innervation: V1 (upper eyelid), V2 (lower eyelid)"]},
+      {h:"Nasal region",
+       list:["Bony & cartilaginous skeleton of nose",
+             "Muscles: nasalis & procerus",
+             "Arteries: angular a., dorsal nasal a., infraorbital a.",
+             "Veins: facial v., nasofrontal v.",
+             "Innervation: V1 and V2",
+             "Glands: parotid & submandibular drainage area"]},
+      {h:"Oral region",
+       list:["Formed by upper & lower lips, bounded by nasolabial and mentolabial grooves",
+             "Muscles: orbicularis oris and modiolus",
+             "Artery: superior & inferior labial a. (from facial a.)",
+             "Vein: facial v.",
+             "Glands: submandibular & submental",
+             "Nerve: V2 (upper lip) and mental n. (lower lip)"]},
+      {h:"Buccal region",
+       list:["Between oral and parotidomasseteric region",
+             "Contents: thick skin, buccal fat pad",
+             "Artery: facial a.; Vein: facial v.; Nerve: facial n. (motor) + buccal n. (V3, sensory)"]},
+      {h:"Parotidomasseteric region",
+       list:["Below the zygomatic arch, between masseter and infratemporal region",
+             "Contents: parotid gland, masseter, temporomandibular joint"]},
+      {h:"Mental region", p:"Chin region — palpation point of V3 (mental n.)."},
+      {h:"Infraorbital region", p:"Below the orbit — palpation point of V2 (infraorbital n.)."},
+      {img:"face-regions.jpg", caption:"Superficial regions of the face"},
+    ]
+  },
+  "infratemporal":{
+    title:"Infratemporal & pterygopalatine fossae",
+    parent:"head",
+    body:[
+      {h:"Infratemporal fossa — overview",
+       p:"An irregularly-shaped depression below the temporal fossa, situated below and medial to the zygomatic arch. It is not fully enclosed by bone."},
+      {h:"Borders",
+       list:["Cranial: infratemporal surface of greater wing of sphenoid + squamous part of temporal bone",
+             "Ventral: maxillary tuberosity",
+             "Dorsal: continuous with the prestyloid space",
+             "Medial: lateral plate of pterygoid process of sphenoid",
+             "Lateral: ramus of mandible"]},
+      {h:"Passages of infratemporal fossa",
+       list:["Foramen ovale — V3, venous plexus of foramen ovale",
+             "Foramen spinosum — middle meningeal a. & v., meningeal br. of V3",
+             "Mandibular foramen — inferior alveolar n., a., v.",
+             "Pterygomaxillary fissure — maxillary a., pterygoid plexus",
+             "Pterygotympanic fissure — chorda tympani, anterior tympanic a. & v., anterior ligament of malleus",
+             "Foramen lacerum",
+             "Foramen petrosum — lesser petrosal n.",
+             "Alveolar foramina of maxillary tuberosity — posterior superior alveolar n. (V2 br.) & vessels"]},
+      {h:"Contents",
+       list:["Medial pterygoid muscle",
+             "Lateral pterygoid muscle",
+             "Temporalis muscle (lower portion)",
+             "Maxillary artery (with branches: middle meningeal, inferior alveolar, buccal, deep temporal, anterior tympanic)",
+             "Pterygoid venous plexus",
+             "Otic ganglion — relays lesser petrosal n. for parotid secretomotor",
+             "Mandibular n. (V3) — auriculotemporal, inferior alveolar, lingual, buccal nn.",
+             "Chorda tympani (joins lingual n.)",
+             "Buccal fat pad of Bichat"]},
+      {img:"infratemporal-fossa.jpg", caption:"Infratemporal fossa boundaries and contents"},
+      {h:"Pterygopalatine fossa — overview",
+       p:"A small narrow pyramidal space (apex pointing inferiorly) between the posterior wall of the maxilla and the pterygoid process of sphenoid. It is the central crossroads of V2 and the pterygopalatine ganglion."},
+      {h:"Borders",
+       list:["Cranial: maxillary surface of greater wing of sphenoid",
+             "Ventral: infratemporal surface of maxilla",
+             "Dorsal: pterygoid process of sphenoid",
+             "Medial: perpendicular plate of palatine bone",
+             "Lateral: pterygomaxillary fissure (connects to infratemporal fossa)",
+             "Caudal: continues as the greater palatine canal"]},
+      {h:"Passages",
+       list:["<b>To the orbit:</b> foramen rotundum (V2); inferior orbital fissure (zygomatic n., infraorbital n. & a., inferior ophthalmic vein, orbitalis)",
+             "<b>To the palate:</b> greater palatine canal (greater palatine n., descending palatine a. & v.); lesser palatine canal (lesser palatine n., a., v.); pterygoid canal (n., a. & v. of pterygoid canal)",
+             "<b>To the nasal cavity:</b> sphenopalatine foramen (sphenopalatine a. & v., medial & lateral superior posterior nasal branches of V2)",
+             "<b>From infratemporal fossa:</b> pterygomaxillary fissure (maxillary a., pterygoid plexus)"]},
+      {h:"Contents",
+       list:["Pterygopalatine ganglion + pterygopalatine n.",
+             "Maxillary nerve (V2) — zygomatic, infraorbital, posterior superior alveolar nn.",
+             "Nerve of pterygoid canal — fused greater (parasympathetic) + deep (sympathetic) petrosal nerves",
+             "Greater palatine n.",
+             "Maxillary artery — infraorbital a., sphenopalatine a.",
+             "Pterygoid venous plexus"]},
+      {img:"pterygopalatine-fossa.jpg", caption:"Pterygopalatine fossa with V2 and pterygopalatine ganglion"},
+    ]
+  },
+  "skull-base":{
+    title:"Cranial base — external & internal",
+    parent:"head",
+    body:[
+      {h:"External cranial base — overview",
+       p:"Extends from the superior incisor teeth anteriorly to the external occipital protuberance posteriorly. Divided into anterior, middle, posterior, and lateral parts."},
+      {h:"Anterior part",
+       list:["Alveolar processes of maxilla with the dental alveoli",
+             "Choanae (posterior opening of nasal cavity to nasopharynx)",
+             "Bony palate — palatine process of maxilla anteriorly + horizontal plate of palatine posteriorly",
+             "Foramina: incisive (nasopalatine n., sphenopalatine a.); greater palatine; lesser palatine"]},
+      {h:"Middle part — choanae → anterior margin of foramen magnum",
+       list:["Body of sphenoid; petrous parts of temporal bones; basilar part of occipital",
+             "Foramen lacerum — mostly cartilage; transmits artery & nerve of pterygoid canal",
+             "Pterygomaxillary fissure — terminal part of maxillary a., superior alveolar n.",
+             "Foramen ovale — V3, lesser petrosal n., accessory meningeal br. of maxillary a., emissary v.",
+             "Foramen spinosum — middle meningeal a., meningeal br. of V3",
+             "Carotid canal — internal carotid a., carotid (sympathetic) plexus"]},
+      {h:"Posterior part — formed by occipital bone",
+       list:["Foramen magnum — lower medulla, meninges, vertebral aa., spinal accessory n. (CN XI)",
+             "Jugular foramen — anterior to posterior: inferior petrosal sinus, CN IX, X, XI, IJV",
+             "Hypoglossal canal — CN XII",
+             "Condylar canal — occipital emissary v. (to suboccipital plexus, occipital sinus, sigmoid sinus)",
+             "Canaliculus for tympanic n. — CN IX tympanic br.",
+             "Mastoid canaliculus / Arnold's canal — CN X auricular br."]},
+      {h:"Lateral part",
+       list:["Zygomatic arch; infratemporal fossa; mandibular fossa; tympanic plate of temporal bone; styloid & mastoid processes",
+             "Petrotympanic fissure — chorda tympani (CN VII)",
+             "Stylomastoid foramen — CN VII & stylomastoid a.",
+             "External acoustic opening",
+             "Musculotubal canal — auditory tube and tensor tympani; lies in front of the carotid canal",
+             "Fossula petrosa — tympanic ganglion of CN IX",
+             "Cochlear canaliculus — cochlear aqueduct"]},
+      {img:"external-skull-base.jpg", caption:"External cranial base — landmarks and foramina"},
+      {h:"Internal cranial base — three fossae",
+       p:"The internal cranial base is concave-like; it is divided into anterior, middle, and posterior cranial fossae."},
+      {h:"Anterior cranial fossa",
+       list:["Borders: cribriform plate & crista galli (ethmoid), orbital plate of frontal bone (inferiorly), lesser wings of sphenoid (posteriorly), frontal bone (anterolaterally)",
+             "Structures: frontal lobe of cerebral cortex; olfactory bulb & tract; orbital gyri",
+             "Openings: anterior ethmoidal foramen (anterior ethmoidal vessels & n.); cribriform foramina (olfactory nn.)"]},
+      {h:"Middle cranial fossa",
+       list:["Borders: body & greater wings of sphenoid; squamous & petrous parts of temporal bone",
+             "Structures: pituitary gland (sella turcica); temporal lobes",
+             "Openings: optic canal (CN II, ophthalmic a.); superior orbital fissure (CN III, IV, VI, V1, ophthalmic vv., sympathetics from cavernous plexus); foramen rotundum (V2); foramen ovale (V3, lesser petrosal n., accessory meningeal a., emissary v.); foramen spinosum (middle meningeal a. & v., meningeal br. V3); foramen lacerum; carotid canal (ICA); hiatus for greater & lesser petrosal nn."]},
+      {h:"Posterior cranial fossa",
+       list:["Borders: dorsum sellae anteriorly; groove for transverse sinus posteriorly; petrous portion of temporal bone & basilar part of occipital bone; laterally parts of occipital bone",
+             "Structures: cerebellum (in cerebellar fossae); brainstem",
+             "Openings: internal acoustic meatus (CN VII, VIII, labyrinthine a.); foramen magnum (medulla, meninges, vertebral aa., spinal accessory n. ascending, dural vv., anterior & posterior spinal aa.); opening of vestibular canaliculus (vestibular aqueduct); mastoid foramen (mastoid emissary v., br. of occipital a., posterior meningeal a.); hypoglossal canal (CN XII); condylar canal (occipital emissary v.); jugular foramen (CN IX, X, XI [descending]; IJV; inferior petrosal sinus; sigmoid sinus; meningeal brs. of ascending pharyngeal & occipital aa.)"]},
+      {img:"internal-skull-base.jpg", caption:"Internal cranial base — three fossae and their openings"},
+    ]
+  },
+  "cranial-nerves":{
+    title:"Cranial nerves I–XII",
+    parent:"head",
+    body:[
+      {h:"CN I — Olfactory",
+       list:["Function: smell",
+             "Opening in skull: cribriform plate of ethmoid",
+             "Course: olfactory receptors in nasal epithelium → fila olfactoria pierce cribriform plate → olfactory bulb (anterior cranial fossa) → olfactory tract → primary olfactory cortex (periamygdaloid & piriform cortex), secondary in entorhinal area 28"]},
+      {h:"CN II — Optic",
+       list:["Function: vision",
+             "Opening in skull: optic canal",
+             "Course: retinal ganglion cell axons → optic nerve → optic canal → optic chiasm (middle cranial fossa) → optic tract → lateral geniculate nucleus (LGN) → optic radiation → primary visual cortex (Brodmann area 17, occipital lobe)"]},
+      {h:"CN III — Oculomotor",
+       list:["Nuclei: main motor + accessory parasympathetic (Edinger-Westphal) — anterior to cerebral aqueduct at level of superior colliculus",
+             "Function: motor to most extraocular muscles, pupil constriction (parasympathetic), accommodation",
+             "Opening in skull: superior orbital fissure",
+             "Course: anterior midbrain → cavernous sinus (lateral wall) → SOF → divides into superior branch (sup. rectus, levator palpebrae sup.; carries sympathetics to superior tarsal m.) and inferior branch (inf. rectus, med. rectus, inf. oblique; pre-ganglionic parasympathetics to ciliary ganglion → sphincter pupillae & ciliary muscle)"]},
+      {h:"CN IV — Trochlear",
+       list:["Nucleus: floor of cerebral aqueduct in dorsal midbrain at level of inferior colliculus",
+             "Function: superior oblique m. (depresses, intorts, abducts the eye)",
+             "Opening in skull: superior orbital fissure",
+             "Course: only CN to leave posterior surface of brainstem; passes through lateral wall of cavernous sinus"]},
+      {h:"CN V — Trigeminal",
+       list:["Nuclei: 3 sensory (mesencephalic, pontine/principal, spinal) + 1 motor (in pons)",
+             "Function: facial sensation; muscles of mastication; tensor tympani; tensor veli palatini; mylohyoid; anterior belly of digastric",
+             "Branches/Openings: V1 ophthalmic — superior orbital fissure; V2 maxillary — foramen rotundum; V3 mandibular — foramen ovale (carries motor root)"]},
+      {h:"CN VI — Abducens",
+       list:["Nucleus: floor of 4th ventricle, lower pons",
+             "Function: lateral rectus (abduction)",
+             "Opening in skull: superior orbital fissure",
+             "Course: pontomedullary junction → subarachnoid space → Dorello's canal → cavernous sinus (within sinus, not in lateral wall) → SOF"]},
+      {h:"CN VII — Facial",
+       list:["Function: motor — muscles of facial expression, stapedius, stylohyoid, posterior belly of digastric; parasympathetic — lacrimal, submandibular, sublingual glands; taste anterior 2/3 of tongue (via chorda tympani); somatic sensation external acoustic meatus",
+             "Openings: internal acoustic meatus → facial canal → exits at stylomastoid foramen; chorda tympani → petrotympanic fissure"]},
+      {h:"CN VIII — Vestibulocochlear",
+       list:["Function: hearing (cochlear) and balance (vestibular)",
+             "Opening: internal acoustic meatus"]},
+      {h:"CN IX — Glossopharyngeal",
+       list:["Function: motor stylopharyngeus; parasympathetic to parotid (via lesser petrosal n. + otic ganglion); sensation oropharynx; taste posterior 1/3 tongue; carotid body/sinus chemo- & baroreceptors",
+             "Opening: jugular foramen"]},
+      {h:"CN X — Vagus",
+       list:["Function: motor — pharynx, larynx, palate (excluding tensor veli palatini & stylopharyngeus); parasympathetic to thoracic & abdominal viscera (down to splenic flexure); sensation external acoustic meatus (auricular branch — Arnold's nerve)",
+             "Opening: jugular foramen"]},
+      {h:"CN XI — Accessory",
+       list:["Function: SCM and trapezius (spinal root)",
+             "Opening: jugular foramen (descending — exits the skull)"]},
+      {h:"CN XII — Hypoglossal",
+       list:["Function: all intrinsic & extrinsic muscles of tongue (except palatoglossus)",
+             "Opening: hypoglossal canal"]},
+      {img:"cranial-nerves.jpg", caption:"Cranial nerves and their skull base openings"},
+    ]
+  },
+
+  // -------------------- NECK --------------------
+  "anterior-triangle":{
+    title:"Anterior triangle of neck",
+    parent:"neck",
+    body:[
+      {h:"Overview",
+       p:"The neck is divided into an anterior and a posterior (lateral) triangle by the SCM. The anterior triangle is further subdivided into the muscular, carotid, submandibular and submental triangles by the digastric and omohyoid muscles."},
+      {h:"Submandibular triangle — borders",
+       list:["Superior: lower part of body of mandible",
+             "Inferoposterior: posterior belly of digastric",
+             "Inferoanterior: anterior belly of digastric",
+             "Floor: mylohyoid & hyoglossus muscles",
+             "Roof: skin, superficial fascia (with platysma), deep cervical fascia"]},
+      {h:"Lesser's (Pirogov's) triangle — within the submandibular triangle",
+       list:["Superior: hypoglossal nerve",
+             "Inferior: anterior & posterior bellies of digastric",
+             "Use: assists locating the lingual artery (e.g. for ligation procedure)"]},
+      {h:"Submandibular triangle — contents",
+       list:["Nerves: mylohyoid, hypoglossal",
+             "Arteries & veins: facial, sublingual, submental",
+             "Submandibular gland",
+             "Inferior portion of parotid gland",
+             "Submandibular lymph nodes"]},
+      {h:"Carotid triangle — borders",
+       list:["Lateral: SCM",
+             "Cranial: posterior belly of digastric",
+             "Caudoanterior: superior belly of omohyoid"]},
+      {h:"Carotid triangle — contents",
+       list:["Common carotid (bifurcates here into ECA & ICA)",
+             "Internal jugular vein",
+             "External & internal laryngeal nn. (CN X)",
+             "CN XI (spinal accessory), CN XII (hypoglossal)",
+             "Ansa cervicalis",
+             "Sympathetic trunk",
+             "Larynx, thyroid"]},
+      {img:"anterior-triangle.jpg", caption:"Subdivisions of the anterior triangle of the neck"},
+    ]
+  },
+  "posterior-triangle":{
+    title:"Posterior (lateral) triangle of neck",
+    parent:"neck",
+    body:[
+      {h:"Borders of the posterior (lateral) cervical region",
+       list:["Anterior: SCM",
+             "Posterior: trapezius",
+             "Inferior: clavicle"]},
+      {h:"Subdivisions",
+       p:"Subdivided by the inferior belly of omohyoid into the occipital triangle (above) and the subclavian (omoclavicular) triangle (below)."},
+      {h:"Subclavian triangle",
+       list:["Superior: inferior belly of omohyoid",
+             "Inferior: clavicle",
+             "Anterior: SCM",
+             "Contents: 3rd part of subclavian a., subclavian v., trunks of brachial plexus, supraclavicular nerves, EJV (terminal portion)"]},
+      {h:"Occipital triangle",
+       list:["Inferior: inferior belly of omohyoid",
+             "Anterior: SCM",
+             "Posterior: trapezius",
+             "Contents: spinal accessory n. (CN XI) — most superficial; cervical plexus brs. (lesser occipital, great auricular, transverse cervical, supraclavicular); occipital lymph nodes; transverse cervical a."]},
+      {img:"posterior-triangle.jpg", caption:"Posterior cervical triangle and its subdivisions"},
+    ]
+  },
+  "scalene-fissure":{
+    title:"Scalene fissure (interscalene triangle)",
+    parent:"neck",
+    body:[
+      {h:"Borders",
+       list:["Anteriorly: anterior scalene muscle",
+             "Posteriorly: middle scalene muscle",
+             "Inferiorly: first rib"]},
+      {h:"Contents",
+       list:["Brachial plexus (trunks)",
+             "Subclavian artery (3rd part)",
+             "(Note: the subclavian vein passes anterior to the anterior scalene, NOT through the fissure)"]},
+      {img:"scalene-fissure.jpg", caption:"The scalene fissure with brachial plexus and subclavian artery"},
+      {h:"Clinical",
+       p:"Compression of the neurovascular bundle here is one cause of thoracic outlet syndrome."},
+    ]
+  },
+
+  // -------------------- CHEST --------------------
+  "thoracic-wall":{
+    title:"Thoracic wall topography",
+    parent:"chest",
+    body:[
+      {h:"Layers",
+       p:"Superficial skin → subcutaneous fat (except sternal area) → superficial common thoracic fascia (covers pectorals, serratus anterior, origin of external oblique; dorsolaterally also covers latissimus dorsi)."},
+      {h:"Veins",
+       p:"Thoraco-epigastric veins lie in subcutaneous tissue of the anterior and lateral chest walls and drain into the lateral thoracic vein → axillary vein. (Important collateral pathway in caval obstruction.)"},
+      {h:"Intercostal space",
+       p:"There are 11 intercostal spaces per side (numbered for the rib above). Each contains: intercostal vein, artery, and nerve (VAN, superior → inferior) and intercostal lymph nodes."},
+      {img:"intercostal-space.jpg", caption:"Cross-section of an intercostal space (VAN bundle in the costal groove)"},
+      {h:"Surface projections of the heart",
+       list:["2nd intercostal space, right — 1 cm lateral to the sternum",
+             "5th intercostal space, right — near the linea sternalis",
+             "5th intercostal space, left — medial to the midclavicular line; corresponds to the apex of the heart",
+             "2nd intercostal space, left — 2 cm lateral to the sternum"]},
+      {h:"Surface projections of the lungs",
+       p:"The apex projects superior to the 1st rib toward the neck. The horizontal pulmonary fissure projects onto the 4th intercostal space medially (right side)."},
+      {h:"Pneumothorax",
+       list:["Caused by entry of air into the pleural cavity → collapse of the lung",
+             "Primary spontaneous — rupture of small subpleural blebs (e.g. with pressure changes; scuba diving)",
+             "Secondary spontaneous — due to underlying lung disease",
+             "Traumatic — gunshot, stab, blunt thoracic injury",
+             "Tension — pleural air pressure exceeds atmospheric → mediastinal shift, decreased venous return",
+             "Treatment: chest tube via the 5th–6th intercostal space at the midaxillary line ('nipple level')"]},
+      {div:"callout warn", text:"<b>Clinical:</b> The neurovascular bundle runs along the inferior border of each rib — needles for thoracocentesis or chest tubes are inserted along the <b>upper border</b> of the rib below to avoid the bundle."},
+    ]
+  },
+  "mediastinum":{
+    title:"Mediastinum",
+    parent:"chest",
+    body:[
+      {h:"Borders",
+       list:["Anterior: thoracic wall (sternum & costal cartilages 1–5)",
+             "Posterior: superior thoracic vertebral bodies",
+             "Lateral: parietal pleura (mediastinal pleura)",
+             "Superior: superior thoracic aperture",
+             "Inferior: diaphragm"]},
+      {h:"Divisions",
+       list:["Superior mediastinum — above the thoracic plane (sternal angle to T4–T5 disc)",
+             "Inferior mediastinum — below the thoracic plane:",
+             "&nbsp;&nbsp;Anterior inferior mediastinum",
+             "&nbsp;&nbsp;Middle inferior mediastinum",
+             "&nbsp;&nbsp;Posterior inferior mediastinum"]},
+      {h:"Key contents by compartment",
+       list:["<b>Superior:</b> thymus (or its remnant), great vessels (arch of aorta, brachiocephalic vv. → SVC), trachea, esophagus, thoracic duct, vagus & phrenic nn., sympathetic trunk",
+             "<b>Anterior inferior:</b> thymic remnants, lymph nodes, fat",
+             "<b>Middle inferior:</b> heart in pericardium, ascending aorta, pulmonary trunk & main bronchi, phrenic nn.",
+             "<b>Posterior inferior:</b> thoracic aorta, esophagus, thoracic duct, azygos & hemiazygos vv., sympathetic trunk, splanchnic nn."]},
+      {img:"mediastinum.jpg", caption:"Sagittal and transverse divisions of the mediastinum"},
+    ]
+  },
+  "axilla":{
+    title:"Axilla",
+    parent:"chest",
+    body:[
+      {h:"Overview",
+       p:"The axilla is a pyramidal region under the glenohumeral joint, containing neurovascular structures travelling between the neck/thorax and the upper limb."},
+      {h:"Boundaries (pyramid with apex, base, 4 walls)",
+       list:["Apex (cervicoaxillary canal): bounded by the clavicle (anteriorly), the 1st rib (medially), and the superior border of the scapula (posteriorly)",
+             "Base: skin, superficial fascia, axillary fascia (deep)",
+             "Anterior wall: pectoralis major and minor",
+             "Posterior wall: subscapularis, teres major, latissimus dorsi",
+             "Medial wall: serratus anterior overlying the upper 4–5 ribs",
+             "Lateral wall: intertubercular sulcus of humerus"]},
+      {h:"Contents",
+       list:["Axillary artery (3 parts, divided by pec minor) and axillary vein",
+             "Brachial plexus (cords and branches)",
+             "Lymph nodes (mnemonic — APICAL):",
+             "&nbsp;&nbsp;<b>P</b>ectoral (anterior)",
+             "&nbsp;&nbsp;<b>S</b>ubscapular (posterior)",
+             "&nbsp;&nbsp;<b>I</b>nfraclavicular",
+             "&nbsp;&nbsp;<b>C</b>entral",
+             "&nbsp;&nbsp;<b>A</b>pical",
+             "&nbsp;&nbsp;<b>H</b>umeral (lateral)"]},
+      {img:"axilla.jpg", caption:"Boundaries and contents of the axilla"},
+    ]
+  },
+
+  // -------------------- ABDOMEN --------------------
+  "abdomen-ruq":{
+    title:"Right Upper Quadrant (RUQ)",
+    parent:"abdomen",
+    body:[
+      {h:"Definition",
+       p:"The RUQ is bounded medially by the median plane and inferiorly by the transumbilical plane."},
+      {h:"Main contents",
+       list:["Liver — right lobe (and most of the left lobe)",
+             "Gallbladder — fundus projects at Murphy's point (right costal arch × midclavicular line)",
+             "Pylorus of the stomach",
+             "Duodenum (parts 1, 2, and the head of pancreas — Desjardin's point)",
+             "Right kidney and right adrenal gland",
+             "Hepatic flexure of the colon (right colic flexure)",
+             "Portion of transverse colon"]},
+      {h:"Common pathology localizing to RUQ",
+       list:["Acute cholecystitis (Murphy's sign)",
+             "Hepatitis, hepatic abscess",
+             "Duodenal ulcer (peptic disease)",
+             "Right-sided pyelonephritis"]},
+      {img:"abdomen-ruq.jpg", caption:"RUQ — surface and visceral landmarks"},
+    ]
+  },
+  "abdomen-luq":{
+    title:"Left Upper Quadrant (LUQ)",
+    parent:"abdomen",
+    body:[
+      {h:"Main contents",
+       list:["Stomach (most of it; Labbé triangle is its surface projection)",
+             "Spleen",
+             "Body and tail of pancreas",
+             "Left kidney and left adrenal gland",
+             "Splenic flexure of colon (left colic flexure)",
+             "Portion of transverse and descending colon"]},
+      {h:"Common pathology localizing to LUQ",
+       list:["Splenic rupture (e.g. trauma; Kehr's sign — referred pain to the left shoulder)",
+             "Gastric ulcer",
+             "Acute pancreatitis (body/tail)",
+             "Left-sided pyelonephritis"]},
+      {img:"abdomen-luq.jpg", caption:"LUQ — surface and visceral landmarks"},
+    ]
+  },
+  "abdomen-rlq":{
+    title:"Right Lower Quadrant (RLQ)",
+    parent:"abdomen",
+    body:[
+      {h:"Main contents",
+       list:["Cecum",
+             "Vermiform appendix (root projects at McBurney's point — 1/3 from ASIS on the line ASIS → umbilicus; alternative — Lanz point on the interspinous line, 5 cm right of midline for pelvic appendix)",
+             "Ascending colon",
+             "Terminal ileum",
+             "Right ovary & uterine tube (in females)",
+             "Right ureter (lower portion)",
+             "Right spermatic cord (in males)"]},
+      {h:"Common pathology localizing to RLQ",
+       list:["Acute appendicitis (McBurney's tenderness; Rovsing, Psoas, Obturator signs)",
+             "Crohn's disease (terminal ileitis)",
+             "Right ovarian / tubal pathology (e.g. ectopic pregnancy)",
+             "Right ureteric stone"]},
+      {img:"abdomen-rlq.jpg", caption:"RLQ — surface and visceral landmarks (incl. McBurney's & Lanz points)"},
+    ]
+  },
+  "abdomen-llq":{
+    title:"Left Lower Quadrant (LLQ)",
+    parent:"abdomen",
+    body:[
+      {h:"Main contents",
+       list:["Sigmoid colon",
+             "Descending colon",
+             "Left ovary & uterine tube (in females)",
+             "Left ureter (lower portion)",
+             "Left spermatic cord (in males)"]},
+      {h:"Common pathology localizing to LLQ",
+       list:["Diverticulitis (sigmoid)",
+             "Left ovarian / tubal pathology",
+             "Left ureteric stone"]},
+      {img:"abdomen-llq.jpg", caption:"LLQ — surface and visceral landmarks"},
+    ]
+  },
+  "abdominal-wall":{
+    title:"Abdominal wall & rectus sheath",
+    parent:"abdomen",
+    body:[
+      {h:"Layers (superficial → deep)",
+       list:["Skin",
+             "Camper's fascia — subcutaneous fat",
+             "Scarpa's fascia — membranous layer; separates superficial fatty layer from deeper fatty layer",
+             "Deep fatty layer — thinner than the superficial layer",
+             "Superficial abdominal fascia (of external oblique)",
+             "External oblique",
+             "Internal oblique",
+             "Transversus abdominis",
+             "Transversalis fascia (part of parietal abdominal fascia)",
+             "Parietal peritoneum"]},
+      {img:"abdominal-wall-layers.jpg", caption:"Layers of the abdominal wall"},
+      {h:"Rectus sheath",
+       list:["Fibrous structure that envelops the rectus abdominis",
+             "Formed by the aponeuroses of external oblique, internal oblique, and transversus abdominis",
+             "Has anterior & posterior laminae",
+             "Posterior lamina is deficient below the umbilicus — its inferior margin forms the <b>arcuate line</b>",
+             "Aponeurotic fibers cross in the midline forming the <b>linea alba</b> (xiphoid → pubic symphysis)"]},
+      {h:"Neurovasculature — superficial layer",
+       list:["Lies between Camper's and Scarpa's fascia",
+             "Arteries: superficial epigastric a. (from femoral a.), superficial circumflex iliac a. (from femoral a.)"]},
+      {h:"Neurovasculature — deeper layer",
+       list:["Posterior intercostal aa.",
+             "Subcostal a.",
+             "Lumbar aa.",
+             "Inferior epigastric a. — runs deep to the lateral umbilical fold"]},
+      {h:"Innervation",
+       list:["Last 5 intercostal nn. and subcostal n.",
+             "Skin of inguinal canal: ilioinguinal & iliohypogastric nn.",
+             "Muscles supplied by: intercostal nn., iliohypogastric n., ilioinguinal n."]},
+      {h:"Surgical incisions",
+       list:["<b>Median (midline) incision</b> through linea alba — minimal blood loss; avoids major nerves; gives broad access to the abdomen",
+             "<b>Paramedian incision</b> — lateral to linea alba; gives access to lateral structures (kidney, spleen, adrenals); ligates blood and nerve supply medial to it (causing atrophy of the muscle medially)",
+             "<b>Kocher (subcostal) incision</b> — begins inferior to xiphoid and extends inferolaterally parallel to the right costal margin; access to the gallbladder",
+             "<b>McBurney / gridiron incision</b> — at McBurney's point, classically for open appendicectomy",
+             "<b>Pfannenstiel incision</b> — low transverse curved incision above the pubis (e.g. C-section)"]},
+      {div:"callout", text:"<b>Tip:</b> The arcuate line and the linea alba are key surgical landmarks — useful for laparotomy planning and component-separation hernia repair."},
+    ]
+  },
+  "inguinal":{
+    title:"Inguinal region",
+    parent:"abdomen",
+    body:[
+      {h:"Overview",
+       p:"The inguinal region lies between the anterior superior iliac spine (laterally) and the pubic tubercle (medially). It is the lower lateral part of the abdominal wall, just above the thigh region."},
+      {h:"Inguinal canal — overview",
+       p:"An oblique passageway between the muscle layers of the lower anterior abdominal wall, with deep (internal) and superficial (external) openings."},
+      {h:"Rings",
+       list:["<b>Deep inguinal ring</b> — internal opening; an outpouching of transversalis fascia which becomes the internal spermatic fascia (innermost cover of the spermatic cord)",
+             "<b>Superficial inguinal ring</b> — opening in the aponeurosis of external oblique; bounded by medial & lateral crura and intercrural fibers; visible only after dissecting off the external spermatic fascia"]},
+      {h:"Borders",
+       list:["Anterior wall: aponeurosis of external oblique (reinforced laterally by internal oblique)",
+             "Posterior wall: transversalis fascia (reinforced medially by conjoint tendon)",
+             "Floor: inguinal ligament (and lacunar ligament medially)",
+             "Roof: arching fibers of internal oblique and transversus abdominis (conjoint tendon)"]},
+      {h:"Contents",
+       list:["<b>Spermatic cord</b> (males) / <b>round ligament of uterus</b> (females)",
+             "<b>Ilioinguinal n.</b> (lies on top of cord; emerges through superficial ring)",
+             "<b>Genital branch of genitofemoral n.</b> (within cord)"]},
+      {img:"inguinal-canal.jpg", caption:"Inguinal canal — borders, rings, contents"},
+      {h:"Hesselbach's (inguinal) triangle",
+       list:["Medial: lateral margin of rectus abdominis",
+             "Lateral: inferior epigastric a. & v.",
+             "Inferior: inguinal ligament"]},
+      {h:"Hernias",
+       list:["<b>Indirect inguinal hernia</b> — congenital or acquired; lateral to the inferior epigastric vessels; passes through the deep ring, traverses the canal, exits the superficial ring (may descend into scrotum)",
+             "<b>Direct inguinal hernia</b> — acquired; medial to the inferior epigastric vessels; pushes through the Hesselbach's triangle (supravesical fossa) and exits the superficial ring",
+             "<b>Femoral hernia</b> — through the femoral ring, emerges inferior to the inguinal ligament; more common in females (proportionally wider pelvis); high risk of strangulation"]},
+      {div:"callout warn", text:"<b>Mnemonic:</b> 'MD's don't lie' — <b>M</b>edial = <b>D</b>irect; lateral = indirect (relative to inferior epigastric vessels)."},
+    ]
+  },
+  "peritoneum":{
+    title:"Peritoneal cavity",
+    parent:"abdomen",
+    body:[
+      {h:"Overview",
+       p:"The peritoneal cavity is subdivided into the greater sac and the lesser sac (omental bursa)."},
+      {h:"Greater sac",
+       p:"Accounts for most of the space in the peritoneal cavity. Begins at the diaphragm and ends in the pelvic cavity. Contains all peritoneal organs."},
+      {h:"Lesser sac (omental bursa)",
+       p:"Found behind the stomach, in front of the pancreas. Continuous with the greater sac through the epiploic foramen (foramen of Winslow)."},
+      {h:"Borders of the epiploic foramen",
+       list:["Anterior: hepatoduodenal ligament (portal triad — bile duct, hepatic a., portal v.)",
+             "Posterior: IVC",
+             "Superior: caudate lobe of liver",
+             "Inferior: superior part of duodenum"]},
+      {img:"lesser-sac.jpg", caption:"Transverse section through the lesser sac"},
+      {h:"Supra- and infracolic compartments",
+       p:"The peritoneal cavity is divided by the transverse mesocolon into a supracolic (above) and infracolic (below) compartment."},
+      {h:"Supracolic compartment",
+       p:"Contains: liver, gallbladder, stomach, duodenum, pancreas, spleen, lesser omentum (hepatoduodenal & hepatogastric ligaments)."},
+      {h:"Infracolic compartment",
+       p:"Contains the small intestine, large intestine, and the horizontal & ascending parts of the duodenum. Divided by the root of the mesentery into right and left infracolic spaces, each supplied by unpaired branches of the abdominal aorta."},
+      {h:"Peritoneal recesses",
+       list:["Duodenojejunal flexure — superior, inferior duodenal folds & fossae",
+             "Ileocecal junction — superior & inferior ileocecal recesses",
+             "Sigmoid recess — intersigmoid recess (beneath the sigmoid mesocolon)"]},
+      {h:"Retroperitoneal organs (mnemonic — SAD PUCKER)",
+       list:["<b>S</b>uprarenal (adrenal) glands",
+             "<b>A</b>orta and IVC",
+             "<b>D</b>uodenum (parts 2–4)",
+             "<b>P</b>ancreas (except tail)",
+             "<b>U</b>reters",
+             "<b>C</b>olon (ascending & descending)",
+             "<b>K</b>idneys",
+             "<b>E</b>sophagus (lower part)",
+             "<b>R</b>ectum (middle and lower thirds)"]},
+    ]
+  },
+  "duodenum-pancreas":{
+    title:"Duodenum & pancreas",
+    parent:"abdomen",
+    body:[
+      {h:"Duodenum — four parts (~25 cm long, C-shaped)",
+       list:["<b>Superior</b> — projects to the level of L1; intraperitoneal; wider proximal lumen called the duodenal ampulla (cap)",
+             "<b>Descending</b> — descends along L1–L3; major duodenal papilla (foregut → midgut transition); minor duodenal papilla above",
+             "<b>Horizontal</b> — crosses the vertebral column at L3; passes over the IVC and is crossed anteriorly by the SMA & SMV (superior mesenteric vessels)",
+             "<b>Ascending</b> — from inferior border of pancreas to L2; ends at the duodenojejunal junction left of the midline"]},
+      {h:"Relationships",
+       p:"The duodenum curves from the anterior aspect of the pancreas to the posterolateral aspect, so the head of pancreas lies within the duodenal C."},
+      {h:"Pancreas",
+       list:["<b>Level of L1</b>: body & tail. The body forms the omental tuberosity (creates the omental bursa behind the stomach). The tail extends to the splenic hilum.",
+             "<b>Level of L2</b>: head & uncinate process. The IVC lies posterior to the head; the bile duct enters the head from posterior."]},
+      {h:"Vessels",
+       list:["Splenic a. — courses along the superior border of body and tail",
+             "Splenic v. — posterior to the body; merges with the SMV (posterior to the pancreatic neck) → forms the hepatic portal vein"]},
+      {img:"duodenum-pancreas.jpg", caption:"Duodenum & pancreas — topography"},
+    ]
+  },
+  "retroperitoneum":{
+    title:"Retroperitoneum",
+    parent:"abdomen",
+    body:[
+      {h:"Definition",
+       p:"The retroperitoneum is the part of the dorsal abdominal cavity between the posterior parietal peritoneum and the transversalis fascia. It is continuous with the subperitoneal space."},
+      {h:"Spaces (divided by the perirenal/Gerota's fascia)",
+       list:["Anterior pararenal space",
+             "Perirenal space",
+             "Posterior pararenal space"]},
+      {h:"Retroperitoneal organs",
+       p:"Duodenum (except ampulla), pancreas, ascending and descending colon, kidneys, suprarenal glands, ureters, bladder, uterus, and rectum. Some are 'secondary retroperitoneal' (originally intraperitoneal — duodenum, pancreas, ascending & descending colon)."},
+      {h:"Vessels",
+       list:["Abdominal aorta and IVC ('great vessels')",
+             "Iliac vessels (to the legs)"]},
+      {h:"Nerves",
+       list:["Branches of lumbar plexus and sacral plexus",
+             "Right and left lumbar sympathetic trunks",
+             "Thoracic splanchnic nerves (sympathetic)",
+             "Four lumbar splanchnic nerves (sympathetic)",
+             "Autonomic (prevertebral) plexuses (e.g. abdominal aortic plexus)"]},
+      {h:"Lymphatics",
+       p:"Lumbar trunks, cisterna chyli, lumbar lymph nodes."},
+      {img:"retroperitoneum.jpg", caption:"Retroperitoneal anatomy"},
+    ]
+  },
+  "projection-points":{
+    title:"Surface projection points (abdominal landmarks)",
+    parent:"abdomen",
+    body:[
+      {h:"Labbé triangle",
+       p:"Surface projection of the stomach. Borders: transpyloric line (left 9th costal arch ↔ right 9th costal arch) and the right 9th costal arch ↔ left 8th costal arch."},
+      {h:"Desjardin's point",
+       p:"Projection of the head of pancreas and major duodenal papilla. Located on the line: apex of right axilla → umbilicus, ~6–7 cm from umbilicus."},
+      {h:"Murphy's point",
+       p:"Projection of the fundus of the gallbladder. Intersection of the right costal arch with the right midclavicular line. Tenderness on inspiration here = Murphy's sign (cholecystitis)."},
+      {h:"McBurney's point",
+       p:"Projection of the root of the vermiform appendix. On the line ASIS → umbilicus, at the lateral one-third (i.e. ~1/3 from ASIS)."},
+      {h:"Lanz point",
+       p:"Projection of a pelvic appendix. On the interspinous line (right ASIS ↔ left ASIS), 5 cm to the right of midline."},
+      {img:"abdominal-projection-points.jpg", caption:"Classic abdominal projection points"},
+    ]
+  },
+
+  // -------------------- PELVIS --------------------
+  "male-pelvis":{
+    title:"Male pelvis",
+    parent:"pelvis",
+    body:[
+      {h:"Overview",
+       p:"The male pelvis is located in the lower part of the abdomen and contains the urinary bladder, urethra, ureters, rectum, ductus deferens (with ampullae), seminal glands, and prostate."},
+      {h:"Bony pelvis comparison (male vs. female)",
+       list:["Male outlet narrower and less oval; pelvic inlet narrower dorsally",
+             "Pubic arch — closer to 60° in males, closer to 90° in females",
+             "Sacrum — more curved in males, less curved in females; tends to impinge upon the outlet"]},
+      {h:"Sagittal anatomy (anterior → posterior)",
+       list:["Pubic symphysis",
+             "Urinary bladder → prostatic urethra → membranous urethra → spongy urethra (penis)",
+             "Prostate (surrounding the prostatic urethra), seminal vesicles, ductus deferens (ampulla)",
+             "Rectovesical pouch (peritoneal recess between bladder and rectum — most dependent in males)",
+             "Rectum, anal canal"]},
+      {img:"male-pelvis-sagittal.jpg", caption:"Sagittal section of the male pelvis"},
+    ]
+  },
+  "female-pelvis":{
+    title:"Female pelvis & continence",
+    parent:"pelvis",
+    body:[
+      {h:"Topography",
+       list:["<b>Uterus</b> — posterosuperior to the urinary bladder, anterior to the rectum",
+             "Anterior part of the uterus is covered by peritoneum, creating the <b>vesico-uterine pouch</b> anteriorly and the <b>recto-uterine pouch (Pouch of Douglas)</b> posteriorly",
+             "Normal uterus is anteverted (relative to vagina) and anteflexed (relative to cervix)",
+             "The peritoneal fold from the uterus is the <b>broad ligament</b>; basal part = <b>cardinal ligament</b> (lateral cervical lig.) — runs from cervix to lateral pelvic wall",
+             "<b>Uterine tube</b> — on its posterior wall the ovary hangs on the mesovarium; proper ligament of ovary (lower pole → uterine horn); suspensory ligament of ovary (upper pole → pelvic wall); these subdivide the broad ligament into mesosalpinx (upper) and mesometrium (lower)",
+             "<b>Vagina</b> — touches ventrally the posterior surface of the bladder and urethra; rectum is posterior; enveloped by the urethrovaginal sphincter as it passes the urogenital diaphragm; posterior fornix contacts the peritoneum at the bottom of the rectouterine pouch (culdocentesis target)",
+             "<b>Urethra</b> — surrounded below by the external urethral sphincter; posterior wall contacts the inferior anterior vaginal wall"]},
+      {img:"female-pelvis-sagittal.jpg", caption:"Sagittal section of the female pelvis"},
+      {h:"Mechanism of continence",
+       p:"As the bladder fills, pressure is low and detrusor remains relaxed. Increasing fullness raises bladder afferent activity to the dorsal horn → spinal interneurons activate somatic pudendal and sympathetic hypogastric efferents. Pudendal somatic activation contracts the striated urethral sphincter and increases pelvic-diaphragm tone. Hypogastric sympathetic activation inhibits detrusor and contracts urethral smooth muscle. Information also reaches the pontine continence center, periaqueductal gray, and right anterior cingulate cortex — all promote continence."},
+      {h:"Voiding",
+       p:"When permitted, bladder afferents reach the periaqueductal gray → activate the pontine micturition center → parasympathetic pelvic efferents to detrusor → contraction; concurrently, sympathetic and somatic efferents to the urethra are inhibited → urethral relaxation and urine flow."},
+      {div:"callout", text:"Continence also depends on intact anatomic supports of the pelvic organs and sufficient urethral pressure (especially the levator ani's puborectalis and pubovaginalis components)."},
+    ]
+  },
+  "pelvic-floor":{
+    title:"Pelvic floor & ischioanal fossa",
+    parent:"pelvis",
+    body:[
+      {h:"Pelvic floor — overview",
+       p:"Closure of the trunk inferiorly and posteriorly. Formed by the pelvic diaphragm and the urogenital diaphragm. Provides passage for the rectum, vagina, urethra. Part of the deep stabilizing system."},
+      {h:"Pelvic diaphragm — Levator ani + coccygeus",
+       list:["<b>Iliococcygeus</b> — origin: ischial spine + tendinous arch of levator ani; insertion: coccyx (lateral) + iliococcygeal raphe",
+             "<b>Pubococcygeus</b> — muscular band between pubis and coccyx; encircles pelvic organs",
+             "<b>Puborectalis</b> — origin: superior ramus of pubis; encircles the rectum (forming the anorectal angle)",
+             "Functions: maintains intra-abdominal pressure; supports pelvic contents; closes the rectum; elevates pelvic floor and anus",
+             "Innervation: pudendal n., anterior rami S2–S4"]},
+      {h:"Coccygeus (ischiococcygeus)",
+       list:["Thin muscle merging with the sacrospinous ligament",
+             "Origin: ischial spine, sacrospinous ligament, pelvic wall",
+             "Insertion: coccyx, S5 vertebra",
+             "Function: pulls coccyx ventrally during defecation and delivery",
+             "Innervation: anterior ramus S4"]},
+      {h:"External anal sphincter",
+       list:["Subcutaneous part — below the internal anal sphincter",
+             "Superficial part — encircles the caudal portion of the internal anal sphincter",
+             "Deep part — encircles cranial part of the internal anal sphincter; partially merges with puborectalis",
+             "Function: compresses the anal canal; maintains anorectal continence",
+             "Innervation: pudendal n., anterior rami S3–S4"]},
+      {h:"Urogenital diaphragm",
+       list:["Mainly the deep transverse perineal muscle (origin: ischial ramus & inferior ramus, internal surfaces; insertion: urogenital hiatus)",
+             "Superficial transverse perineal muscle (only in men) — origin: ischial tuberosity; insertion: perineal body central tendon",
+             "Innervation: deep branch of perineal n. (pudendal, S2–S4)",
+             "Function: support and stabilize pelvic organs and the central tendon",
+             "Transverse perineal ligament — anterior; completes the urogenital diaphragm"]},
+      {h:"Pelvic & UG diaphragm fasciae",
+       p:"Both diaphragms are covered above and below by superior and inferior fasciae (perineal membrane = inferior UG diaphragmatic fascia)."},
+      {h:"Ischioanal (ischiorectal) fossa",
+       p:"Wedge-shaped, fat-filled space between the pelvic and urogenital diaphragms; opens posteriorly. Contains the pudendal canal (Alcock's canal) on its lateral wall, which transmits the pudendal n. and internal pudendal vessels."},
+      {img:"pelvic-floor-frontal.jpg", caption:"Frontal section of the pelvis showing the ischioanal fossa"},
+    ]
+  },
+  "perineum":{
+    title:"Perineum",
+    parent:"pelvis",
+    body:[
+      {h:"Overview",
+       p:"The perineum is the most inferior part of the pelvic outlet, between the thighs. It supports the urogenital and gastrointestinal systems and is essential for micturition, defecation, sexual intercourse, and childbirth."},
+      {h:"Anatomical borders",
+       list:["Anterior: pubic symphysis",
+             "Posterior: tip of the coccyx",
+             "Lateral: inferior pubic & ischial rami; sacrotuberous ligament",
+             "Roof: pelvic floor",
+             "Base: skin and fascia"]},
+      {h:"Surface borders",
+       list:["Anterior: mons pubis (♀) / base of penis (♂)",
+             "Lateral: medial surfaces of the thighs",
+             "Posterior: superior end of the intergluteal cleft"]},
+      {h:"Subdivision",
+       p:"A theoretical line drawn between the ischial tuberosities divides the perineum into the urogenital triangle (anterior) and the anal triangle (posterior)."},
+      {h:"Urogenital triangle",
+       list:["Bounded by pubic symphysis, ischiopubic rami, and the interischial line",
+             "Has an additional layer of strong deep fascia — the perineal membrane",
+             "Contents: external genitalia and urethra",
+             "Pouches: superficial perineal pouch (above perineal membrane); deep perineal pouch"]},
+      {h:"Anal triangle",
+       list:["Bounded by coccyx, sacrotuberous ligaments, and the interischial line",
+             "Contents: anal aperture, external anal sphincter, ischioanal fossae (×2)",
+             "Pudendal n. supplies somatic fibres to the perineum"]},
+      {h:"Perineal fascia",
+       list:["Deep fascia: covers superficial perineal muscles and protruding structures (penis, clitoris)",
+             "Superficial fascia — two layers:",
+             "&nbsp;&nbsp;Superficial layer (continuous with Camper's fascia)",
+             "&nbsp;&nbsp;Deep layer — Colles' fascia (continuous with Scarpa's fascia)"]},
+      {h:"Perineal body (central tendon)",
+       p:"Fibrous node in the centre of the perineum — common origin/insertion for: bulbospongiosus, superficial & deep transverse perineal mm., external anal sphincter, fibres of levator ani (especially puborectalis), and external urethral sphincter (in part)."},
+      {img:"perineum.jpg", caption:"Diamond-shaped perineum: urogenital and anal triangles"},
+    ]
+  },
+
+  // -------------------- BACK / VERTEBRAL CANAL --------------------
+  "vertebral-canal":{
+    title:"Vertebral canal — topography",
+    parent:"back",
+    body:[
+      {h:"Overview",
+       p:"Formed by the vertebral foramina of successive vertebrae of the articulated vertebral column. Extends from the foramen magnum to the sacral hiatus and follows the vertebral curves."},
+      {h:"Regional shape",
+       list:["Cervical and lumbar regions — large and triangular (free mobility)",
+             "Thoracic region — small and circular (less movement)",
+             "Lumbar region — gradually decreases in size from L1 to L5; relatively wider in females"]},
+      {h:"Clinical zones",
+       list:["<b>Central zone</b> — between medial margins of facet joints",
+             "<b>Lateral zones</b> (×2) — beneath facet joints, entering the intervertebral foramina",
+             "Lateral zones subdivided into: subarticular (lateral recess), foraminal, and extraforaminal regions"]},
+      {img:"vertebral-canal.jpg", caption:"Vertebral canal — central and lateral zones"},
+    ]
+  },
+  "lumbar-puncture":{
+    title:"Lumbar puncture & epidural anesthesia",
+    parent:"back",
+    body:[
+      {h:"Epidural space",
+       p:"Lies between the spinal dura and the wall of the vertebral canal. Contains epidural fat and the internal vertebral venous plexus (Batson's plexus)."},
+      {h:"Epidural anesthesia",
+       p:"Access to the epidural space is usually obtained in the lumbar region for the administration of anesthetic and analgesic drugs (and for endoscopy). The caudal route is mainly used for analgesic injections. Always entered in the midline posteriorly, where the depth of the space is greatest."},
+      {h:"Lumbar puncture — adult technique",
+       list:["Patient sitting or lying on the side on a flat surface",
+             "Lumbar spine flexed maximally to separate the vertebral spines and expose the ligamentum flavum at the interlaminar window",
+             "A line drawn between the highest points of the iliac crests almost always intersects the L4/L5 body",
+             "Skin and soft tissues are anaesthetized; a needle is inserted between the spines of L3/L4 or L4/L5",
+             "Needle angled in horizontal and sagittal planes to pierce the ligamentum flavum"]},
+      {h:"Layers traversed by the needle (in order)",
+       p:"<b>Skin → Subcutaneous tissue → Supraspinous ligament → Interspinous ligament → Ligamentum flavum → Epidural space → Dura → Arachnoid → Subarachnoid space</b>"},
+      {h:"Lumbar puncture — neonates and infants",
+       list:["Spinal cord usually terminates between L1–L5 in children aged 1–7; conus medullaris between T12–L3",
+             "Position the baby (lying or sitting) for maximum convex curvature of the lumbar spine",
+             "Needle and trocar inserted between L3 and L4 — approximately level with the iliac crests; insert immediately above or below the iliac crests",
+             "Distance from skin to subarachnoid space ≈ 1.4 cm in neonates; increases with age"]},
+      {div:"callout danger", text:"<b>Caution:</b> never enter above L2 in adults (risk of cord injury). Always confirm the iliac crest landmark and aim midline."},
+      {img:"lumbar-puncture.jpg", caption:"Lumbar puncture technique and needle path"},
+    ]
+  },
+
+  // -------------------- LIMBS --------------------
+  "axilla-2":{
+    title:"Axilla — boundaries & contents",
+    parent:"upper-limb",
+    body:[
+      {h:"See chest → axilla",
+       p:"For full content, see the Axilla page in the Chest region. Boundaries: pyramid with apex (cervicoaxillary canal), base (skin & axillary fascia) and 4 walls — anterior (pec major/minor), posterior (subscap, teres major, lat dorsi), medial (serratus anterior), lateral (intertubercular sulcus)."},
+      {h:"Contents",
+       list:["Axillary artery (3 parts) and axillary vein",
+             "Cords and branches of the brachial plexus",
+             "Axillary lymph nodes — APICAL (pectoral, subscapular, infraclavicular, central, apical, humeral)"]},
+    ]
+  },
+  "upper-limb-regions":{
+    title:"Upper limb regions",
+    parent:"upper-limb",
+    body:[
+      {h:"Brachial region",
+       p:"Anterior compartment — biceps brachii, brachialis, coracobrachialis (musculocutaneous n., brachial a.). Posterior compartment — triceps brachii (radial n., profunda brachii a.). Cubital fossa: medial — pronator teres; lateral — brachioradialis; superior — line between epicondyles. Roof — bicipital aponeurosis. Floor — brachialis & supinator. Contents — brachial a. & median n. medially; biceps tendon centrally; radial n. laterally."},
+      {h:"Antebrachial region",
+       p:"Anterior compartment — flexors and pronators (median & ulnar nn., radial & ulnar aa.). Posterior compartment — extensors and supinator (radial n.)."},
+      {h:"Hand",
+       p:"Thenar (median n.), hypothenar (ulnar n.), midpalmar and adductor compartments. Carpal tunnel: roof — flexor retinaculum; floor — carpal bones; contents — median n. + 9 long flexor tendons (4 FDS, 4 FDP, FPL)."},
+    ]
+  },
+  "gluteal":{
+    title:"Gluteal region",
+    parent:"lower-limb",
+    body:[
+      {h:"Borders",
+       list:["Roof: iliac crest",
+             "Floor: lower border of gluteus maximus"]},
+      {h:"Muscles — superficial layer",
+       list:["Gluteus maximus",
+             "Tensor fasciae latae"]},
+      {h:"Muscles — deep layer",
+       list:["Gluteus medius",
+             "Gluteus minimus",
+             "Piriformis",
+             "Quadratus femoris",
+             "Triceps coxae — gemellus inferior, gemellus superior, obturator internus"]},
+      {h:"Nerves of the gluteal region",
+       list:["Superficial — cluneal nerves: superior, middle, and inferior (cutaneous)",
+             "Deep — branches of the sacral plexus:",
+             "&nbsp;&nbsp;Superior gluteal n. — gluteus medius, gluteus minimus, tensor fasciae latae",
+             "&nbsp;&nbsp;Inferior gluteal n. — gluteus maximus",
+             "&nbsp;&nbsp;Sciatic n. — passes through; not innervating gluteal structures",
+             "&nbsp;&nbsp;Posterior femoral cutaneous n. — skin of posterior thigh, buttock, posterior scrotum/labia",
+             "&nbsp;&nbsp;Nerve to quadratus femoris",
+             "&nbsp;&nbsp;Nerve to obturator internus",
+             "&nbsp;&nbsp;Pudendal n. — sensory to external genitalia and skin around anus, anal canal, perineum; motor to pelvic muscles, external urethral & anal sphincters"]},
+      {h:"Blood supply",
+       p:"Superior and inferior gluteal arteries (from internal iliac a.). Veins follow a similar pattern, draining to the internal iliac vein. The superior gluteal a. supplies gluteal muscles, TFL and the hip joint. The inferior gluteal a. supplies gluteus maximus, piriformis, obturator internus, gemelli, and quadratus femoris."},
+      {h:"Deep fascia of the gluteal region",
+       p:"Lies under subcutaneous tissue. Thickens over gluteus medius to form an aponeurosis. Anteriorly attaches to inguinal ligament and superior pubic ramus; posteriorly to sacrum and coccyx."},
+      {h:"Ligaments and bursae deep to the gluteus maximus",
+       list:["Ligaments: sacrotuberous, sacrospinous, ischiofemoral",
+             "Bursae: trochanteric bursa; ischial bursa; bursa between gluteus maximus and vastus lateralis"]},
+      {h:"Greater sciatic foramen — structures passing",
+       list:["<b>Suprapiriform:</b> superior gluteal n.; superior gluteal vessels",
+             "<b>Infrapiriform:</b> inferior gluteal n.; inferior gluteal vessels; sciatic n.; posterior cutaneous n. of thigh; n. to quadratus femoris; pudendal n.; internal pudendal vessels; n. to obturator internus"]},
+      {h:"Lesser sciatic foramen",
+       list:["Tendon of obturator internus",
+             "Pudendal nerve",
+             "Internal pudendal vessels",
+             "Note: gemellus muscles' origins fill most of the foramen"]},
+      {div:"callout warn", text:"<b>Clinical:</b> intramuscular injections are given in the <b>anterosuperior quadrant</b> of the gluteal region (gluteus medius / minimus) to avoid the sciatic nerve."},
+      {img:"gluteal.jpg", caption:"Gluteal region — superficial & deep muscles, sciatic foramina"},
+    ]
+  },
+  "anterior-thigh":{
+    title:"Anterior thigh — iliopectineal fossa, femoral triangle",
+    parent:"lower-limb",
+    body:[
+      {h:"Femoral triangle — borders",
+       list:["Superior (base): inguinal ligament",
+             "Lateral: medial border of sartorius",
+             "Medial: medial border of adductor longus"]},
+      {h:"Femoral triangle — floor & roof",
+       list:["Floor (lateral → medial): iliacus, psoas major, pectineus, adductor longus",
+             "Roof: skin, subcutaneous tissue, fascia lata, cribriform fascia"]},
+      {h:"Femoral triangle — contents (lateral → medial; mnemonic NAVEL)",
+       list:["<b>N</b>erve — femoral n. (lies <b>outside</b> the femoral sheath)",
+             "<b>A</b>rtery — femoral a.",
+             "<b>V</b>ein — femoral v.",
+             "<b>E</b>mpty space (femoral canal — contains lymphatics, deep inguinal lymph node of Cloquet)",
+             "<b>L</b>ymphatics — within the canal"]},
+      {h:"Iliopectineal fossa",
+       p:"The depression at the apex of the femoral triangle, where the iliopsoas and pectineus meet. Continues distally as the adductor (subsartorial / Hunter's) canal."},
+      {h:"Adductor (subsartorial / Hunter's) canal",
+       list:["Anterior wall: sartorius (covered by vastoadductor membrane)",
+             "Lateral wall: vastus medialis",
+             "Posteromedial wall: adductor longus + adductor magnus",
+             "Contents: femoral a. & v., saphenous n., n. to vastus medialis"]},
+      {img:"femoral-triangle.jpg", caption:"Femoral triangle — borders, floor, contents (NAVEL)"},
+    ]
+  },
+};
+
+/* ====================================================================
+   CNS / PNS REGIONS
+   ==================================================================== */
+
+const CNS_PNS = {
+  brain:{
+    title:"Brain (CNS)",
+    intro:"The cerebrum, cerebellum, and brainstem form the supratentorial and infratentorial CNS components.",
+    sub:[
+      {id:"frontal-lobe", name:"Frontal lobe", brief:"Motor cortex, prefrontal cortex, Broca's area"},
+      {id:"parietal-lobe", name:"Parietal lobe", brief:"Somatosensory cortex, association areas"},
+      {id:"temporal-lobe", name:"Temporal lobe", brief:"Auditory cortex, Wernicke's area, hippocampus"},
+      {id:"occipital-lobe", name:"Occipital lobe", brief:"Primary visual cortex (Brodmann area 17)"},
+      {id:"cerebellum", name:"Cerebellum", brief:"Coordination, balance, motor learning"},
+      {id:"brainstem", name:"Brainstem", brief:"Midbrain, pons, medulla — origins of CNs III–XII"},
+    ]
+  },
+  spinal:{
+    title:"Spinal cord (CNS)",
+    intro:"Continues caudally from the medulla; segmented (C1–Co1) and surrounded by meninges.",
+    sub:[
+      {id:"cervical-cord", name:"Cervical enlargement (C5–T1)", brief:"Origin of the brachial plexus"},
+      {id:"thoracic-cord", name:"Thoracic cord", brief:"Sympathetic outflow"},
+      {id:"lumbar-cord", name:"Lumbar enlargement (L2–S3)", brief:"Origin of the lumbosacral plexus"},
+      {id:"conus", name:"Conus medullaris & cauda equina", brief:"Termination at L1–L2 (adult); LP target below"},
+    ]
+  },
+  cn:{
+    title:"Cranial nerves (PNS)",
+    intro:"Twelve pairs of cranial nerves arising from the brain and exiting through specific skull foramina.",
+    sub:[
+      {id:"cn-1", name:"CN I — Olfactory", brief:"Smell — through cribriform plate"},
+      {id:"cn-2", name:"CN II — Optic", brief:"Vision — through optic canal"},
+      {id:"cn-3", name:"CN III — Oculomotor", brief:"Most extraocular muscles, parasympathetics — SOF"},
+      {id:"cn-4", name:"CN IV — Trochlear", brief:"Superior oblique — SOF"},
+      {id:"cn-5", name:"CN V — Trigeminal", brief:"Facial sensation, mastication — SOF, FR, FO"},
+      {id:"cn-6", name:"CN VI — Abducens", brief:"Lateral rectus — SOF"},
+      {id:"cn-7", name:"CN VII — Facial", brief:"Facial expression, parasympathetics, taste — IAM/stylomastoid"},
+      {id:"cn-8", name:"CN VIII — Vestibulocochlear", brief:"Hearing & balance — IAM"},
+      {id:"cn-9", name:"CN IX — Glossopharyngeal", brief:"Stylopharyngeus, parotid, taste — jugular foramen"},
+      {id:"cn-10", name:"CN X — Vagus", brief:"Pharynx, larynx, viscera — jugular foramen"},
+      {id:"cn-11", name:"CN XI — Accessory", brief:"SCM, trapezius — jugular foramen"},
+      {id:"cn-12", name:"CN XII — Hypoglossal", brief:"Tongue muscles — hypoglossal canal"},
+    ]
+  },
+  plexuses:{
+    title:"Peripheral plexuses (PNS)",
+    intro:"Major somatic nerve plexuses formed by anterior rami of spinal nerves.",
+    sub:[
+      {id:"cervical-plexus", name:"Cervical plexus (C1–C4)", brief:"Lesser occipital, great auricular, transverse cervical, supraclavicular, ansa cervicalis, phrenic"},
+      {id:"brachial-plexus", name:"Brachial plexus (C5–T1)", brief:"Roots → trunks → divisions → cords → branches; supplies the upper limb"},
+      {id:"lumbar-plexus", name:"Lumbar plexus (L1–L4)", brief:"Iliohypogastric, ilioinguinal, genitofemoral, lateral femoral cutaneous, obturator, femoral"},
+      {id:"sacral-plexus", name:"Sacral plexus (L4–S4)", brief:"Sciatic, superior & inferior gluteal, pudendal, posterior femoral cutaneous"},
+      {id:"coccygeal-plexus", name:"Coccygeal plexus (S4–Co1)", brief:"Anococcygeal nerve"},
+    ]
+  },
+  ans:{
+    title:"Autonomic nervous system",
+    intro:"Visceral motor system controlling smooth muscle, cardiac muscle, and glands — sympathetic, parasympathetic, and enteric divisions.",
+    sub:[
+      {id:"sympathetic", name:"Sympathetic", brief:"T1–L2 outflow; paravertebral & prevertebral ganglia"},
+      {id:"parasympathetic", name:"Parasympathetic", brief:"Cranial (III, VII, IX, X) and sacral (S2–S4) outflows"},
+      {id:"enteric", name:"Enteric", brief:"Myenteric (Auerbach's) and submucosal (Meissner's) plexuses"},
+    ]
+  },
+};
+
+/* ====================================================================
+   ROUTER + RENDERING
+   ==================================================================== */
+
+function el(tag, attrs={}, ...children){
+    const e = document.createElement(tag);
+    for(const k in attrs){
+        if(k==="class") e.className = attrs[k];
+        else if(k==="html") e.innerHTML = attrs[k];
+        else e.setAttribute(k, attrs[k]);
+    }
+    for(const c of children){
+        if(c==null) continue;
+        if(typeof c === "string") e.appendChild(document.createTextNode(c));
+        else e.appendChild(c);
+    }
+    return e;
+}
+
+function setActiveNav(){
+    const links = document.querySelectorAll('#topnav a');
+    const cur = location.hash || '#/welcome';
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === cur || (cur.startsWith('#/topography') && a.getAttribute('href')==='#/topography') || (cur.startsWith('#/region/') && a.getAttribute('href')==='#/topography') || (cur.startsWith('#/cns/') && a.getAttribute('href')==='#/cns-pns') ));
+}
+
+function renderImagePlaceholder(filename, caption){
+    return `<figure class="imgbox empty">
+      <img alt="${caption||filename}" src="images/${filename}" onerror="this.style.display='none';this.parentNode.classList.add('empty');"/>
+      <div class="ph-label">When prompted by Claude Code, upload an image: <code>images/${filename}</code><br><i>${caption||''}</i></div>
+    </figure>`;
+}
+
+function renderBlocks(blocks){
+    let html = "";
+    for(const b of blocks){
+        if(b.h) html += `<h3>${b.h}</h3>`;
+        if(b.p) html += `<p>${b.p}</p>`;
+        if(b.list){
+            html += "<ul>";
+            for(const li of b.list) html += `<li>${li}</li>`;
+            html += "</ul>";
+        }
+        if(b.img) html += renderImagePlaceholder(b.img, b.caption);
+        if(b.div) html += `<div class="${b.div}">${b.text}</div>`;
+    }
+    return html;
+}
+
+/* -------- Welcome page -------- */
+function viewWelcome(){
+    return `
+    <section class="hero">
+        <h1>Interactive Anatomy Atlas</h1>
+        <p class="lead">A practical, dissection-oriented study companion. Explore topography region by region, look up anatomical terms with their borders, and study the central and peripheral nervous systems through interactive maps.</p>
+        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn" href="#/topography">Open Topography</a>
+            <a class="btn alt" href="#/cns-pns">Open CNS / PNS</a>
+            <a class="btn ghost" href="#/terms">Browse Term Library</a>
+        </div>
+    </section>
+
+    <h2>Choose a study path</h2>
+    <div class="grid cols-3">
+        <a class="tile" href="#/terms">
+            <div class="icon">📚</div>
+            <h3>Term Library</h3>
+            <p>All topographies & anatomical landmarks with their borders, contents, and clinical pearls. Searchable by name and category — Douglas pouch, McBurney's, Labbé, Hesselbach's, Murphy's, and more.</p>
+        </a>
+        <a class="tile" href="#/cns-pns">
+            <div class="icon">🧠</div>
+            <h3>CNS / PNS Regions</h3>
+            <p>Interactive map of the central and peripheral nervous systems — brain regions, spinal cord, all 12 cranial nerves, and the major peripheral plexuses.</p>
+        </a>
+        <a class="tile" href="#/topography">
+            <div class="icon">🫀</div>
+            <h3>Topography</h3>
+            <p>Click any region of the human body to drill into subregions — head, neck, chest, abdomen (with quadrants), pelvis, back, and limbs.</p>
+        </a>
+    </div>
+
+    <h2>How to use</h2>
+    <div class="card">
+        <ul>
+            <li><b>Topography → Region → Subregion</b>: Click a "+" on the body map to open a region; click a sub-area to see borders, contents, and clinical correlations.</li>
+            <li><b>Term Library</b>: Use the search box and category filter. Cards show <b>borders</b> first — useful for board-style questions.</li>
+            <li><b>Images</b>: Image placeholders are scattered through the site. When you ask Claude Code, it will tell you what image to upload (e.g. <span class="kbd">images/scalene-fissure.jpg</span>).</li>
+            <li><b>Offline ready</b>: The whole site is in a single <span class="kbd">index.html</span> file — works on GitHub Pages or any static host.</li>
+        </ul>
+    </div>
+    `;
+}
+
+/* -------- Term library -------- */
+function viewTerms(){
+    const cats = [...new Set(TERMS.map(t=>t.category))].sort();
+    return `
+    <h1>Term Library</h1>
+    <p class="muted">All topographic anatomical terms — focused on borders, contents, and clinical landmarks. ${TERMS.length} terms.</p>
+    <div class="term-search">
+        <input id="termq" placeholder="Search terms (e.g. McBurney, Hesselbach, Douglas, scalp...)" />
+        <select id="termcat">
+            <option value="">All categories</option>
+            ${cats.map(c=>`<option>${c}</option>`).join("")}
+        </select>
+    </div>
+    <div id="termlist" class="term-list"></div>
+    `;
+}
+
+function renderTermList(){
+    const q = (document.getElementById("termq")?.value||"").toLowerCase();
+    const cat = document.getElementById("termcat")?.value||"";
+    const filtered = TERMS.filter(t=>{
+        const s = (t.name+" "+t.borders+" "+t.definition+" "+t.category).toLowerCase();
+        return (!q || s.includes(q)) && (!cat || t.category===cat);
+    }).sort((a,b)=>a.name.localeCompare(b.name));
+    const list = document.getElementById("termlist");
+    if(!list) return;
+    if(!filtered.length){
+        list.innerHTML = `<div class="no-results">No terms match your search.</div>`;
+        return;
+    }
+    list.innerHTML = filtered.map(t=>`
+        <div class="term-card">
+            <div class="cat">${t.category}</div>
+            <h3>${t.name}</h3>
+            <div class="borders"><b>Borders:</b> ${t.borders}</div>
+            <p class="muted" style="font-size:13.5px">${t.definition}</p>
+        </div>
+    `).join("");
+}
+
+/* -------- Topography (body map) -------- */
+function viewTopography(){
+    const legendHTML = REGIONS.map(r=>`
+        <li onclick="location.hash='#/region/${r.id}'">
+            <b>${r.name}</b><br>
+            <span class="muted">${r.short}</span>
+        </li>`).join("");
+
+    return `
+    <h1>Topography</h1>
+    <p class="muted">Click a "+" on the body or pick a region from the list. Each region opens to its subregions and their full anatomical detail.</p>
+
+    <div class="bodymap-wrap">
+        <div>
+            <svg class="bodymap" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg" aria-label="Human body map">
+                <!-- Head -->
+                <ellipse cx="200" cy="60" rx="42" ry="50" class="silhouette"/>
+                <!-- Neck -->
+                <rect x="180" y="105" width="40" height="30" class="silhouette"/>
+                <!-- Torso -->
+                <path d="M 130 135 Q 150 130 200 130 Q 250 130 270 135 L 280 250 L 285 380 Q 270 430 260 460 L 240 470 L 160 470 L 140 460 Q 130 430 115 380 L 120 250 Z" class="silhouette"/>
+                <!-- Arms -->
+                <path d="M 130 140 L 90 240 L 75 360 L 80 370 L 100 360 L 110 250 L 125 160 Z" class="silhouette-2"/>
+                <path d="M 270 140 L 310 240 L 325 360 L 320 370 L 300 360 L 290 250 L 275 160 Z" class="silhouette-2"/>
+                <!-- Legs -->
+                <path d="M 165 470 L 160 600 L 155 700 L 175 700 L 185 600 L 195 470 Z" class="silhouette-2"/>
+                <path d="M 235 470 L 240 600 L 245 700 L 225 700 L 215 600 L 205 470 Z" class="silhouette-2"/>
+
+                <!-- HOTSPOTS with + markers -->
+                <g onclick="location.hash='#/region/head'" style="cursor:pointer">
+                    <circle cx="200" cy="60" r="20" class="hot"/>
+                    <text class="plus" x="200" y="68">+</text>
+                </g>
+                <g onclick="location.hash='#/region/neck'" style="cursor:pointer">
+                    <circle cx="200" cy="120" r="14" class="hot"/>
+                    <text class="plus" x="200" y="127">+</text>
+                </g>
+                <g onclick="location.hash='#/region/chest'" style="cursor:pointer">
+                    <circle cx="200" cy="200" r="22" class="hot"/>
+                    <text class="plus" x="200" y="208">+</text>
+                </g>
+                <g onclick="location.hash='#/region/abdomen'" style="cursor:pointer">
+                    <circle cx="200" cy="320" r="22" class="hot"/>
+                    <text class="plus" x="200" y="328">+</text>
+                </g>
+                <g onclick="location.hash='#/region/pelvis'" style="cursor:pointer">
+                    <circle cx="200" cy="430" r="20" class="hot"/>
+                    <text class="plus" x="200" y="438">+</text>
+                </g>
+                <g onclick="location.hash='#/region/upper-limb'" style="cursor:pointer">
+                    <circle cx="103" cy="220" r="16" class="hot"/>
+                    <text class="plus" x="103" y="227">+</text>
+                </g>
+                <g onclick="location.hash='#/region/upper-limb'" style="cursor:pointer">
+                    <circle cx="297" cy="220" r="16" class="hot"/>
+                    <text class="plus" x="297" y="227">+</text>
+                </g>
+                <g onclick="location.hash='#/region/lower-limb'" style="cursor:pointer">
+                    <circle cx="178" cy="540" r="16" class="hot"/>
+                    <text class="plus" x="178" y="547">+</text>
+                </g>
+                <g onclick="location.hash='#/region/lower-limb'" style="cursor:pointer">
+                    <circle cx="222" cy="540" r="16" class="hot"/>
+                    <text class="plus" x="222" y="547">+</text>
+                </g>
+                <g onclick="location.hash='#/region/back'" style="cursor:pointer">
+                    <rect x="225" y="270" width="55" height="100" rx="12" class="hot"/>
+                    <text class="plus" x="252" y="324">+</text>
+                </g>
+            </svg>
+        </div>
+        <div class="legend">
+            <h3>Body regions</h3>
+            <ul>${legendHTML}</ul>
+        </div>
+    </div>
+    `;
+}
+
+/* -------- Region (subregion picker) -------- */
+function viewRegion(id){
+    const r = REGIONS.find(x=>x.id===id);
+    if(!r) return `<p>Region not found.</p>`;
+    // Special handling for abdomen — show 4 quadrant SVG
+    let quadrantSvg = "";
+    if(id==="abdomen"){
+        quadrantSvg = `
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:480px;margin:18px auto;">
+            <div onclick="location.hash='#/sub/abdomen-ruq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
+                <h4>RUQ — Right Upper Quadrant</h4>
+                <p>Liver, gallbladder, pylorus, duodenum, head of pancreas, right kidney</p>
+            </div>
+            <div onclick="location.hash='#/sub/abdomen-luq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
+                <h4>LUQ — Left Upper Quadrant</h4>
+                <p>Stomach, spleen, pancreas (body/tail), left kidney</p>
+            </div>
+            <div onclick="location.hash='#/sub/abdomen-rlq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
+                <h4>RLQ — Right Lower Quadrant</h4>
+                <p>Cecum, appendix, ascending colon, terminal ileum, right ovary/ureter</p>
+            </div>
+            <div onclick="location.hash='#/sub/abdomen-llq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
+                <h4>LLQ — Left Lower Quadrant</h4>
+                <p>Sigmoid colon, descending colon, left ovary/ureter</p>
+            </div>
+        </div>`;
+    }
+    const subs = r.sub.map(s=>`
+        <div class="subregion-card" onclick="location.hash='#/sub/${s.id}'">
+            <h4>${s.name}</h4>
+            <p>${s.brief}</p>
+        </div>`).join("");
+    return `
+    <div class="crumbs"><a href="#/topography">Topography</a> &rsaquo; <span>${r.name}</span></div>
+    <div class="region-header">
+        <h1>${r.name}</h1>
+        <p>${r.short}</p>
+    </div>
+    ${quadrantSvg}
+    <h2>Subregions</h2>
+    <div class="subregion-grid">${subs}</div>
+    `;
+}
+
+/* -------- Subregion detail page -------- */
+function viewSub(id){
+    const d = DETAILS[id];
+    if(!d) return `<p>Subregion not found: ${id}</p>`;
+    const parent = REGIONS.find(x=>x.id===d.parent);
+    return `
+    <div class="crumbs">
+        <a href="#/topography">Topography</a> &rsaquo;
+        <a href="#/region/${d.parent}">${parent?parent.name:""}</a> &rsaquo;
+        <span>${d.title}</span>
+    </div>
+    <div class="region-header">
+        <h1>${d.title}</h1>
+    </div>
+    <div class="section">
+        ${renderBlocks(d.body)}
+    </div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn ghost" href="#/region/${d.parent}">← Back to ${parent?parent.name:""}</a>
+        <a class="btn alt" href="#/topography">All regions</a>
+    </div>
+    `;
+}
+
+/* -------- CNS / PNS -------- */
+function viewCnsPns(){
+    const blocks = Object.entries(CNS_PNS).map(([k,sec])=>`
+        <div class="card">
+            <h3 style="margin-top:0">${sec.title}</h3>
+            <p class="muted">${sec.intro}</p>
+            <div class="subregion-grid">
+                ${sec.sub.map(s=>`
+                    <div class="subregion-card" onclick="location.hash='#/cns/${s.id}'">
+                        <h4>${s.name}</h4>
+                        <p>${s.brief}</p>
+                    </div>
+                `).join("")}
+            </div>
+        </div>
+    `).join("");
+
+    return `
+    <h1>CNS / PNS</h1>
+    <p class="muted">Click any region of the brain map below or pick from the list. Each entry opens a structured detail page.</p>
+
+    <div class="bodymap-wrap">
+        <div>
+            <svg class="bodymap" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" aria-label="Nervous system map">
+                <!-- Brain -->
+                <ellipse cx="200" cy="90" rx="80" ry="60" class="silhouette"/>
+                <text x="200" y="95" text-anchor="middle" fill="#9fb0d0" font-size="14">Brain</text>
+
+                <!-- Spinal cord -->
+                <rect x="190" y="150" width="20" height="280" rx="10" class="silhouette"/>
+                <text x="220" y="295" fill="#9fb0d0" font-size="12">Spinal cord</text>
+
+                <!-- Plexuses (illustrative dots) -->
+                <circle cx="120" cy="180" r="10" class="silhouette-2"/>
+                <text x="60" y="184" fill="#9fb0d0" font-size="11">Cervical plexus</text>
+                <circle cx="120" cy="225" r="12" class="silhouette-2"/>
+                <text x="40" y="229" fill="#9fb0d0" font-size="11">Brachial plexus</text>
+                <circle cx="280" cy="365" r="12" class="silhouette-2"/>
+                <text x="295" y="369" fill="#9fb0d0" font-size="11">Lumbar plexus</text>
+                <circle cx="280" cy="410" r="12" class="silhouette-2"/>
+                <text x="295" y="414" fill="#9fb0d0" font-size="11">Sacral plexus</text>
+
+                <!-- Hotspots -->
+                <g onclick="document.getElementById('cns-brain').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+                    <circle cx="200" cy="90" r="20" class="hot"/>
+                    <text class="plus" x="200" y="98">+</text>
+                </g>
+                <g onclick="document.getElementById('cns-spinal').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+                    <circle cx="200" cy="295" r="14" class="hot"/>
+                    <text class="plus" x="200" y="303">+</text>
+                </g>
+                <g onclick="document.getElementById('cns-cn').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+                    <circle cx="280" cy="90" r="14" class="hot"/>
+                    <text class="plus" x="280" y="97">+</text>
+                </g>
+                <g onclick="document.getElementById('cns-plexuses').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+                    <circle cx="120" cy="225" r="14" class="hot"/>
+                    <text class="plus" x="120" y="232">+</text>
+                </g>
+            </svg>
+        </div>
+        <div class="legend">
+            <h3>Sections</h3>
+            <ul>
+                <li onclick="document.getElementById('cns-brain').scrollIntoView({behavior:'smooth'})"><b>Brain</b><br><span class="muted">Cerebrum, cerebellum, brainstem</span></li>
+                <li onclick="document.getElementById('cns-spinal').scrollIntoView({behavior:'smooth'})"><b>Spinal cord</b><br><span class="muted">Cervical → conus medullaris</span></li>
+                <li onclick="document.getElementById('cns-cn').scrollIntoView({behavior:'smooth'})"><b>Cranial nerves</b><br><span class="muted">CN I–XII</span></li>
+                <li onclick="document.getElementById('cns-plexuses').scrollIntoView({behavior:'smooth'})"><b>Peripheral plexuses</b><br><span class="muted">Cervical, brachial, lumbar, sacral, coccygeal</span></li>
+                <li onclick="document.getElementById('cns-ans').scrollIntoView({behavior:'smooth'})"><b>Autonomic NS</b><br><span class="muted">Sympathetic, parasympathetic, enteric</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <h2 id="cns-brain">${CNS_PNS.brain.title}</h2>
+    <div class="card">
+        <p class="muted">${CNS_PNS.brain.intro}</p>
+        ${renderImagePlaceholder("brain.jpg","Brain — lobes, cerebellum, brainstem")}
+        <div class="subregion-grid">
+            ${CNS_PNS.brain.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
+        </div>
+    </div>
+
+    <h2 id="cns-spinal">${CNS_PNS.spinal.title}</h2>
+    <div class="card">
+        <p class="muted">${CNS_PNS.spinal.intro}</p>
+        ${renderImagePlaceholder("spinal-cord.jpg","Spinal cord segments and enlargements")}
+        <div class="subregion-grid">
+            ${CNS_PNS.spinal.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
+        </div>
+    </div>
+
+    <h2 id="cns-cn">${CNS_PNS.cn.title}</h2>
+    <div class="card">
+        <p class="muted">${CNS_PNS.cn.intro}</p>
+        ${renderImagePlaceholder("cranial-nerves-overview.jpg","Cranial nerves I–XII overview")}
+        <div class="subregion-grid">
+            ${CNS_PNS.cn.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
+        </div>
+    </div>
+
+    <h2 id="cns-plexuses">${CNS_PNS.plexuses.title}</h2>
+    <div class="card">
+        <p class="muted">${CNS_PNS.plexuses.intro}</p>
+        ${renderImagePlaceholder("peripheral-plexuses.jpg","Cervical, brachial, lumbar, sacral and coccygeal plexuses")}
+        <div class="subregion-grid">
+            ${CNS_PNS.plexuses.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
+        </div>
+    </div>
+
+    <h2 id="cns-ans">${CNS_PNS.ans.title}</h2>
+    <div class="card">
+        <p class="muted">${CNS_PNS.ans.intro}</p>
+        ${renderImagePlaceholder("autonomic-ns.jpg","Autonomic nervous system — sympathetic, parasympathetic, enteric")}
+        <div class="subregion-grid">
+            ${CNS_PNS.ans.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
+        </div>
+    </div>
+    `;
+}
+
+/* -------- CNS subregion -------- */
+const CNS_DETAILS = {
+  "frontal-lobe":{
+    parent:"brain",
+    title:"Frontal lobe",
+    body:[
+      {h:"Overview", p:"Anterior part of the cerebrum. Houses the primary motor cortex (precentral gyrus), premotor area, supplementary motor area, prefrontal cortex (executive function), Broca's area (left dominant — motor speech), and the frontal eye field."},
+      {h:"Key landmarks", list:[
+        "Precentral gyrus (M1) — primary motor cortex",
+        "Superior, middle, and inferior frontal gyri",
+        "Broca's area — pars opercularis & pars triangularis (Brodmann 44, 45)",
+        "Prefrontal cortex — judgment, planning, personality"
+      ]},
+      {img:"frontal-lobe.jpg", caption:"Lateral view of frontal lobe"},
+    ]
+  },
+  "parietal-lobe":{
+    parent:"brain", title:"Parietal lobe",
+    body:[
+      {h:"Overview", p:"Posterior to the central sulcus. Contains the primary somatosensory cortex (postcentral gyrus) and association areas for spatial cognition, attention and language (left supramarginal & angular gyri)."},
+      {h:"Key landmarks", list:[
+        "Postcentral gyrus (S1) — primary somatosensory",
+        "Superior parietal lobule",
+        "Inferior parietal lobule — supramarginal gyrus (40), angular gyrus (39)"
+      ]},
+      {img:"parietal-lobe.jpg", caption:"Parietal lobe with somatosensory cortex"},
+    ]
+  },
+  "temporal-lobe":{
+    parent:"brain", title:"Temporal lobe",
+    body:[
+      {h:"Overview", p:"Lateral to the lateral (Sylvian) fissure. Contains primary auditory cortex (Heschl's gyrus), Wernicke's area (sensory language, dominant), hippocampus and amygdala (medial)."},
+      {h:"Key landmarks", list:[
+        "Superior temporal gyrus — auditory cortex (41, 42), Wernicke's (22 posterior)",
+        "Middle and inferior temporal gyri",
+        "Medial — hippocampus, amygdala, parahippocampal gyrus"
+      ]},
+      {img:"temporal-lobe.jpg", caption:"Temporal lobe — auditory cortex and medial structures"},
+    ]
+  },
+  "occipital-lobe":{
+    parent:"brain", title:"Occipital lobe",
+    body:[
+      {h:"Overview", p:"Posterior cerebrum. Houses the primary visual cortex (V1, Brodmann 17) on the calcarine sulcus banks; visual association areas surround it."},
+      {img:"occipital-lobe.jpg", caption:"Occipital lobe and primary visual cortex"},
+    ]
+  },
+  "cerebellum":{
+    parent:"brain", title:"Cerebellum",
+    body:[
+      {h:"Overview", p:"Lies in the posterior cranial fossa, beneath the tentorium cerebelli. Comprises two hemispheres and the vermis. Three lobes: anterior, posterior, flocculonodular."},
+      {h:"Functional zones", list:[
+        "Vestibulocerebellum (flocculonodular) — balance, eye movements",
+        "Spinocerebellum (vermis + paravermis) — posture, gait",
+        "Cerebrocerebellum (lateral hemispheres) — motor planning, coordination"
+      ]},
+      {img:"cerebellum.jpg", caption:"Cerebellum — lobes and peduncles"},
+    ]
+  },
+  "brainstem":{
+    parent:"brain", title:"Brainstem",
+    body:[
+      {h:"Components", list:[
+        "Midbrain — superior & inferior colliculi; CN III, IV nuclei",
+        "Pons — CN V, VI, VII, VIII nuclei",
+        "Medulla oblongata — CN IX, X, XI (cranial part), XII nuclei"
+      ]},
+      {h:"Internal arrangement", p:"Houses ascending and descending tracts (corticospinal, lemniscal, spinothalamic), reticular formation, and respiratory & cardiovascular centers."},
+      {img:"brainstem.jpg", caption:"Brainstem — midbrain, pons, medulla"},
+    ]
+  },
+
+  "cervical-cord":{
+    parent:"spinal", title:"Cervical enlargement (C5–T1)",
+    body:[
+      {h:"Overview", p:"Provides the motor and sensory innervation of the upper limbs via the brachial plexus (C5–T1). Spinal cord here is wider in the transverse plane."},
+      {img:"cervical-cord.jpg", caption:"Cervical enlargement"},
+    ]
+  },
+  "thoracic-cord":{
+    parent:"spinal", title:"Thoracic cord",
+    body:[
+      {h:"Overview", p:"Smaller transverse diameter. T1–L2 segments contain the lateral horn (intermediolateral cell column) — origin of preganglionic sympathetic neurons (T1–L2 outflow)."},
+      {img:"thoracic-cord.jpg", caption:"Thoracic cord with sympathetic outflow"},
+    ]
+  },
+  "lumbar-cord":{
+    parent:"spinal", title:"Lumbar enlargement (L2–S3)",
+    body:[
+      {h:"Overview", p:"Origin of the lumbosacral plexuses for the lower limbs. Located opposite vertebrae T11–L1 (cord ends ~ L1–L2 in adults)."},
+      {img:"lumbar-enlargement.jpg", caption:"Lumbar enlargement & cauda equina"},
+    ]
+  },
+  "conus":{
+    parent:"spinal", title:"Conus medullaris & cauda equina",
+    body:[
+      {h:"Overview", p:"The conus medullaris is the tapered terminus of the spinal cord — typically at L1–L2 in adults (T12–L3 in children 1–7 years). Below it lies the cauda equina — bundles of lumbar, sacral, and coccygeal nerve roots descending in CSF."},
+      {h:"Clinical", p:"The lumbar cistern (subarachnoid space below the conus) is the safe target for lumbar puncture (between L3/L4 or L4/L5 in adults)."},
+      {img:"conus-medullaris.jpg", caption:"Conus medullaris and cauda equina"},
+    ]
+  },
+
+  "cn-1":{parent:"cn", title:"CN I — Olfactory", body:[
+    {h:"Function", p:"Smell (special visceral afferent — SVA)."},
+    {h:"Skull opening", p:"Cribriform plate of the ethmoid bone."},
+    {h:"Course", p:"Olfactory receptors in the nasal epithelium → fila olfactoria pierce the cribriform plate → olfactory bulb (anterior cranial fossa) → olfactory tract → primary olfactory cortex (periamygdaloid + piriform cortex). Secondary cortex: entorhinal area 28."},
+    {img:"cn-1-olfactory.jpg", caption:"Olfactory pathway"},
+  ]},
+  "cn-2":{parent:"cn", title:"CN II — Optic", body:[
+    {h:"Function", p:"Vision (special somatic afferent)."},
+    {h:"Skull opening", p:"Optic canal (sphenoid)."},
+    {h:"Course", p:"Retinal ganglion cell axons → optic nerve → optic canal → optic chiasm (middle cranial fossa, partial decussation of nasal fibers) → optic tract → lateral geniculate nucleus (LGN, thalamus) → optic radiation (Meyer's loop, parietal radiations) → primary visual cortex (V1, area 17, occipital lobe)."},
+    {img:"cn-2-optic.jpg", caption:"Visual pathway"},
+  ]},
+  "cn-3":{parent:"cn", title:"CN III — Oculomotor", body:[
+    {h:"Nuclei", p:"Main motor + accessory parasympathetic (Edinger-Westphal) — anterior to the cerebral aqueduct, level of superior colliculus."},
+    {h:"Function", list:["Motor: superior rectus, inferior rectus, medial rectus, inferior oblique, levator palpebrae superioris","Parasympathetic: pupil constriction (sphincter pupillae) and accommodation (ciliary muscle)"]},
+    {h:"Skull opening", p:"Superior orbital fissure."},
+    {h:"Course", p:"Anterior aspect of midbrain → between PCA (inferior) and SCA (superior) → cavernous sinus (lateral wall) → SOF → splits into superior branch (sup. rectus + LPS; sympathetics travel with it to superior tarsal m.) and inferior branch (inf. & medial rectus, inf. oblique; preganglionic parasympathetics → ciliary ganglion → short ciliary nn. → sphincter pupillae & ciliary muscle)."},
+    {img:"cn-3-oculomotor.jpg", caption:"Oculomotor nerve and ciliary ganglion"},
+  ]},
+  "cn-4":{parent:"cn", title:"CN IV — Trochlear", body:[
+    {h:"Nucleus", p:"Floor of cerebral aqueduct in dorsal midbrain, level of inferior colliculus."},
+    {h:"Function", p:"Innervates superior oblique muscle (depresses, intorts and abducts the eye)."},
+    {h:"Skull opening", p:"Superior orbital fissure."},
+    {h:"Special features", list:[
+      "Only cranial nerve to leave the posterior surface of the brainstem",
+      "Only cranial nerve with full decussation",
+      "Longest intracranial course",
+      "Passes through the lateral wall of the cavernous sinus"
+    ]},
+    {img:"cn-4-trochlear.jpg", caption:"Trochlear nerve course"},
+  ]},
+  "cn-5":{parent:"cn", title:"CN V — Trigeminal", body:[
+    {h:"Origin", p:"Originates from three sensory nuclei (mesencephalic, principal/pontine, spinal trigeminal) and one motor nucleus in the pons. The sensory ganglion is the trigeminal (Gasserian / semilunar) ganglion in Meckel's cave."},
+    {h:"Branches and skull openings", list:[
+      "<b>V1 — Ophthalmic</b>: superior orbital fissure. Branches: lacrimal, frontal (supraorbital + supratrochlear), nasociliary (incl. anterior ethmoidal, infratrochlear, long ciliary)",
+      "<b>V2 — Maxillary</b>: foramen rotundum. Branches: zygomatic, infraorbital, superior alveolar, posterior superior nasal",
+      "<b>V3 — Mandibular</b>: foramen ovale (carries motor root). Branches: auriculotemporal, inferior alveolar, lingual, buccal; motor to muscles of mastication, mylohyoid, anterior belly of digastric, tensor tympani, tensor veli palatini"
+    ]},
+    {img:"cn-5-trigeminal.jpg", caption:"Trigeminal nerve V1, V2, V3"},
+  ]},
+  "cn-6":{parent:"cn", title:"CN VI — Abducens", body:[
+    {h:"Nucleus", p:"Lower pons — superior part of the floor of the 4th ventricle (under the facial colliculus)."},
+    {h:"Function", p:"Lateral rectus (eye abduction)."},
+    {h:"Skull opening", p:"Superior orbital fissure."},
+    {h:"Course", p:"Pontomedullary junction → subarachnoid → pierces dura → travels in Dorello's canal → tip of petrous temporal bone → cavernous sinus (within sinus, NOT in lateral wall — most vulnerable to lesion in cavernous sinus syndromes) → SOF → lateral rectus."},
+    {img:"cn-6-abducens.jpg", caption:"Abducens course through Dorello's canal"},
+  ]},
+  "cn-7":{parent:"cn", title:"CN VII — Facial", body:[
+    {h:"Function", list:[
+      "Motor: muscles of facial expression, stapedius, stylohyoid, posterior belly of digastric",
+      "Parasympathetic: lacrimal gland (via greater petrosal), submandibular & sublingual glands (via chorda tympani → submandibular ganglion)",
+      "Special sensory (taste): anterior 2/3 of tongue (chorda tympani)",
+      "General sensory: external acoustic meatus skin"
+    ]},
+    {h:"Skull openings", list:["Internal acoustic meatus (entry)","Stylomastoid foramen (exit)","Chorda tympani — petrotympanic fissure"]},
+    {h:"Course", p:"Pontomedullary junction → IAM → facial canal (geniculate ganglion → greater petrosal n. → nerve to stapedius → chorda tympani) → exits stylomastoid foramen → enters parotid gland (does not innervate it) → divides into 5 branches: temporal, zygomatic, buccal, mandibular, cervical (mnemonic: 'Two Zebras Bit My Cookie')."},
+    {img:"cn-7-facial.jpg", caption:"Facial nerve branches and parasympathetic relays"},
+  ]},
+  "cn-8":{parent:"cn", title:"CN VIII — Vestibulocochlear", body:[
+    {h:"Function", p:"Cochlear division — hearing. Vestibular division — balance and head position."},
+    {h:"Skull opening", p:"Internal acoustic meatus."},
+    {img:"cn-8-vestibulocochlear.jpg", caption:"Cochlear and vestibular pathways"},
+  ]},
+  "cn-9":{parent:"cn", title:"CN IX — Glossopharyngeal", body:[
+    {h:"Function", list:[
+      "Motor: stylopharyngeus",
+      "Parasympathetic: parotid gland (via lesser petrosal n. → otic ganglion → auriculotemporal n. of V3)",
+      "Special sensory (taste): posterior 1/3 of tongue",
+      "General sensory: oropharynx, palatine tonsil, posterior 1/3 tongue, middle ear (Jacobson's nerve), carotid body & sinus"
+    ]},
+    {h:"Skull opening", p:"Jugular foramen."},
+    {img:"cn-9-glossopharyngeal.jpg", caption:"Glossopharyngeal nerve"},
+  ]},
+  "cn-10":{parent:"cn", title:"CN X — Vagus", body:[
+    {h:"Function", list:[
+      "Motor: pharynx (except stylopharyngeus), larynx (recurrent laryngeal n.), palate (except tensor veli palatini)",
+      "Parasympathetic: thoracic and abdominal viscera (down to splenic flexure of colon)",
+      "Special sensory: taste from epiglottis",
+      "General sensory: dura of posterior cranial fossa; external acoustic meatus (auricular branch — Arnold's nerve)"
+    ]},
+    {h:"Skull opening", p:"Jugular foramen."},
+    {img:"cn-10-vagus.jpg", caption:"Vagus nerve thoracic and abdominal course"},
+  ]},
+  "cn-11":{parent:"cn", title:"CN XI — Accessory", body:[
+    {h:"Function", p:"Spinal root: motor to sternocleidomastoid (SCM) and trapezius."},
+    {h:"Skull opening", p:"Jugular foramen — exits the cranium."},
+    {h:"Course", p:"Spinal root arises from the upper cervical cord (C1–C5/C6), ascends through the foramen magnum, joins (then leaves) the cranial root, and exits via the jugular foramen — descends in the posterior triangle of the neck. The cranial root joins CN X."},
+    {img:"cn-11-accessory.jpg", caption:"Accessory nerve in the posterior triangle"},
+  ]},
+  "cn-12":{parent:"cn", title:"CN XII — Hypoglossal", body:[
+    {h:"Function", p:"Motor to all intrinsic and extrinsic tongue muscles (genioglossus, hyoglossus, styloglossus) — except palatoglossus (CN X)."},
+    {h:"Skull opening", p:"Hypoglossal canal."},
+    {h:"Clinical", p:"Lower motor neuron lesion → tongue deviates toward the lesion side on protrusion (the unaffected genioglossus pushes it that way)."},
+    {img:"cn-12-hypoglossal.jpg", caption:"Hypoglossal nerve"},
+  ]},
+
+  "cervical-plexus":{parent:"plexuses", title:"Cervical plexus (C1–C4)",body:[
+    {h:"Cutaneous branches", list:[
+      "Lesser occipital n. (C2)",
+      "Great auricular n. (C2, C3)",
+      "Transverse cervical n. (C2, C3)",
+      "Supraclavicular nn. (C3, C4)"
+    ]},
+    {h:"Motor branches", list:[
+      "Ansa cervicalis (C1–C3) — innervates strap muscles (omohyoid, sternohyoid, sternothyroid)",
+      "Phrenic n. (C3, C4, C5) — diaphragm; '<b>C3, 4, 5 keep the diaphragm alive</b>'",
+      "Direct branches to prevertebral muscles, levator scapulae, and middle scalene"
+    ]},
+    {img:"cervical-plexus.jpg", caption:"Cervical plexus and its branches"},
+  ]},
+  "brachial-plexus":{parent:"plexuses", title:"Brachial plexus (C5–T1)",body:[
+    {h:"Organization (mnemonic — Real Texans Drink Cold Beer)", list:[
+      "<b>R</b>oots — anterior rami of C5–T1",
+      "<b>T</b>runks — superior (C5+C6), middle (C7), inferior (C8+T1)",
+      "<b>D</b>ivisions — anterior & posterior of each trunk",
+      "<b>C</b>ords — lateral, posterior, medial",
+      "<b>B</b>ranches — terminal nerves"
+    ]},
+    {h:"Terminal branches (5 main)", list:[
+      "Musculocutaneous n. (lateral cord; C5–C7) — anterior arm flexors",
+      "Median n. (lateral + medial cords; C5–T1) — most forearm flexors, thenar eminence",
+      "Ulnar n. (medial cord; C8–T1) — intrinsic hand muscles, hypothenar",
+      "Axillary n. (posterior cord; C5–C6) — deltoid, teres minor",
+      "Radial n. (posterior cord; C5–T1) — all extensors of arm and forearm"
+    ]},
+    {img:"brachial-plexus.jpg", caption:"Brachial plexus — roots, trunks, divisions, cords, branches"},
+  ]},
+  "lumbar-plexus":{parent:"plexuses", title:"Lumbar plexus (L1–L4)",body:[
+    {h:"Major branches (mnemonic — I, I Get Lots Of Fun)", list:[
+      "<b>I</b>liohypogastric n. (L1)",
+      "<b>I</b>lioinguinal n. (L1)",
+      "<b>G</b>enitofemoral n. (L1, L2)",
+      "<b>L</b>ateral femoral cutaneous n. (L2, L3)",
+      "<b>O</b>bturator n. (L2–L4)",
+      "<b>F</b>emoral n. (L2–L4)"
+    ]},
+    {img:"lumbar-plexus.jpg", caption:"Lumbar plexus"},
+  ]},
+  "sacral-plexus":{parent:"plexuses", title:"Sacral plexus (L4–S4)",body:[
+    {h:"Major branches", list:[
+      "Sciatic n. (L4–S3) — largest nerve in the body; tibial + common fibular components",
+      "Superior gluteal n. (L4–S1) — gluteus medius, minimus, TFL",
+      "Inferior gluteal n. (L5–S2) — gluteus maximus",
+      "Pudendal n. (S2–S4) — perineum, external urethral & anal sphincters",
+      "Posterior femoral cutaneous n. (S1–S3) — skin of posterior thigh"
+    ]},
+    {img:"sacral-plexus.jpg", caption:"Sacral plexus"},
+  ]},
+  "coccygeal-plexus":{parent:"plexuses", title:"Coccygeal plexus (S4–Co1)", body:[
+    {h:"Branches", p:"The anococcygeal nerve provides cutaneous innervation to the skin between the coccyx and the anus."},
+    {img:"coccygeal-plexus.jpg", caption:"Coccygeal plexus"},
+  ]},
+
+  "sympathetic":{parent:"ans", title:"Sympathetic division", body:[
+    {h:"Origin", p:"Thoracolumbar outflow — preganglionic neurons in the intermediolateral cell column of T1–L2."},
+    {h:"Pathway", p:"Preganglionic axons exit via the ventral root → white ramus communicans → sympathetic chain (paravertebral) → either synapse there (passing back through gray ramus to spinal n. and reaching effectors via somatic distribution) or pass through to prevertebral (collateral) ganglia (e.g. celiac, superior mesenteric, inferior mesenteric) via splanchnic nerves."},
+    {h:"Functions", p:"'Fight or flight'. Increases heart rate, dilates pupils, dilates bronchi, redirects blood to skeletal muscle, mobilizes glucose."},
+    {img:"sympathetic.jpg", caption:"Sympathetic outflow"},
+  ]},
+  "parasympathetic":{parent:"ans", title:"Parasympathetic division", body:[
+    {h:"Origin", p:"Craniosacral outflow."},
+    {h:"Cranial outflow", list:[
+      "CN III — Edinger-Westphal nucleus → ciliary ganglion → short ciliary nn. → sphincter pupillae & ciliary muscle",
+      "CN VII — superior salivatory nucleus → greater petrosal → pterygopalatine ganglion → lacrimal gland & nasal/palatine glands; chorda tympani → submandibular ganglion → submandibular & sublingual glands",
+      "CN IX — inferior salivatory nucleus → lesser petrosal → otic ganglion → auriculotemporal n. (V3) → parotid gland",
+      "CN X — dorsal motor nucleus → thoracic and abdominal viscera (down to splenic flexure)"
+    ]},
+    {h:"Sacral outflow", p:"S2–S4 → pelvic splanchnic nerves → distal colon (from splenic flexure to anal canal), pelvic viscera (bladder, internal genitalia)."},
+    {h:"Function", p:"'Rest and digest'. Slows heart rate, constricts pupils and bronchi, stimulates GI motility and secretions, contracts detrusor (voiding)."},
+    {img:"parasympathetic.jpg", caption:"Cranio-sacral parasympathetic outflow"},
+  ]},
+  "enteric":{parent:"ans", title:"Enteric nervous system", body:[
+    {h:"Plexuses", list:[
+      "Myenteric plexus (Auerbach's) — between longitudinal and circular layers of muscularis externa; controls motility",
+      "Submucosal plexus (Meissner's) — within the submucosa; controls secretion and local blood flow"
+    ]},
+    {h:"Importance", p:"Capable of independent reflex function (the 'second brain'). Modulated by the parasympathetic and sympathetic systems."},
+    {img:"enteric.jpg", caption:"Enteric nervous system layers"},
+  ]},
+};
+
+function viewCnsSub(id){
+    const d = CNS_DETAILS[id];
+    if(!d) return `<p>Section not found: ${id}</p>`;
+    const sec = CNS_PNS[d.parent];
+    return `
+    <div class="crumbs">
+        <a href="#/cns-pns">CNS / PNS</a> &rsaquo;
+        <span>${sec?sec.title:""}</span> &rsaquo;
+        <span>${d.title}</span>
+    </div>
+    <div class="region-header">
+        <h1>${d.title}</h1>
+    </div>
+    <div class="section">
+        ${renderBlocks(d.body)}
+    </div>
+    <div style="margin-top:18px"><a class="btn ghost" href="#/cns-pns">← Back to CNS / PNS</a></div>
+    `;
+}
+
+/* ====================================================================
+   ROUTER
+   ==================================================================== */
+function route(){
+    const h = location.hash || "#/welcome";
+    const app = document.getElementById("app");
+    let html = "";
+    if(h==="#/welcome" || h==="#/" || h===""){
+        html = viewWelcome();
+    } else if(h==="#/terms"){
+        html = viewTerms();
+    } else if(h==="#/topography"){
+        html = viewTopography();
+    } else if(h==="#/cns-pns"){
+        html = viewCnsPns();
+    } else if(h.startsWith("#/region/")){
+        html = viewRegion(h.replace("#/region/",""));
+    } else if(h.startsWith("#/sub/")){
+        html = viewSub(h.replace("#/sub/",""));
+    } else if(h.startsWith("#/cns/")){
+        html = viewCnsSub(h.replace("#/cns/",""));
+    } else {
+        html = viewWelcome();
+    }
+    app.innerHTML = html;
+    setActiveNav();
+
+    // Wire up Term Library search
+    if(h==="#/terms"){
+        renderTermList();
+        document.getElementById("termq").addEventListener("input", renderTermList);
+        document.getElementById("termcat").addEventListener("change", renderTermList);
+    }
+    window.scrollTo({top:0, behavior:"instant"});
+}
+
+window.addEventListener("hashchange", route);
+window.addEventListener("DOMContentLoaded", route);
+</script>
+</body>
+</html>

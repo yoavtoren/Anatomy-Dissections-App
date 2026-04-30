@@ -1,5 +1,25 @@
 # Images folder
 
+## ── TOPOGRAPHY VIEWER (save these FIRST) ──────────────────────────────
+These are the main anatomical images shown in the interactive body viewer.
+Save them with the **exact filenames below** in this `images/` folder:
+
+| File | What it shows |
+|---|---|
+| `body-overview.png` | Full-body anatomical figure (whole-body shot showing organs) |
+| `region-head.png` | Head/face frontal view — brain visible through top of skull |
+| `region-neck.png` | Anterior neck — thyroid, trachea, carotid vessels |
+| `region-chest.png` | Thorax — ribcage with heart cross-section and both lungs |
+| `region-abdomen.png` | Opened abdomen — liver, stomach, intestines, spleen |
+| `region-pelvis.png` | Pelvis *(add when available)* |
+| `region-upper-limb.png` | Arm/forearm *(add when available)* |
+| `region-lower-limb.png` | Leg/thigh *(add when available)* |
+| `region-back.png` | Posterior spine/back *(add when available)* |
+
+**How to add:** drag the image into this folder (or use Finder → Copy) then rename it to match the filename above exactly. PNG, JPG, or WEBP all work — if you use JPG just rename the extension in the table above inside `index.html` (search for `images/region-`).
+
+---
+
 This folder holds anatomical images shown across the site. The site references each
 image by its **exact filename**. When you run the project in Claude Code, it will
 prompt you to upload images one at a time, e.g.:

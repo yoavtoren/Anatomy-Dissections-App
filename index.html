@@ -6,273 +6,359 @@
 <title>Interactive Anatomy — Topography, Terms & CNS/PNS</title>
 <style>
 /* ============================================================
-   GLOBAL STYLES
+   PASTEL THEME — white base, red / yellow / blue palette
    ============================================================ */
 :root{
-    --bg:#0e1726;
-    --panel:#16213a;
-    --panel-2:#1d2c4a;
-    --ink:#e8eefc;
-    --muted:#9fb0d0;
-    --accent:#5dc1ff;
-    --accent-2:#79f1c4;
-    --warn:#ffd166;
-    --danger:#ff7373;
-    --border:#27375a;
-    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --bg:#FFFDF9;
+    --panel:#FFFFFF;
+    --panel-2:#F4F7FF;
+    --ink:#2C3550;
+    --muted:#7A8BAC;
+    --accent:#5B8EF8;       /* pastel blue  */
+    --accent-2:#FF8C8C;     /* pastel red   */
+    --warn:#FFD166;         /* pastel yellow*/
+    --danger:#FF7B7B;
+    --border:#DDE8FF;
+    --shadow:0 8px 24px rgba(91,142,248,.11);
     --radius:14px;
+    --p-red:#FFADAD;
+    --p-yellow:#FFD6A5;
+    --p-blue:#A8C4F8;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+
+/* ── Background: fixed pastel blobs + dot grid ── */
+body{
+    margin:0;padding:0;
+    background-color:var(--bg);
+    background-image:
+        radial-gradient(ellipse 600px 500px at -8% -6%, rgba(168,196,248,.42), transparent 60%),
+        radial-gradient(ellipse 500px 400px at 108% 12%, rgba(255,173,173,.32), transparent 55%),
+        radial-gradient(ellipse 450px 360px at 52% 108%, rgba(255,214,165,.4), transparent 58%),
+        radial-gradient(ellipse 280px 240px at 100% 75%, rgba(168,196,248,.22), transparent 60%);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+}
+body::before{
+    content:"";position:fixed;inset:0;
+    background-image:radial-gradient(circle, rgba(91,142,248,.09) 1.5px, transparent 1.5px);
+    background-size:30px 30px;
+    pointer-events:none;z-index:0;
+}
+header.site,#app,footer{position:relative;z-index:1}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
+
+/* ── Header ── */
 header.site{
     position:sticky;top:0;z-index:20;
-    background:linear-gradient(180deg,rgba(14,23,38,.95),rgba(14,23,38,.85));
-    backdrop-filter:blur(8px);
+    background:rgba(255,253,249,.93);
+    backdrop-filter:blur(14px);
     border-bottom:1px solid var(--border);
+    box-shadow:0 2px 14px rgba(91,142,248,.1);
+}
+header.site::after{
+    content:"";position:absolute;bottom:0;left:0;right:0;height:2.5px;
+    background:linear-gradient(90deg,var(--p-red) 0%,var(--p-yellow) 50%,var(--p-blue) 100%);
 }
 .nav{max-width:1240px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:18px}
-.brand{font-weight:700;font-size:18px;letter-spacing:.3px;display:flex;align-items:center;gap:10px;color:#fff}
-.brand .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+.brand{font-weight:700;font-size:18px;letter-spacing:.3px;display:flex;align-items:center;gap:10px;color:var(--ink)}
+.brand .dot{
+    width:13px;height:13px;border-radius:50%;
+    background:linear-gradient(135deg,var(--p-red),var(--p-yellow),var(--p-blue));
+    box-shadow:0 2px 8px rgba(91,142,248,.3);
+}
 nav.menu{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 nav.menu a{
     padding:8px 14px;border-radius:10px;color:var(--muted);font-weight:500;font-size:14px;
-    border:1px solid transparent;
+    border:1px solid transparent;transition:all .15s;
 }
-nav.menu a:hover{background:var(--panel);color:#fff;text-decoration:none}
-nav.menu a.active{background:var(--panel-2);color:#fff;border-color:var(--border)}
+nav.menu a:hover{background:rgba(91,142,248,.1);color:var(--ink);text-decoration:none;border-color:var(--border)}
+nav.menu a.active{background:rgba(91,142,248,.13);color:var(--accent);border-color:rgba(91,142,248,.3);font-weight:600}
 main{max-width:1240px;margin:0 auto;padding:32px 22px 80px}
-h1,h2,h3,h4{color:#fff;line-height:1.25}
+
+/* ── Typography ── */
+h1,h2,h3,h4{color:var(--ink);line-height:1.25}
 h1{font-size:34px;margin:0 0 12px}
 h2{font-size:24px;margin:32px 0 12px;border-bottom:1px solid var(--border);padding-bottom:8px}
-h3{font-size:18px;margin:20px 0 8px;color:var(--accent-2)}
-h4{font-size:15px;margin:14px 0 4px;color:var(--accent)}
+h3{font-size:18px;margin:20px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:14px 0 4px;color:var(--accent-2)}
 p{margin:8px 0}
 ul,ol{margin:8px 0 14px 22px}
 li{margin:3px 0}
 hr{border:none;border-top:1px solid var(--border);margin:24px 0}
 .muted{color:var(--muted)}
-.kbd{background:var(--panel-2);padding:2px 6px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.kbd{background:var(--panel-2);padding:2px 6px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink)}
 .tag{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--panel);font-size:12px;color:var(--muted);margin-right:6px}
-.tag.green{color:#0c2;border-color:#1f5}
-.tag.blue{color:#5cf;border-color:#39c}
-.tag.red{color:#f88;border-color:#a44}
-.tag.amber{color:#ffd166;border-color:#a78b3a}
+.tag.green{color:#2A9D5C;border-color:#9FE0BB;background:#F0FFF8}
+.tag.blue{color:#3A7CF0;border-color:#A8C4F8;background:#F0F5FF}
+.tag.red{color:#D04040;border-color:#FFADAD;background:#FFF5F5}
+.tag.amber{color:#CC8800;border-color:#FFD6A5;background:#FFFBF0}
+
+/* ── Cards & Panels ── */
 .card{
     background:var(--panel);border:1px solid var(--border);
     border-radius:var(--radius);padding:18px;
-    box-shadow:var(--shadow);
+    box-shadow:0 4px 16px rgba(91,142,248,.08);
 }
-.card + .card{margin-top:14px}
+.card+.card{margin-top:14px}
 .btn{
     display:inline-block;padding:10px 18px;border-radius:10px;
-    background:var(--accent);color:#021;font-weight:600;border:none;cursor:pointer;
-    transition:transform .1s ease;
+    background:var(--accent);color:#fff;font-weight:600;border:none;cursor:pointer;
+    transition:transform .1s ease,box-shadow .15s;
+    box-shadow:0 4px 14px rgba(91,142,248,.35);
 }
-.btn:hover{transform:translateY(-1px);text-decoration:none}
-.btn.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
-.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn:hover{transform:translateY(-1px);text-decoration:none;box-shadow:0 6px 20px rgba(91,142,248,.48)}
+.btn.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent);box-shadow:none}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--border);box-shadow:none}
 .btn.small{padding:6px 12px;font-size:13px}
 .grid{display:grid;gap:18px}
 .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:900px){.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.grid{grid-template-columns:1fr !important}}
+@media(max-width:900px){.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.grid{grid-template-columns:1fr !important}}
 
-/* ============================================================
-   WELCOME / HERO
-   ============================================================ */
+/* ── Hero / Welcome ── */
 .hero{
-    background:radial-gradient(1200px 500px at 0% 0%, rgba(93,193,255,.18), transparent 60%),
-               radial-gradient(900px 500px at 100% 0%, rgba(121,241,196,.12), transparent 55%),
-               linear-gradient(180deg, var(--panel), var(--panel-2));
+    background:linear-gradient(135deg,rgba(168,196,248,.28) 0%,rgba(255,173,173,.18) 50%,rgba(255,214,165,.28) 100%),#fff;
     border:1px solid var(--border);border-radius:18px;padding:42px 32px;margin-bottom:28px;
-    box-shadow:var(--shadow);
+    box-shadow:0 8px 32px rgba(91,142,248,.1);
+    position:relative;overflow:hidden;
 }
-.hero h1{font-size:42px;margin-bottom:6px}
-.hero p.lead{font-size:17px;color:var(--muted);max-width:780px}
+.hero::before{
+    content:"";position:absolute;top:-70px;right:-70px;
+    width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,173,173,.45),transparent 70%);
+    pointer-events:none;
+}
+.hero::after{
+    content:"";position:absolute;bottom:-50px;left:-50px;
+    width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,rgba(168,196,248,.5),transparent 70%);
+    pointer-events:none;
+}
+.hero h1{font-size:42px;margin-bottom:6px;position:relative;z-index:1}
+.hero p.lead{font-size:17px;color:var(--muted);max-width:780px;position:relative;z-index:1}
 .tile{
     background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-    padding:24px;cursor:pointer;transition:transform .15s ease, border-color .2s;
-    display:block;color:inherit;
+    padding:24px;cursor:pointer;transition:transform .15s,border-color .2s,box-shadow .2s;
+    display:block;color:inherit;box-shadow:0 4px 14px rgba(91,142,248,.07);
 }
-.tile:hover{transform:translateY(-3px);border-color:var(--accent);text-decoration:none}
-.tile h3{margin:0 0 6px;color:#fff;font-size:20px}
+.tile:hover{transform:translateY(-3px);border-color:var(--accent);text-decoration:none;box-shadow:0 8px 26px rgba(91,142,248,.17)}
+.tile h3{margin:0 0 6px;color:var(--ink);font-size:20px}
 .tile p{margin:0;color:var(--muted);font-size:14px}
 .tile .icon{
     width:48px;height:48px;border-radius:12px;
-    background:linear-gradient(135deg,rgba(93,193,255,.25),rgba(121,241,196,.25));
+    background:linear-gradient(135deg,rgba(168,196,248,.45),rgba(255,173,173,.3));
     display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;
     border:1px solid var(--border);
 }
 
-/* ============================================================
-   BODY MAP (SVG)
-   ============================================================ */
+/* ── Body map SVG ── */
 .bodymap-wrap{
     background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;
     display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:flex-start;
+    box-shadow:0 4px 16px rgba(91,142,248,.08);
 }
 @media(max-width:900px){.bodymap-wrap{grid-template-columns:1fr}}
 .bodymap{width:100%;max-width:360px;margin:0 auto;display:block;user-select:none}
-.bodymap .silhouette{fill:#22335a;stroke:#3a5587;stroke-width:1.3}
-.bodymap .silhouette-2{fill:#1a2643;stroke:#3a5587;stroke-width:1.1}
+.bodymap .silhouette{fill:#D4E5FF;stroke:#8CBCF0;stroke-width:1.3}
+.bodymap .silhouette-2{fill:#EAF2FF;stroke:#A8C8F4;stroke-width:1.1}
 .bodymap .hot{
-    fill:rgba(93,193,255,.16);stroke:var(--accent);stroke-width:1.4;
-    cursor:pointer;transition:fill .15s, stroke-width .15s;
+    fill:rgba(91,142,248,.18);stroke:var(--accent);stroke-width:1.6;
+    cursor:pointer;transition:fill .15s,stroke-width .15s;
 }
-.bodymap .hot:hover{fill:rgba(93,193,255,.45);stroke-width:2.2}
+.bodymap .hot:hover{fill:rgba(91,142,248,.42);stroke-width:2.4}
 .bodymap .plus{
-    fill:#fff;font-weight:700;font-size:22px;text-anchor:middle;
+    fill:var(--accent);font-weight:700;font-size:22px;text-anchor:middle;
     pointer-events:none;
 }
-.bodymap .pulse{
-    fill:var(--accent);
-    animation:pulse 1.8s ease-out infinite;
-    transform-origin:center;
-}
-@keyframes pulse{
-    0%{opacity:.65;r:13}
-    50%{opacity:.25;r:18}
-    100%{opacity:.65;r:13}
-}
+.bodymap .pulse{fill:var(--accent);animation:pulse 1.8s ease-out infinite;transform-origin:center}
+@keyframes pulse{0%{opacity:.65;r:13}50%{opacity:.25;r:18}100%{opacity:.65;r:13}}
 .legend{font-size:13px;color:var(--muted)}
 .legend ul{list-style:none;padding:0;margin:0}
-.legend li{padding:8px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--panel-2);cursor:pointer;transition:background .2s}
-.legend li:hover{background:#243962;color:#fff}
-.legend li b{color:#fff}
+.legend li{padding:8px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--panel-2);cursor:pointer;transition:background .2s,border-color .2s}
+.legend li:hover{background:rgba(91,142,248,.1);border-color:var(--accent);color:var(--ink)}
+.legend li b{color:var(--ink)}
 
 .subregion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
 .subregion-card{
-    background:var(--panel-2);border:1px solid var(--border);border-radius:12px;
-    padding:14px;cursor:pointer;transition:transform .12s, border-color .2s;
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:14px;cursor:pointer;transition:transform .12s,border-color .2s,box-shadow .2s;
+    box-shadow:0 3px 10px rgba(91,142,248,.07);
 }
-.subregion-card:hover{transform:translateY(-2px);border-color:var(--accent)}
-.subregion-card h4{margin:0 0 4px;color:#fff;font-size:15px}
+.subregion-card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 6px 18px rgba(91,142,248,.15)}
+.subregion-card h4{margin:0 0 4px;color:var(--ink);font-size:15px}
 .subregion-card p{margin:0;color:var(--muted);font-size:12.5px}
 
-/* ============================================================
-   TERM LIBRARY
-   ============================================================ */
-.term-search{
-    display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 16px;
-}
+/* ── Term Library ── */
+.term-search{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 16px}
 .term-search input{
-    flex:1 1 280px;padding:12px 14px;border-radius:10px;background:var(--panel-2);
-    border:1px solid var(--border);color:#fff;font-size:15px;outline:none;
+    flex:1 1 280px;padding:12px 14px;border-radius:10px;
+    background:var(--panel);border:1px solid var(--border);color:var(--ink);font-size:15px;outline:none;
+    box-shadow:0 2px 8px rgba(91,142,248,.07);
 }
-.term-search input:focus{border-color:var(--accent)}
-.term-search select{
-    padding:10px 12px;border-radius:10px;background:var(--panel-2);
-    border:1px solid var(--border);color:#fff;font-size:14px;
-}
+.term-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,142,248,.14)}
+.term-search select{padding:10px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--border);color:var(--ink);font-size:14px}
 .term-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
 .term-card{
     background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;
-    transition:border-color .2s;
+    transition:border-color .2s,box-shadow .2s;box-shadow:0 3px 10px rgba(91,142,248,.07);
 }
-.term-card:hover{border-color:var(--accent)}
-.term-card h3{margin:0 0 6px;font-size:16px}
-.term-card .cat{font-size:11px;color:var(--accent-2);text-transform:uppercase;letter-spacing:.5px}
-.term-card .borders{margin-top:8px;font-size:13.5px}
-.term-card .borders b{color:var(--accent)}
+.term-card:hover{border-color:var(--accent);box-shadow:0 6px 18px rgba(91,142,248,.14)}
+.term-card h3{margin:0 0 6px;font-size:16px;color:var(--ink)}
+.term-card .cat{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.term-card .borders{margin-top:8px;font-size:13.5px;color:var(--ink)}
+.term-card .borders b{color:var(--accent-2)}
 .no-results{padding:30px;text-align:center;color:var(--muted)}
 
-/* ============================================================
-   REGION DETAIL PAGES
-   ============================================================ */
+/* ── Region detail pages ── */
 .region-detail{display:grid;grid-template-columns:1fr;gap:18px}
 .crumbs{font-size:13px;color:var(--muted);margin-bottom:6px}
 .crumbs a{color:var(--accent)}
 .region-header{
-    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    background:linear-gradient(135deg,rgba(168,196,248,.22),rgba(255,173,173,.12));
     border:1px solid var(--border);border-radius:var(--radius);padding:24px;
+    box-shadow:0 4px 14px rgba(91,142,248,.08);
 }
-.region-header h1{margin:0 0 6px}
+.region-header h1{margin:0 0 6px;color:var(--ink)}
 .region-header p{margin:0;color:var(--muted)}
 .section{
     background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+    box-shadow:0 4px 14px rgba(91,142,248,.07);
 }
 .section h2{margin-top:0}
-.section h3{margin-top:14px}
-.callout{
-    border-left:3px solid var(--accent);background:rgba(93,193,255,.08);
-    padding:10px 14px;border-radius:8px;margin:12px 0;font-size:14px;
-}
-.callout.warn{border-left-color:var(--warn);background:rgba(255,209,102,.08)}
-.callout.danger{border-left-color:var(--danger);background:rgba(255,115,115,.08)}
+.callout{border-left:3px solid var(--accent);background:rgba(91,142,248,.07);padding:10px 14px;border-radius:8px;margin:12px 0;font-size:14px}
+.callout.warn{border-left-color:var(--warn);background:rgba(255,209,102,.1)}
+.callout.danger{border-left-color:var(--danger);background:rgba(255,123,123,.1)}
 
-/* ============================================================
-   IMAGE PLACEHOLDER
-   ============================================================ */
-.imgbox{
-    margin:14px 0;border:2px dashed var(--border);border-radius:12px;
-    padding:18px;text-align:center;background:var(--panel-2);color:var(--muted);
-    transition:border-color .2s;
-}
+/* ── Image placeholder ── */
+.imgbox{margin:14px 0;border:2px dashed var(--border);border-radius:12px;padding:18px;text-align:center;background:var(--panel-2);color:var(--muted);transition:border-color .2s}
 .imgbox img{max-width:100%;border-radius:8px;display:block;margin:0 auto}
-.imgbox.empty::before{
-    content:"";display:inline-block;width:48px;height:48px;border-radius:8px;
-    background:linear-gradient(135deg,#2a3d68,#1a2643);margin-bottom:10px;
-}
+.imgbox.empty::before{content:"";display:inline-block;width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,rgba(168,196,248,.5),rgba(255,173,173,.35));margin-bottom:10px}
 .imgbox .ph-label{font-size:13px;color:var(--muted)}
-.imgbox .ph-label code{
-    background:var(--panel);padding:2px 6px;border-radius:4px;color:var(--accent-2);
-    border:1px solid var(--border);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
-}
+.imgbox .ph-label code{background:var(--panel);padding:2px 6px;border-radius:4px;color:var(--accent);border:1px solid var(--border);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+
+/* ── Footer ── */
+footer{margin-top:60px;padding:24px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--border)}
+
+/* ── Print ── */
+@media print{header.site,.hero,nav.menu{display:none}body{background:#fff;color:#000}.card,.section,.region-header,.term-card{border-color:#ccc;background:#fff;color:#000}}
 
 /* ============================================================
-   FOOTER
+   AO-STYLE TOPOGRAPHY — two-panel layout + real image viewer
    ============================================================ */
-footer{
-    margin-top:60px;padding:24px;color:var(--muted);font-size:13px;
-    text-align:center;border-top:1px solid var(--border);
-}
-
-/* ============================================================
-   PRINT
-   ============================================================ */
-@media print{
-    header.site,.hero,nav.menu{display:none}
-    body{background:#fff;color:#000}
-    .card,.section,.region-header,.term-card{border-color:#ccc;background:#fff;color:#000}
-}
-
-/* ============================================================
-   AO-STYLE TOPOGRAPHY — two-panel layout + animated zoom
-   ============================================================ */
-.ao-topo-wrap{display:grid;grid-template-columns:1fr 345px;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:590px;box-shadow:var(--shadow)}
+.ao-topo-wrap{display:grid;grid-template-columns:1fr 345px;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:590px;box-shadow:0 8px 32px rgba(91,142,248,.12)}
 @media(max-width:960px){.ao-topo-wrap{grid-template-columns:1fr}}
-.ao-figure-panel{position:relative;background:linear-gradient(145deg,#060c17,#0e1726);display:flex;align-items:center;justify-content:center;padding:28px 20px;min-height:570px}
-.ao-svg-wrap{width:100%;max-width:285px}
-#aoBodySvg{width:100%;display:block;user-select:none;cursor:crosshair}
-.ao-lm-set{transition:opacity .45s ease}
-#ao-hotspots{transition:opacity .3s ease}
-.ao-toolbar{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:8px;z-index:5}
-.ao-tool-btn{width:36px;height:36px;border-radius:10px;background:rgba(22,33,58,.92);border:1px solid var(--border);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:background .15s,color .15s;line-height:1;padding:0}
-.ao-tool-btn:hover{background:var(--panel-2);color:#fff}
-.ao-region-badge{position:absolute;top:14px;right:14px;background:rgba(93,193,255,.15);border:1px solid rgba(93,193,255,.35);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.3px;opacity:0;transition:opacity .3s;pointer-events:none}
+.ao-figure-panel{
+    position:relative;
+    background:#090c10;
+    display:flex;flex-direction:column;align-items:stretch;min-height:570px;
+    overflow:hidden;
+}
+/* Image viewer fills the figure panel */
+.ao-img-viewer{position:relative;width:100%;flex:1;min-height:400px}
+.ao-img-layer{
+    position:absolute;inset:0;opacity:0;transition:opacity .55s ease;
+    pointer-events:none;display:flex;align-items:center;justify-content:center;
+}
+.ao-img-layer.active{opacity:1;pointer-events:auto}
+.ao-body-img{width:100%;height:100%;object-fit:contain;user-select:none;display:block}
+/* Overview hotspot "+" buttons */
+.ao-hs-overlay{position:absolute;inset:0}
+.ao-hs-btn{
+    position:absolute;transform:translate(-50%,-50%);
+    width:32px;height:32px;border-radius:50%;
+    background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.75);
+    color:#fff;font-size:19px;font-weight:700;line-height:1;
+    cursor:pointer;transition:all .18s ease;
+    display:flex;align-items:center;justify-content:center;padding:0;
+    animation:ao-hs-pulse 2.4s ease-out infinite;
+}
+@keyframes ao-hs-pulse{
+    0%{box-shadow:0 0 0 0 rgba(91,142,248,.6)}
+    70%{box-shadow:0 0 0 11px rgba(91,142,248,0)}
+    100%{box-shadow:0 0 0 0 rgba(91,142,248,0)}
+}
+.ao-hs-btn:hover{background:rgba(91,142,248,.55);border-color:var(--accent);transform:translate(-50%,-50%) scale(1.22);animation:none;box-shadow:0 4px 20px rgba(91,142,248,.5)}
+/* Region landmark pin labels */
+.ao-lm-overlay{position:absolute;inset:0;pointer-events:none}
+.ao-lm-pin{
+    position:absolute;transform:translate(-50%,-50%);
+    background:rgba(255,255,255,.93);border:1.5px solid rgba(200,215,255,.6);
+    border-radius:20px;padding:3px 10px 3px 7px;
+    font-size:11px;font-weight:600;color:#1a2040;
+    cursor:pointer;white-space:nowrap;
+    box-shadow:0 2px 12px rgba(0,0,0,.38);
+    transition:all .18s ease;pointer-events:auto;
+    display:flex;align-items:center;gap:5px;
+}
+.ao-lm-pin::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.ao-lm-pin:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translate(-50%,-50%) scale(1.08)}
+.ao-lm-pin:hover::before{background:rgba(255,255,255,.85)}
+/* Toolbar and overlays */
+.ao-toolbar{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:8px;z-index:10}
+.ao-tool-btn{
+    width:36px;height:36px;border-radius:10px;
+    background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;
+    transition:all .15s;line-height:1;padding:0;
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+}
+.ao-tool-btn:hover{background:rgba(255,255,255,.28);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.ao-region-badge{
+    position:absolute;top:14px;right:14px;z-index:10;
+    background:rgba(9,12,16,.65);border:1px solid rgba(91,142,248,.45);
+    border-radius:999px;padding:4px 12px;font-size:11px;font-weight:600;color:rgba(255,255,255,.9);
+    letter-spacing:.3px;opacity:0;transition:opacity .3s;pointer-events:none;
+    box-shadow:0 2px 8px rgba(0,0,0,.4);backdrop-filter:blur(4px);
+}
 .ao-region-badge.show{opacity:1}
-.ao-hint-bar{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(14,23,38,.9);border:1px solid var(--border);border-radius:999px;padding:5px 16px;font-size:11.5px;color:var(--muted);white-space:nowrap;pointer-events:none;transition:opacity .3s}
-.ao-info-panel{border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--panel)}
-.ao-info-header{padding:20px 22px 16px;border-bottom:1px solid var(--border);background:var(--panel-2)}
+.ao-hint-bar{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;
+    background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);
+    border-radius:999px;padding:5px 16px;font-size:11.5px;color:rgba(255,255,255,.72);
+    white-space:nowrap;pointer-events:none;transition:opacity .3s;
+    box-shadow:0 2px 10px rgba(0,0,0,.35);backdrop-filter:blur(4px);
+}
+/* Right info panel */
+.ao-info-panel{border-left:1px solid var(--border);display:flex;flex-direction:column;background:#fff}
+.ao-info-header{
+    padding:20px 22px 16px;border-bottom:1px solid var(--border);
+    background:linear-gradient(135deg,rgba(168,196,248,.18),rgba(255,173,173,.1));
+}
 .ao-info-tag{font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px}
-.ao-region-title-el{font-size:22px;font-weight:700;color:#fff;margin:0;line-height:1.2}
+.ao-region-title-el{font-size:22px;font-weight:700;color:var(--ink);margin:0;line-height:1.2}
 .ao-info-body{flex:1;overflow-y:auto;padding:16px}
 .ao-sec-row{display:flex;align-items:center;gap:8px;margin:0 0 8px}
 .ao-sec-bar{width:3px;height:16px;background:var(--accent);border-radius:2px;flex-shrink:0}
 .ao-sec-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted)}
 .ao-desc{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 16px}
-.ao-sub-card{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:7px;cursor:pointer;background:var(--panel-2);transition:border-color .15s,background .15s;text-decoration:none;color:inherit}
-.ao-sub-card:hover{border-color:var(--accent);background:rgba(93,193,255,.07);text-decoration:none}
-.ao-sub-icon{width:26px;height:26px;border-radius:7px;background:rgba(93,193,255,.1);display:flex;align-items:center;justify-content:center;font-size:12px;margin-right:10px;flex-shrink:0;border:1px solid var(--border)}
-.ao-sub-name{font-size:12.5px;font-weight:600;color:#fff;flex:1}
+.ao-sub-card{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 12px;border:1px solid var(--border);border-radius:10px;
+    margin-bottom:7px;cursor:pointer;background:var(--panel-2);
+    transition:border-color .15s,background .15s,box-shadow .15s;text-decoration:none;color:inherit;
+}
+.ao-sub-card:hover{border-color:var(--accent);background:rgba(91,142,248,.08);text-decoration:none;box-shadow:0 4px 12px rgba(91,142,248,.1)}
+.ao-sub-icon{width:26px;height:26px;border-radius:7px;background:rgba(91,142,248,.1);display:flex;align-items:center;justify-content:center;font-size:12px;margin-right:10px;flex-shrink:0;border:1px solid var(--border)}
+.ao-sub-name{font-size:12.5px;font-weight:600;color:var(--ink);flex:1}
 .ao-sub-arrow{color:var(--muted);font-size:15px;font-weight:700}
 .ao-info-footer{padding:12px 16px;border-top:1px solid var(--border)}
-.ao-full-link{width:100%;padding:12px;background:var(--accent);color:#021;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;transition:transform .1s;display:block;text-align:center;text-decoration:none}
-.ao-full-link:hover{transform:translateY(-1px);text-decoration:none}
+.ao-full-link{
+    width:100%;padding:12px;
+    background:linear-gradient(135deg,var(--accent) 0%,#89B4FF 100%);
+    color:#fff;border:none;border-radius:10px;font-weight:700;font-size:13px;
+    cursor:pointer;transition:transform .1s,box-shadow .15s;
+    display:block;text-align:center;text-decoration:none;
+    box-shadow:0 4px 14px rgba(91,142,248,.35);
+}
+.ao-full-link:hover{transform:translateY(-1px);text-decoration:none;box-shadow:0 6px 22px rgba(91,142,248,.5)}
 </style>
 </head>
 <body>
@@ -305,178 +391,124 @@ footer{
 /* ====================================================================
    AO-STYLE BODY MAP — zoom data + SVG label helpers + animation
    ==================================================================== */
-const ZOOM_DATA = {
+/* ====================================================================
+   REAL-IMAGE BODY MAP — per-region anatomical photos with CSS fade
+   ==================================================================== */
+const REGION_IMAGES = {
   head:{
-    vb:[130,0,140,125], fs:4.5,
-    desc:"Scalp, calvarial regions, temporal & infratemporal fossae, skull base. Key surgical corridors for cranial procedures.",
-    icon:"💀",
+    img:"images/region-head.png",
+    desc:"Scalp, cranial vault, intracranial compartments — cerebral cortex, cerebellum, brainstem, cranial nerves, and facial musculature.",
+    icon:"🧠",
     landmarks:[
-      {x:200,y:22,label:"Frontal bone",dir:"r",sub:"#/sub/scalp"},
-      {x:242,y:52,label:"Temporal bone",dir:"l",sub:"#/sub/skull-base"},
-      {x:158,y:52,label:"Parietal bone",dir:"r",sub:"#/sub/scalp"},
-      {x:243,y:88,label:"Mastoid process",dir:"l",sub:"#/sub/skull-base"},
-      {x:200,y:104,label:"Mandible",dir:"r",sub:"#/region/head"},
+      {x:50,y:12,label:"Cerebral Cortex",sub:"#/sub/scalp"},
+      {x:68,y:30,label:"Cerebellum",sub:"#/sub/skull-base"},
+      {x:50,y:28,label:"Frontal Bone",sub:"#/sub/scalp"},
+      {x:20,y:36,label:"Temporal Artery",sub:"#/region/head"},
+      {x:36,y:56,label:"Facial Nerve (VII)",sub:"#/region/head"},
+      {x:27,y:63,label:"Masseter",sub:"#/region/head"},
+      {x:50,y:80,label:"Mandible",sub:"#/region/head"},
     ]
   },
   neck:{
-    vb:[140,97,120,120], fs:4,
-    desc:"Anterior & posterior cervical triangles, scalene fissure, laryngeal skeleton, fascial layers and contents.",
+    img:"images/region-neck.png",
+    desc:"Anterior & posterior triangles, carotid sheath, thyroid gland, larynx, trachea, brachial plexus, and great vessels.",
     icon:"⚕",
     landmarks:[
-      {x:200,y:108,label:"Hyoid bone",dir:"r",sub:"#/sub/anterior-triangle"},
-      {x:200,y:119,label:"Thyroid cart.",dir:"l",sub:"#/sub/anterior-triangle"},
-      {x:200,y:130,label:"Cricoid ring",dir:"r",sub:"#/sub/anterior-triangle"},
-      {x:163,y:122,label:"SCM",dir:"r",sub:"#/sub/posterior-triangle"},
-      {x:181,y:140,label:"Clavicle",dir:"r",sub:"#/sub/scalene-fissure"},
+      {x:30,y:34,label:"Sternocleidomastoid",sub:"#/sub/anterior-triangle"},
+      {x:38,y:44,label:"Int. Jugular Vein",sub:"#/sub/anterior-triangle"},
+      {x:42,y:52,label:"Common Carotid A.",sub:"#/sub/anterior-triangle"},
+      {x:50,y:36,label:"Thyroid Cartilage",sub:"#/sub/anterior-triangle"},
+      {x:50,y:52,label:"Thyroid Gland",sub:"#/sub/anterior-triangle"},
+      {x:50,y:68,label:"Trachea",sub:"#/sub/anterior-triangle"},
+      {x:22,y:56,label:"Brachial Plexus",sub:"#/sub/scalene-fissure"},
+      {x:50,y:87,label:"Clavicle",sub:"#/sub/scalene-fissure"},
     ]
   },
   chest:{
-    vb:[100,128,200,178], fs:6,
-    desc:"Thoracic wall, intercostal spaces, mediastinum, pleural cavities, axilla. Heart auscultation surface zones.",
+    img:"images/region-chest.png",
+    desc:"Thoracic wall, intercostal spaces, mediastinum, pleurae, lungs, pericardium, heart, and great vessels.",
     icon:"🫁",
     landmarks:[
-      {x:200,y:147,label:"Manubrium",dir:"r",sub:"#/sub/thoracic-wall"},
-      {x:200,y:167,label:"Sternal angle",dir:"l",sub:"#/sub/mediastinum"},
-      {x:200,y:200,label:"Body of sternum",dir:"r",sub:"#/sub/thoracic-wall"},
-      {x:200,y:233,label:"Xiphoid process",dir:"l",sub:"#/sub/thoracic-wall"},
-      {x:148,y:190,label:"Axilla",dir:"r",sub:"#/sub/axilla"},
+      {x:50,y:8,label:"Sternum",sub:"#/sub/thoracic-wall"},
+      {x:25,y:42,label:"Left Lung",sub:"#/sub/mediastinum"},
+      {x:72,y:40,label:"Right Lung",sub:"#/sub/mediastinum"},
+      {x:57,y:22,label:"Superior Vena Cava",sub:"#/sub/mediastinum"},
+      {x:50,y:20,label:"Ascending Aorta",sub:"#/sub/mediastinum"},
+      {x:48,y:50,label:"Pericardium",sub:"#/sub/mediastinum"},
+      {x:45,y:63,label:"Right Ventricle",sub:"#/sub/mediastinum"},
+      {x:52,y:67,label:"Left Ventricle",sub:"#/sub/mediastinum"},
+      {x:30,y:35,label:"Intercostal Space",sub:"#/sub/thoracic-wall"},
     ]
   },
   abdomen:{
-    vb:[110,238,180,168], fs:5.5,
-    desc:"Abdominal wall layers, peritoneal cavity, four quadrants, retroperitoneum. Key surface projection points.",
+    img:"images/region-abdomen.png",
+    desc:"Peritoneal cavity and retroperitoneum — liver, gallbladder, stomach, spleen, pancreas, small and large intestine.",
     icon:"🫃",
     landmarks:[
-      {x:200,y:262,label:"Transpyloric (L1)",dir:"l",sub:"#/sub/projection-points"},
-      {x:200,y:305,label:"Umbilicus (L3-4)",dir:"r",sub:"#/sub/abdominal-wall"},
-      {x:252,y:308,label:"Murphy's point",dir:"l",sub:"#/sub/abdomen-ruq"},
-      {x:155,y:334,label:"McBurney's pt.",dir:"r",sub:"#/sub/abdomen-rlq"},
-      {x:200,y:380,label:"Pubic crest",dir:"r",sub:"#/sub/inguinal"},
+      {x:33,y:22,label:"Liver",sub:"#/sub/abdomen-ruq"},
+      {x:38,y:36,label:"Gallbladder",sub:"#/sub/abdomen-ruq"},
+      {x:53,y:28,label:"Stomach",sub:"#/sub/abdomen-luq"},
+      {x:72,y:20,label:"Spleen",sub:"#/sub/abdomen-luq"},
+      {x:50,y:44,label:"Pancreas",sub:"#/sub/abdomen-luq"},
+      {x:50,y:62,label:"Small Intestine",sub:"#/sub/abdominal-wall"},
+      {x:70,y:55,label:"Ascending Colon",sub:"#/sub/abdomen-rlq"},
+      {x:68,y:68,label:"Appendix",sub:"#/sub/abdomen-rlq"},
+      {x:48,y:74,label:"Sigmoid Colon",sub:"#/sub/abdomen-llq"},
     ]
   },
   pelvis:{
-    vb:[110,362,180,138], fs:5.5,
-    desc:"Male & female pelvis, pelvic floor, perineum, ischioanal fossae. ASIS and inguinal landmarks.",
+    img:"images/region-pelvis.png",
+    desc:"Male & female pelvis, pelvic floor, perineum, ischioanal fossae, inguinal canal, ASIS and pubic landmarks.",
     icon:"🦴",
-    landmarks:[
-      {x:154,y:382,label:"ASIS",dir:"r",sub:"#/sub/inguinal"},
-      {x:246,y:382,label:"ASIS",dir:"l",sub:"#/sub/inguinal"},
-      {x:200,y:418,label:"Inguinal lig.",dir:"l",sub:"#/sub/inguinal"},
-      {x:200,y:453,label:"Pubic symphysis",dir:"r",sub:"#/sub/pelvic-floor"},
-      {x:172,y:472,label:"Femoral triangle",dir:"r",sub:"#/sub/anterior-thigh"},
-    ]
+    landmarks:[]
   },
   "upper-limb":{
-    vb:[58,128,132,232], fs:4.5,
-    desc:"Axilla, brachial plexus, deltoid region, cubital fossa, carpal tunnel — arm, forearm and hand regions.",
+    img:"images/region-upper-limb.png",
+    desc:"Axilla, brachial plexus, deltoid region, cubital fossa, carpal tunnel — arm, forearm, and hand.",
     icon:"💪",
-    landmarks:[
-      {x:130,y:142,label:"Clavicle",dir:"r",sub:"#/sub/axilla-2"},
-      {x:115,y:158,label:"Acromion",dir:"r",sub:"#/sub/axilla-2"},
-      {x:102,y:205,label:"Deltoid region",dir:"r",sub:"#/sub/upper-limb-regions"},
-      {x:87,y:270,label:"Cubital fossa",dir:"r",sub:"#/sub/upper-limb-regions"},
-      {x:80,y:345,label:"Wrist/carpal",dir:"r",sub:"#/sub/upper-limb-regions"},
-    ]
+    landmarks:[]
   },
   "lower-limb":{
-    vb:[130,456,158,264], fs:5,
-    desc:"Gluteal region, greater trochanter, femoral triangle, adductor canal, popliteal fossa, leg compartments.",
+    img:"images/region-lower-limb.png",
+    desc:"Gluteal region, femoral triangle, adductor canal, popliteal fossa, leg compartments, ankle, and foot.",
     icon:"🦵",
-    landmarks:[
-      {x:160,y:480,label:"Greater trochanter",dir:"r",sub:"#/sub/gluteal"},
-      {x:175,y:515,label:"Femoral triangle",dir:"r",sub:"#/sub/anterior-thigh"},
-      {x:174,y:580,label:"Femur shaft",dir:"r",sub:"#/sub/anterior-thigh"},
-      {x:174,y:617,label:"Patella",dir:"r",sub:"#/sub/anterior-thigh"},
-      {x:162,y:640,label:"Head of fibula",dir:"r",sub:"#/sub/anterior-thigh"},
-      {x:170,y:700,label:"Medial malleolus",dir:"r",sub:"#/sub/anterior-thigh"},
-    ]
+    landmarks:[]
   },
   back:{
-    vb:[140,128,120,345], fs:4,
-    desc:"Vertebral canal, epidural space, spinal cord segments. Landmarks for lumbar puncture and epidural anaesthesia.",
+    img:"images/region-back.png",
+    desc:"Vertebral column, paraspinal muscles, epidural space, spinal cord segments, lumbar puncture landmarks.",
     icon:"🦴",
-    landmarks:[
-      {x:200,y:162,label:"C7 vert. prom.",dir:"r",sub:"#/sub/vertebral-canal"},
-      {x:200,y:200,label:"T4/5 sternal ∠",dir:"l",sub:"#/sub/vertebral-canal"},
-      {x:200,y:265,label:"L1 (conus)",dir:"r",sub:"#/sub/vertebral-canal"},
-      {x:200,y:356,label:"L4 (iliac crest)",dir:"l",sub:"#/sub/lumbar-puncture"},
-      {x:200,y:415,label:"Sacrum",dir:"r",sub:"#/sub/lumbar-puncture"},
-    ]
+    landmarks:[]
   },
 };
 
-// Generate SVG markup for one region's landmark group
-function makeLmGroup(regionId, zd){
-    const {vb, fs, landmarks} = zd;
-    const pillH = fs + 3.5;
-    const lineLen = fs * 2.8;
-    const charW = fs * 0.58;
-    const items = landmarks.map(lm => {
-        const isL = lm.dir === "l";
-        const dir = isL ? -1 : 1;
-        const lx2 = lm.x + dir * lineLen;
-        const pillW = Math.max(charW * lm.label.length + 7, 18);
-        const rx = isL ? lx2 - pillW : lx2;
-        const ry = lm.y - pillH / 2;
-        const tx = rx + 2.5;
-        const ty = lm.y + fs * 0.36;
-        return `<g onclick="location.hash='${lm.sub}';event.stopPropagation()" style="cursor:pointer">
-          <circle cx="${lm.x.toFixed(1)}" cy="${lm.y.toFixed(1)}" r="${(fs*0.52).toFixed(1)}" style="fill:var(--accent)"/>
-          <line x1="${lm.x.toFixed(1)}" y1="${lm.y.toFixed(1)}" x2="${lx2.toFixed(1)}" y2="${lm.y.toFixed(1)}" style="stroke:var(--accent);stroke-width:${(fs*0.18).toFixed(2)};opacity:.65"/>
-          <rect x="${rx.toFixed(1)}" y="${ry.toFixed(1)}" width="${pillW.toFixed(1)}" height="${pillH.toFixed(1)}" rx="${(pillH*0.45).toFixed(1)}" style="fill:#101c33;stroke:#27375a;stroke-width:${(fs*0.11).toFixed(2)}"/>
-          <text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" font-size="${fs}" font-weight="600" style="fill:#e8eefc" font-family="Inter,-apple-system,sans-serif">${lm.label}</text>
-        </g>`;
-    }).join("\n");
-    return `<g id="ao-lm-${regionId.replace(/\//g,"-")}" class="ao-lm-set" style="opacity:0;pointer-events:none">${items}</g>`;
-}
-
-/* Body map animation state + helpers */
-const bm = { cur:[0,0,400,720], tgt:[0,0,400,720], raf:null, active:null };
-
-function _bmTick(){
-    const spd = 0.13, svg = document.getElementById("aoBodySvg");
-    let moving = false;
-    for(let i=0;i<4;i++){
-        const d = bm.tgt[i]-bm.cur[i];
-        if(Math.abs(d)>0.08){bm.cur[i]+=d*spd;moving=true;}
-        else bm.cur[i]=bm.tgt[i];
-    }
-    if(svg) svg.setAttribute("viewBox",bm.cur.map(n=>n.toFixed(2)).join(" "));
-    bm.raf = moving ? requestAnimationFrame(_bmTick) : null;
-}
+/* Body map state (no longer needs viewBox animation) */
+const bm = { active:null };
 
 function bmSelectRegion(id){
-    if(bm.raf) cancelAnimationFrame(bm.raf);
-    const zd = ZOOM_DATA[id]; if(!zd) return;
-    bm.tgt=[...zd.vb]; bm.active=id;
-    const hs=document.getElementById("ao-hotspots");
-    if(hs){hs.style.opacity="0";hs.style.pointerEvents="none";}
-    document.querySelectorAll(".ao-lm-set").forEach(g=>{g.style.opacity="0";g.style.pointerEvents="none";});
-    setTimeout(()=>{
-        const g=document.getElementById("ao-lm-"+id.replace(/\//g,"-"));
-        if(g){g.style.opacity="1";g.style.pointerEvents="";}
-    },460);
+    const ri = REGION_IMAGES[id]; if(!ri) return;
+    bm.active = id;
+    document.querySelectorAll(".ao-img-layer").forEach(l=>l.classList.remove("active"));
+    const layer = document.getElementById("ao-layer-"+id.replace(/\//g,"-"));
+    if(layer) layer.classList.add("active");
     const badge=document.getElementById("ao-region-badge");
     const reg=REGIONS.find(r=>r.id===id);
     if(badge&&reg){badge.textContent=reg.name;badge.classList.add("show");}
     const hint=document.getElementById("ao-hint");
     if(hint) hint.textContent="Click a label to view anatomical detail";
     bmUpdatePanel(id);
-    bm.raf=requestAnimationFrame(_bmTick);
 }
 
 function bmReset(){
-    if(bm.raf) cancelAnimationFrame(bm.raf);
-    bm.tgt=[0,0,400,720]; bm.active=null;
-    const hs=document.getElementById("ao-hotspots");
-    if(hs){hs.style.opacity="1";hs.style.pointerEvents="";}
-    document.querySelectorAll(".ao-lm-set").forEach(g=>{g.style.opacity="0";g.style.pointerEvents="none";});
+    bm.active=null;
+    document.querySelectorAll(".ao-img-layer").forEach(l=>l.classList.remove("active"));
+    const ov=document.getElementById("ao-layer-overview");
+    if(ov) ov.classList.add("active");
     const badge=document.getElementById("ao-region-badge");
     if(badge) badge.classList.remove("show");
     const hint=document.getElementById("ao-hint");
     if(hint) hint.textContent="Select a region to explore anatomy";
     bmUpdatePanel(null);
-    bm.raf=requestAnimationFrame(_bmTick);
 }
 
 function bmUpdatePanel(id){
@@ -488,23 +520,23 @@ function bmUpdatePanel(id){
     if(!titleEl) return;
     if(!id){
         titleEl.textContent="Overview";
-        if(descEl) descEl.textContent="Select a region to drill into subregion anatomy — click any '+' on the figure or choose below.";
+        if(descEl) descEl.textContent="Select a region to explore anatomy — click any '+' on the figure or choose a region below.";
         if(subsLbl) subsLbl.textContent="All Regions";
         if(footerLink) footerLink.style.display="none";
         if(subsEl) subsEl.innerHTML=REGIONS.map(r=>{
-            const zd=ZOOM_DATA[r.id];
+            const ri=REGION_IMAGES[r.id];
             return `<div class="ao-sub-card" onclick="bmSelectRegion('${r.id}')">
-              <div class="ao-sub-icon">${zd?zd.icon:"+"}</div>
+              <div class="ao-sub-icon">${ri?ri.icon:"+"}</div>
               <span class="ao-sub-name">${r.name}</span>
               <span class="ao-sub-arrow">›</span>
             </div>`;
         }).join("");
     } else {
-        const zd=ZOOM_DATA[id];
+        const ri=REGION_IMAGES[id];
         const reg=REGIONS.find(r=>r.id===id);
-        if(!zd||!reg) return;
+        if(!ri||!reg) return;
         titleEl.textContent=reg.name;
-        if(descEl) descEl.textContent=zd.desc;
+        if(descEl) descEl.textContent=ri.desc;
         if(subsLbl) subsLbl.textContent="Subregions";
         if(footerLink){footerLink.href="#/region/"+id;footerLink.textContent="Open Full Region →";footerLink.style.display="block";}
         if(subsEl&&reg.sub) subsEl.innerHTML=reg.sub.map(s=>`
@@ -2055,91 +2087,49 @@ function renderTermList(){
 
 /* -------- Topography (body map — AO-style animated) -------- */
 function viewTopography(){
-    // Pre-generate all landmark SVG groups for every region
-    const lmGroups = Object.entries(ZOOM_DATA).map(([id,zd])=>makeLmGroup(id,zd)).join("\n");
+    // Generate per-region image layers with landmark pin overlays
+    const regionLayers = Object.entries(REGION_IMAGES).map(([id, ri]) => {
+        const pins = ri.landmarks.map(lm =>
+            `<div class="ao-lm-pin" style="left:${lm.x}%;top:${lm.y}%" onclick="location.hash='${lm.sub}';event.stopPropagation()">${lm.label}</div>`
+        ).join("\n          ");
+        return `
+        <div class="ao-img-layer" id="ao-layer-${id.replace(/\//g,"-")}">
+          <img src="${ri.img}" class="ao-body-img" alt="${id} anatomy" draggable="false"/>
+          <div class="ao-lm-overlay">${pins}</div>
+        </div>`;
+    }).join("");
 
     return `
 <div class="ao-topo-wrap">
 
-  <!-- ── LEFT: animated figure panel ─────────────────────── -->
+  <!-- ── LEFT: real-image figure panel ───────────────────── -->
   <div class="ao-figure-panel">
     <div class="ao-toolbar">
       <button class="ao-tool-btn" onclick="bmReset()" title="Reset to overview">↩</button>
     </div>
     <div id="ao-region-badge" class="ao-region-badge"></div>
 
-    <div class="ao-svg-wrap">
-      <svg id="aoBodySvg" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive human body map">
+    <div class="ao-img-viewer">
 
-        <!-- Body silhouette -->
-        <ellipse cx="200" cy="60" rx="42" ry="50" class="silhouette"/>
-        <rect x="180" y="105" width="40" height="30" class="silhouette"/>
-        <path d="M 130 135 Q 150 130 200 130 Q 250 130 270 135 L 280 250 L 285 380 Q 270 430 260 460 L 240 470 L 160 470 L 140 460 Q 130 430 115 380 L 120 250 Z" class="silhouette"/>
-        <path d="M 130 140 L 90 240 L 75 360 L 80 370 L 100 360 L 110 250 L 125 160 Z" class="silhouette-2"/>
-        <path d="M 270 140 L 310 240 L 325 360 L 320 370 L 300 360 L 290 250 L 275 160 Z" class="silhouette-2"/>
-        <path d="M 165 470 L 160 600 L 155 700 L 175 700 L 185 600 L 195 470 Z" class="silhouette-2"/>
-        <path d="M 235 470 L 240 600 L 245 700 L 225 700 L 215 600 L 205 470 Z" class="silhouette-2"/>
+      <!-- Overview: full-body anatomical illustration with "+" hotspots -->
+      <div class="ao-img-layer active" id="ao-layer-overview">
+        <img src="images/body-overview.png" class="ao-body-img" alt="Full body anatomy overview" draggable="false"/>
+        <div class="ao-hs-overlay">
+          <button class="ao-hs-btn" style="left:52%;top:4.5%" onclick="bmSelectRegion('head')">+</button>
+          <button class="ao-hs-btn" style="left:52%;top:14%" onclick="bmSelectRegion('neck')">+</button>
+          <button class="ao-hs-btn" style="left:50%;top:27%" onclick="bmSelectRegion('chest')">+</button>
+          <button class="ao-hs-btn" style="left:48%;top:44%" onclick="bmSelectRegion('abdomen')">+</button>
+          <button class="ao-hs-btn" style="left:48%;top:58%" onclick="bmSelectRegion('pelvis')">+</button>
+          <button class="ao-hs-btn" style="left:21%;top:37%" onclick="bmSelectRegion('upper-limb')">+</button>
+          <button class="ao-hs-btn" style="left:79%;top:37%" onclick="bmSelectRegion('upper-limb')">+</button>
+          <button class="ao-hs-btn" style="left:44%;top:76%" onclick="bmSelectRegion('lower-limb')">+</button>
+          <button class="ao-hs-btn" style="left:56%;top:76%" onclick="bmSelectRegion('lower-limb')">+</button>
+        </div>
+      </div>
 
-        <!-- Anatomical detail overlays -->
-        <!-- Clavicles -->
-        <path d="M 185 136 Q 162 144 130 142" fill="none" stroke="#3a5587" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M 215 136 Q 238 144 270 142" fill="none" stroke="#3a5587" stroke-width="2.2" stroke-linecap="round"/>
-        <!-- Ribcage -->
-        <ellipse cx="200" cy="232" rx="57" ry="70" fill="none" stroke="#3a5587" stroke-width="1.2" opacity="0.4"/>
-        <!-- Spine indicator -->
-        <line x1="200" y1="135" x2="200" y2="425" stroke="#3a5587" stroke-width="2" stroke-dasharray="4 7" opacity="0.3"/>
-        <!-- Pelvis arch -->
-        <path d="M 145 432 Q 145 410 167 406 L 233 406 Q 255 410 255 432" fill="none" stroke="#3a5587" stroke-width="1.4" opacity="0.4"/>
-        <!-- Sternum highlight -->
-        <line x1="200" y1="140" x2="200" y2="298" stroke="#3a5587" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+      <!-- Per-region detailed anatomy images + landmark labels -->
+      ${regionLayers}
 
-        <!-- ── Overview hotspots (visible when not zoomed) ── -->
-        <g id="ao-hotspots">
-          <g onclick="bmSelectRegion('head')" style="cursor:pointer">
-            <circle cx="200" cy="60" r="19" class="hot"/>
-            <text class="plus" x="200" y="68">+</text>
-          </g>
-          <g onclick="bmSelectRegion('neck')" style="cursor:pointer">
-            <circle cx="200" cy="120" r="13" class="hot"/>
-            <text class="plus" x="200" y="127">+</text>
-          </g>
-          <g onclick="bmSelectRegion('chest')" style="cursor:pointer">
-            <circle cx="200" cy="200" r="21" class="hot"/>
-            <text class="plus" x="200" y="208">+</text>
-          </g>
-          <g onclick="bmSelectRegion('abdomen')" style="cursor:pointer">
-            <circle cx="200" cy="318" r="21" class="hot"/>
-            <text class="plus" x="200" y="326">+</text>
-          </g>
-          <g onclick="bmSelectRegion('pelvis')" style="cursor:pointer">
-            <circle cx="200" cy="430" r="19" class="hot"/>
-            <text class="plus" x="200" y="438">+</text>
-          </g>
-          <g onclick="bmSelectRegion('upper-limb')" style="cursor:pointer">
-            <circle cx="100" cy="222" r="15" class="hot"/>
-            <text class="plus" x="100" y="229">+</text>
-          </g>
-          <g onclick="bmSelectRegion('upper-limb')" style="cursor:pointer">
-            <circle cx="300" cy="222" r="15" class="hot"/>
-            <text class="plus" x="300" y="229">+</text>
-          </g>
-          <g onclick="bmSelectRegion('lower-limb')" style="cursor:pointer">
-            <circle cx="178" cy="542" r="15" class="hot"/>
-            <text class="plus" x="178" y="549">+</text>
-          </g>
-          <g onclick="bmSelectRegion('lower-limb')" style="cursor:pointer">
-            <circle cx="222" cy="542" r="15" class="hot"/>
-            <text class="plus" x="222" y="549">+</text>
-          </g>
-          <g onclick="bmSelectRegion('back')" style="cursor:pointer">
-            <circle cx="252" cy="285" r="17" class="hot"/>
-            <text class="plus" x="252" y="293">+</text>
-          </g>
-        </g>
-
-        <!-- ── Anatomical landmark groups (one per region, zoomed) ── -->
-        ${lmGroups}
-      </svg>
     </div>
 
     <div id="ao-hint" class="ao-hint-bar">Select a region to explore anatomy</div>
@@ -2156,7 +2146,7 @@ function viewTopography(){
         <div class="ao-sec-bar"></div>
         <span class="ao-sec-lbl">Description</span>
       </div>
-      <p class="ao-desc" id="ao-region-desc">Select a region to drill into subregion anatomy — click any '+' on the figure or choose a region below.</p>
+      <p class="ao-desc" id="ao-region-desc">Select a region to explore anatomy — click any '+' on the figure or choose a region below.</p>
       <div class="ao-sec-row" style="margin-top:8px">
         <div class="ao-sec-bar"></div>
         <span class="ao-sec-lbl" id="ao-subs-label">All Regions</span>
@@ -2692,8 +2682,7 @@ function route(){
 
     // Initialize body map panel after topography HTML is injected
     if(h==="#/topography"){
-        bm.cur=[0,0,400,720]; bm.tgt=[0,0,400,720]; bm.active=null;
-        if(bm.raf){cancelAnimationFrame(bm.raf);bm.raf=null;}
+        bm.active=null;
         bmUpdatePanel(null);
     }
 

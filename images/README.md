@@ -60,10 +60,30 @@ will work — change the extension on the filename if needed; matching is exact)
 - `cn-12-hypoglossal.jpg`
 - `cranial-nerves-overview.jpg`
 
-### Neck
-- `anterior-triangle.jpg`
-- `posterior-triangle.jpg`
-- `scalene-fissure.jpg`
+### Neck (N-01 → N-23)
+- `cervical-fascia.jpg` — Cervical fascia layers cross-section (investing / pretracheal / prevertebral / carotid sheath)
+- `punctum-nervosum.jpg` — Erb's point: 4 cutaneous cervical plexus branches at posterior SCM border
+- `neck-skin-innervation.jpg` — Cutaneous sensory map of neck skin (C2–C4 dermatomes)
+- `neck-triangles.jpg` — Anterior + posterior triangles with subdivisions (carotid, submandibular, submental, suboccipital)
+- `cervical-plexus.jpg` — Cervical plexus roots, branches and distribution diagram
+- `ansa-cervicalis.jpg` — Ansa cervicalis (deep cervical ansa) loop + superficial cervical ansa
+- `brachial-plexus.jpg` — Brachial plexus RTDCB with key nerves and territories
+- `carotid-sheath.jpg` — Carotid sheath cross-section (VAN contents, SCM anterior, prevertebral posterior)
+- `phrenic-nerve.jpg` — Phrenic nerve course: cervical origin on anterior scalene → thoracic path
+- `hyoid-muscles.jpg` — Suprahyoid (4) + infrahyoid strap muscles (4) with innervation
+- `styloid-septum.jpg` — Styloid muscles (XII / VII / IX) + styloid septum / ligaments
+- `crico-tracheostomy.jpg` — Cricothyroid membrane + tracheostomy site landmarks and layers
+- `thyroid-gland.jpg` — Thyroid gland anatomy + pyramidal lobe + at-risk structures
+- `brachiocephalic.jpg` — Brachiocephalic trunk + veins → SVC formation
+- `jugular-system.jpg` — Anterior, external, and internal jugular vein anatomy
+- `lymphatic-drainage-neck.jpg` — Head/neck lymph node levels I–V + venous angle terminations
+- `omohyoid.jpg` — Omohyoid two bellies + intermediate tendon + ansa cervicalis innervation
+- `rule-of-4.jpg` — C4 (carotid bifurcation) / T4 (carina/sternal angle) / L4 (aortic bifurcation)
+- `subclavian-artery.jpg` — Subclavian artery 3 parts + all branches (VIT / costocervical / dorsal scapular)
+- `thyroid-blood-supply.jpg` — Thyroid vasculature: 3 arteries + 3 veins + at-risk RLN and external SLN
+- `larynx-muscles.jpg` — Laryngeal cartilages + intrinsic muscles (external SLN = cricothyroid; RLN = rest)
+- `cervical-sympathetic.jpg` — Cervical sympathetic chain: SCG, middle, stellate ganglia + Horner's pathway
+- `eca-branches.jpg` — External carotid artery 8 branches (SALFOPMS mnemonic)
 
 ### Chest / Thorax
 - `intercostal-space.jpg`

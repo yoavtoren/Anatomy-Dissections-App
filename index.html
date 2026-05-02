@@ -530,8 +530,8 @@ footer{margin-top:60px;padding:24px;color:var(--muted);font-size:13px;text-align
 #aoLabSvg .lab-hot.lab-active{fill:rgba(82,196,144,.92);stroke:#fff;stroke-width:8}
 #aoLabSvg .lab-plus{fill:#fff;font-size:40px;font-weight:900;text-anchor:middle;dominant-baseline:central;pointer-events:none}
 #aoLabSvg .lab-lbl{
-    fill:#fff;font-size:32px;font-weight:700;text-anchor:middle;pointer-events:none;
-    paint-order:stroke;stroke:rgba(0,0,0,.78);stroke-width:9;stroke-linejoin:round;
+    fill:#fff;font-size:24px;font-weight:700;text-anchor:middle;pointer-events:none;
+    paint-order:stroke;stroke:rgba(0,0,0,.78);stroke-width:8;stroke-linejoin:round;
 }
 /* Right info panel */
 .ao-info-panel{border-left:1px solid var(--border);display:flex;flex-direction:column;background:#fff;overflow:hidden;height:620px}
@@ -786,9 +786,104 @@ a.topic-item:hover{border-color:var(--cc,#5B8EF8);box-shadow:0 2px 10px rgba(91,
 .topic-num { flex-shrink:0; min-width:36px; font-weight:700; color:var(--cc,#5B8EF8); font-size:12px; font-family:monospace; }
 .topic-text { flex:1; }
 .topic-arrow{color:var(--cc,#5B8EF8);font-size:16px;flex-shrink:0;opacity:.6}
-/* Topic detail page */
-.topic-content-body{margin-top:16px}
-.topic-nav-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:28px;flex-wrap:wrap}
+/* ============================================================
+   READING EXPERIENCE — Topic content body overhaul
+   ============================================================ */
+.topic-content-body{margin-top:24px;max-width:860px}
+
+/* Kill the outer wrapper's cramped inline-style box */
+.topic-content-body>div{
+    font-size:16px!important;line-height:1.78!important;
+    padding:0!important;background:transparent!important;
+    border-radius:0!important;font-family:inherit!important;
+}
+/* Chapter color banner (top of each topic) */
+.topic-content-body>div>div:first-child{
+    border-radius:14px!important;margin:0 0 32px!important;
+    padding:22px 28px!important;
+}
+.topic-content-body>div>div:first-child h2{
+    font-size:20px!important;margin:0!important;line-height:1.3!important;
+}
+/* Intro summary box (f1f5f9) */
+.topic-content-body [style*="background:#f1f5f9"]{
+    padding:20px 24px!important;border-radius:14px!important;
+    font-size:16px!important;line-height:1.8!important;
+    margin-bottom:28px!important;
+    box-shadow:0 2px 14px rgba(0,0,0,.07)!important;
+}
+/* Info cards (f8fafc) */
+.topic-content-body [style*="background:#f8fafc"]{
+    padding:16px 20px!important;border-radius:12px!important;
+    font-size:15.5px!important;line-height:1.72!important;
+    margin-bottom:0!important;
+    box-shadow:0 2px 8px rgba(0,0,0,.05)!important;
+}
+/* Red callout (fef2f2) */
+.topic-content-body [style*="background:#fef2f2"]{
+    padding:16px 20px!important;border-radius:0 12px 12px 0!important;
+    font-size:15.5px!important;line-height:1.72!important;margin-bottom:16px!important;
+}
+/* Summary green box (f0fdf4) */
+.topic-content-body [style*="background:#f0fdf4"]{
+    padding:22px 28px!important;border-radius:14px!important;
+    font-size:15.5px!important;line-height:1.72!important;margin-top:40px!important;
+}
+.topic-content-body [style*="background:#f0fdf4"]>ul{margin:12px 0 0 22px!important}
+.topic-content-body [style*="background:#f0fdf4"] li{margin:9px 0!important;font-size:15.5px!important;line-height:1.72!important}
+/* Dashed illustration placeholder */
+.topic-content-body [style*="border:2px dashed"]{
+    padding:20px 24px!important;border-radius:14px!important;
+    margin:24px 0!important;min-height:auto!important;
+}
+.topic-content-body [style*="border:2px dashed"] p{
+    font-size:13px!important;line-height:1.6!important;margin:0!important;
+}
+/* Grid layouts */
+.topic-content-body [style*="display:grid"]{gap:14px!important;margin-bottom:24px!important}
+/* h2 inside content */
+.topic-content-body h2{
+    font-size:20px!important;margin:36px 0 16px!important;
+    padding-bottom:8px!important;border-bottom:1px solid var(--border)!important;
+    line-height:1.3!important;color:var(--ink)!important;
+}
+/* h3 section headers */
+.topic-content-body h3{
+    font-size:17px!important;margin:32px 0 14px!important;
+    padding-bottom:8px!important;line-height:1.3!important;font-weight:700!important;
+}
+/* Paragraphs */
+.topic-content-body p{font-size:16px!important;line-height:1.78!important;margin:0 0 12px!important}
+/* Lists */
+.topic-content-body ul,.topic-content-body ol{margin:10px 0 18px 22px!important;padding:0!important}
+.topic-content-body li{font-size:15.5px!important;line-height:1.72!important;margin:8px 0!important}
+
+/* Topic nav row — prominent footer navigation */
+.topic-nav-row{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    margin-top:48px;flex-wrap:wrap;
+    padding-top:28px;border-top:1px solid var(--border);
+}
+.topic-nav-row .btn.ghost{
+    padding:13px 24px!important;font-size:15px!important;
+    font-weight:600!important;border-radius:12px!important;
+    min-width:120px;text-align:center;
+}
+
+/* Chapter detail header — larger, more spacious */
+.chapter-detail-header{
+    padding:24px 30px!important;margin:14px 0 30px!important;border-radius:14px!important;
+}
+.chapter-detail-header h1{
+    font-size:clamp(20px,2.8vw,28px)!important;line-height:1.3!important;margin:4px 0 0!important;
+}
+.chapter-detail-num{font-size:13px!important;letter-spacing:.06em!important}
+
+/* Topic list items — more spacious and readable */
+.topic-item{padding:14px 20px!important;font-size:15px!important;border-radius:12px!important}
+.topic-num{font-size:13px!important;min-width:42px!important}
+.topic-text{font-size:15px!important;line-height:1.5!important}
+.topic-arrow{font-size:20px!important;opacity:.5!important}
 
 /* Question portal placeholder */
 .portal-placeholder {
@@ -1367,19 +1462,19 @@ const REGIONS = [
 
 /* Lab photo hotspot positions — original image coords (2488 x 1696) */
 const LAB_HOTSPOTS=[
-  {id:'ch7', cx:  87,cy: 378,lbl:'Ch.7'},   // arteries poster, far left wall
-  {id:'ch8', cx: 248,cy: 354,lbl:'Ch.8'},   // veins poster, second from left
-  {id:'ch6', cx: 403,cy: 676,lbl:'Ch.6'},   // large heart, foreground left green table
-  {id:'ch10',cx: 211,cy: 831,lbl:'Ch.10'},  // brain model, foreground left green table
-  {id:'ch11',cx: 415,cy: 800,lbl:'Ch.11'},  // yellow nerve model, foreground left green table
-  {id:'ch3', cx: 694,cy: 415,lbl:'Ch.3'},   // torso/GI model, background center-left
-  {id:'ch9', cx: 856,cy: 335,lbl:'Ch.9'},   // green lymphatic poster, back center wall
-  {id:'ch1', cx:1190,cy: 639,lbl:'Ch.1'},   // reclining skeleton, central white pedestal
-  {id:'ch13',cx:1228,cy: 918,lbl:'Ch.13'},  // regional anatomy floor poster, center foreground
-  {id:'ch4', cx:1482,cy: 422,lbl:'Ch.4'},   // lung models, background right white table
-  {id:'ch5', cx:1624,cy: 428,lbl:'Ch.5'},   // kidney/repro models, same back-right table
-  {id:'ch12',cx:2003,cy: 484,lbl:'Ch.12'},  // sensory glass case & posters, far right wall
-  {id:'ch2', cx:2251,cy: 632,lbl:'Ch.2'},   // standing muscle man, far right green table
+  {id:'ch7', cx:  87,cy: 378},   // arteries poster, far left wall
+  {id:'ch8', cx: 248,cy: 354},   // veins poster, second from left
+  {id:'ch9', cx: 856,cy: 335},   // green lymphatic poster, back center wall
+  {id:'ch6', cx: 400,cy: 910},   // large heart, foreground left green table
+  {id:'ch10',cx: 230,cy:1120},   // brain model, foreground left green table
+  {id:'ch11',cx: 410,cy:1020},   // yellow nerve model, foreground left green table
+  {id:'ch3', cx: 730,cy: 560},   // torso/GI model, background center-left
+  {id:'ch1', cx:1220,cy: 880},   // reclining skeleton, central white pedestal
+  {id:'ch13',cx:1200,cy:1220},   // regional anatomy floor poster, center foreground
+  {id:'ch4', cx:1482,cy: 690},   // lung models, background right white table
+  {id:'ch5', cx:1624,cy: 690},   // kidney/repro models, same back-right table
+  {id:'ch12',cx:2010,cy: 840},   // sensory glass case & posters, far right wall
+  {id:'ch2', cx:2260,cy:1000},   // standing muscle man, far right green table
 ];
 
 const CHAPTERS = [
@@ -3056,10 +3151,13 @@ function renderTermList(){
 
 /* -------- Interactive Anatomy Map (lab photo) -------- */
 function viewInteractiveTopics(){
-    const spots = LAB_HOTSPOTS.map(h=>`
-        <circle class="lab-hot" cx="${h.cx}" cy="${h.cy}" r="38" onclick="labSelectChapter('${h.id}')"/>
+    const spots = LAB_HOTSPOTS.map(h=>{
+        const ch=CHAPTERS.find(c=>c.id===h.id);
+        const lbl=ch?ch.title:h.id;
+        return `<circle class="lab-hot" cx="${h.cx}" cy="${h.cy}" r="38" onclick="labSelectChapter('${h.id}')"/>
         <text class="lab-plus" x="${h.cx}" y="${h.cy}">+</text>
-        <text class="lab-lbl" x="${h.cx}" y="${h.cy+72}">${h.lbl}</text>`).join('');
+        <text class="lab-lbl" x="${h.cx}" y="${h.cy+80}">${lbl}</text>`;
+    }).join('');
     return `
     <div class="topics-header">
         <h1>Interactive Anatomy Map</h1>
@@ -3221,16 +3319,16 @@ function viewTopic(chId, qNum){
         &rsaquo; <span>Q${q}</span>
     </div>
     <div class="chapter-detail-header" style="--cc:${ch.color}">
-        <div class="chapter-detail-num">Chapter ${ch.num} &mdash; Question ${q} of ${ch.topics.length}</div>
-        <h1 style="font-size:clamp(16px,2.4vw,22px);line-height:1.35">${topic.text}</h1>
+        <div class="chapter-detail-num">Ch.${ch.num} &nbsp;·&nbsp; Q${q} of ${ch.topics.length}</div>
+        <h1>${topic.text}</h1>
     </div>
     <div class="topic-content-body">
-        ${topic.content||'<p class="muted" style="padding:32px;text-align:center;font-size:15px">Study content coming soon for this topic.</p>'}
+        ${topic.content||'<p class="muted" style="padding:40px;text-align:center;font-size:16px">Study content coming soon for this topic.</p>'}
     </div>
     <div class="topic-nav-row">
-        ${prev?`<a class="btn ghost" href="#/chapter/${chId}/q/${prev.q}" style="--cc:${ch.color}">&#8592; Q${prev.q}</a>`:'<span></span>'}
-        <a class="btn ghost" href="#/chapter/${chId}">All Topics</a>
-        ${next?`<a class="btn ghost" href="#/chapter/${chId}/q/${next.q}" style="--cc:${ch.color}">Q${next.q} &#8594;</a>`:'<span></span>'}
+        ${prev?`<a class="btn ghost" href="#/chapter/${chId}/q/${prev.q}">&#8592; Q${prev.q}</a>`:'<span></span>'}
+        <a class="btn ghost" href="#/chapter/${chId}" style="color:var(--cc,${ch.color});border-color:var(--cc,${ch.color})">All Topics</a>
+        ${next?`<a class="btn ghost" href="#/chapter/${chId}/q/${next.q}">Q${next.q} &#8594;</a>`:'<span></span>'}
     </div>`;
 }
 

@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Interactive Anatomy — Topography, Terms & CNS/PNS</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Anatomy Atlas Assistant" />
+<meta name="theme-color" content="#5B8EF8" />
+<meta name="description" content="Interactive topographical anatomy atlas — study regions, terms, and the nervous system." />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="manifest" href="manifest.json" />
 <style>
 /* ============================================================
    PASTEL THEME — white base, red / yellow / blue palette
@@ -37,7 +44,7 @@ body{
         radial-gradient(ellipse 500px 400px at 108% 12%, rgba(255,173,173,.32), transparent 55%),
         radial-gradient(ellipse 450px 360px at 52% 108%, rgba(255,214,165,.4), transparent 58%),
         radial-gradient(ellipse 280px 240px at 100% 75%, rgba(168,196,248,.22), transparent 60%);
-    background-attachment:fixed;
+    background-attachment:scroll;
     color:var(--ink);
     font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.55;
@@ -547,6 +554,123 @@ footer{margin-top:60px;padding:24px;color:var(--muted);font-size:13px;text-align
     box-shadow:0 4px 14px rgba(91,142,248,.35);
 }
 .ao-full-link:hover{transform:translateY(-1px);text-decoration:none;box-shadow:0 6px 22px rgba(91,142,248,.5)}
+
+/* ============================================================
+   iPAD / MOBILE / PWA — responsive polish & safe-area support
+   ============================================================ */
+
+/* ── Safe areas: notch, Dynamic Island, home indicator ── */
+header.site{padding-top:env(safe-area-inset-top,0px)}
+.nav{
+    padding-left:max(22px,calc(22px + env(safe-area-inset-left,0px)));
+    padding-right:max(22px,calc(22px + env(safe-area-inset-right,0px)));
+}
+main{
+    padding-left:max(22px,calc(22px + env(safe-area-inset-left,0px)));
+    padding-right:max(22px,calc(22px + env(safe-area-inset-right,0px)));
+    padding-bottom:max(80px,calc(80px + env(safe-area-inset-bottom,0px)));
+}
+footer{
+    padding-left:max(24px,calc(24px + env(safe-area-inset-left,0px)));
+    padding-right:max(24px,calc(24px + env(safe-area-inset-right,0px)));
+    padding-bottom:max(24px,calc(24px + env(safe-area-inset-bottom,0px)));
+}
+.rj-inner{
+    padding-left:max(22px,calc(22px + env(safe-area-inset-left,0px)));
+    padding-right:max(22px,calc(22px + env(safe-area-inset-right,0px)));
+}
+
+/* ── Hamburger button — hidden on desktop ── */
+.nav-toggle{
+    display:none;flex-direction:column;justify-content:center;gap:5px;
+    background:none;border:1px solid var(--border);border-radius:10px;
+    padding:9px 10px;cursor:pointer;
+    min-width:44px;min-height:44px;
+    margin-left:auto;flex-shrink:0;
+    -webkit-tap-highlight-color:transparent;
+}
+.nav-toggle span{
+    display:block;width:20px;height:2px;
+    background:var(--ink);border-radius:2px;
+    transition:transform .22s,opacity .2s;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ── 768 px — iPad portrait & large phones ── */
+@media(max-width:768px){
+    /* Hamburger on, inline nav off */
+    .nav-toggle{display:flex}
+    nav.menu{
+        display:none;position:absolute;top:100%;left:0;right:0;
+        background:rgba(255,253,249,.97);
+        backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+        flex-direction:column;gap:4px;
+        padding:10px 22px calc(20px + env(safe-area-inset-bottom,0px));
+        border-bottom:1px solid var(--border);
+        box-shadow:0 10px 30px rgba(91,142,248,.12);
+        z-index:100;
+    }
+    nav.menu.open{display:flex}
+    nav.menu a{padding:12px 14px;font-size:15px;border-radius:10px}
+
+    /* Hero: collapse right chip column */
+    .hero{grid-template-columns:1fr}
+    .hero-right{display:none}
+    .hero-left{padding:36px 28px 32px}
+    .hero h1{font-size:30px}
+    .hero p.lead{font-size:14px;margin-bottom:24px}
+
+    /* Topography spotlight: stack */
+    .topo-spot{grid-template-columns:1fr}
+    .topo-spot-right{min-height:200px}
+
+    /* Welcome tiles: 2 cols */
+    .welcome-tiles{grid-template-columns:repeat(2,1fr)}
+
+    /* Body map panels */
+    .ao-figure-panel{height:360px}
+    .ao-info-panel{height:auto;max-height:360px}
+
+    /* Section + inline image: hide sidebar image (still shown in flow) */
+    .sec-with-img{grid-template-columns:1fr}
+    .sec-img{display:none}
+
+    /* Term search bar */
+    .term-search{flex-direction:column;align-items:stretch}
+    .term-search input,.term-search select{flex:none;width:100%}
+
+    /* Apple HIG minimum touch target 44 × 44 pt */
+    .btn{min-height:44px}
+    .rj-btn{min-height:44px;padding:8px 14px}
+    .legend li{min-height:44px;display:flex;align-items:center}
+    .ao-tool-btn{width:44px;height:44px}
+    .cns-ql-btn{min-height:44px}
+}
+
+/* ── 600 px — phones ── */
+@media(max-width:600px){
+    main{padding-top:20px}
+    .hero h1{font-size:26px}
+    .hero-left{padding:28px 20px 24px}
+    .hero-btns{flex-direction:column;gap:8px}
+    .hero-btns .btn,.hero-btns .btn-outline{padding:12px 18px;font-size:14px;width:100%;text-align:center;display:block}
+    .welcome-tiles{grid-template-columns:1fr}
+    .ao-figure-panel{height:280px}
+    .ao-region-badge{font-size:10px;padding:3px 10px}
+}
+
+/* ── Touch devices: suppress sticky hover-lift ── */
+@media(hover:none) and (pointer:coarse){
+    .w-tile:hover,.tile:hover,.ao-sub-card:hover,
+    .ao-reg-card:hover,.subregion-card:hover,.cns-sub-card:hover{
+        transform:none;
+    }
+    .w-tile:active{transform:translateY(-3px);transition-duration:.08s}
+    .tile:active{transform:translateY(-2px);transition-duration:.08s}
+    .ao-sub-card:active{background:rgba(91,142,248,.1)}
+}
 </style>
 </head>
 <body>
@@ -560,6 +684,9 @@ footer{margin-top:60px;padding:24px;color:var(--muted);font-size:13px;text-align
             <a href="#/cns-pns">CNS / PNS</a>
             <a href="#/terms">Term Library</a>
         </nav>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 </header>
 
@@ -7627,6 +7754,36 @@ function route(){
 window.addEventListener("hashchange", route);
 window.addEventListener("DOMContentLoaded", route);
 window.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLightbox(); });
+
+/* ── Hamburger menu ── */
+(function(){
+    const toggle = document.getElementById('navToggle');
+    const menu   = document.getElementById('topnav');
+    if(!toggle || !menu) return;
+    toggle.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    menu.addEventListener('click', e => {
+        if(e.target.tagName === 'A'){
+            menu.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+    document.addEventListener('click', e => {
+        if(!e.target.closest('header.site')){
+            menu.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+})();
+
+/* ── PWA service worker ── */
+if('serviceWorker' in navigator){
+    window.addEventListener('load', () =>
+        navigator.serviceWorker.register('./sw.js').catch(() => {})
+    );
+}
 </script>
 
 <!-- Lightbox overlay -->

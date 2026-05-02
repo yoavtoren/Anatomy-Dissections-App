@@ -1,0 +1,77 @@
+name: AnatomyAtlasAssistant
+
+options:
+  bundleIdPrefix: com.anatomyatlas
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    ENABLE_BITCODE: "NO"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+    SUPPORTS_MAC_CATALYST: "YES"
+
+targets:
+  AnatomyAtlasAssistant:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    supportedDestinations:
+      - iOS
+      - macCatalyst
+
+    sources:
+      - path: Sources
+        createIntermediateGroups: true
+
+    resources:
+      - path: ../index.html
+      - path: ../images
+        type: folder
+      - path: Resources/Assets.xcassets
+      - path: Resources/LaunchScreen.storyboard
+
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleDisplayName: "Anatomy Atlas Assistant"
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "2"
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiresFullScreen: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        "UISupportedInterfaceOrientations~ipad":
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIApplicationSceneManifest:
+          UIApplicationIsSceneBasedLifecycle: true
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: "Default Configuration"
+                UISceneDelegateClassName: "$(PRODUCT_MODULE_NAME).SceneDelegate"
+        ITSAppUsesNonExemptEncryption: false
+
+    dependencies:
+      - sdk: WebKit.framework
+
+    settings:
+      base:
+        PRODUCT_NAME: "Anatomy Atlas Assistant"
+        PRODUCT_BUNDLE_IDENTIFIER: com.anatomyatlas.AnatomyAtlas
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SUPPORTS_MAC_CATALYST: "YES"
+        MACCATALYST_DEPLOYMENT_TARGET: "13.1"
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: "NO"
+
+    scheme:
+      testTargets: []

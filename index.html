@@ -344,9 +344,60 @@ strong.li-label{background:none;color:var(--ink);font-weight:800;letter-spacing:
 }
 #cnsSvg .hot:hover{fill:#3A6BD4;stroke:rgba(255,255,255,.9);stroke-width:2.5}
 #cnsSvg .plus{
-    fill:#fff;font-weight:800;font-size:inherit;text-anchor:middle;
+    fill:#fff;font-weight:800;font-size:16px;text-anchor:middle;
     pointer-events:none;dominant-baseline:central;
 }
+
+/* ── Continuous region page ── */
+.rj-wrap{
+    position:sticky;top:57px;z-index:15;
+    background:var(--bg);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    margin:18px -22px 0;
+    padding:8px 0;
+}
+.rj-inner{
+    max-width:1240px;margin:0 auto;
+    display:flex;gap:6px;overflow-x:auto;
+    padding:0 22px;scrollbar-width:none;
+}
+.rj-inner::-webkit-scrollbar{display:none}
+.rj-btn{
+    flex-shrink:0;padding:5px 12px;
+    border-radius:20px;border:1px solid var(--border);
+    background:var(--panel);color:var(--ink);
+    font-size:12px;font-weight:500;cursor:pointer;
+    white-space:nowrap;
+    transition:border-color .15s,background .15s,color .15s;
+    display:flex;align-items:center;gap:5px;
+}
+.rj-btn:hover{border-color:var(--accent);background:rgba(91,142,248,.09);color:var(--accent)}
+.topic-section{
+    padding:38px 0;
+    border-top:1px solid var(--border);
+    scroll-margin-top:120px;
+}
+.topic-section:first-child{border-top:none;padding-top:28px}
+.topic-sec-head{
+    display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;
+}
+.topic-sec-icon{
+    width:52px;height:52px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;flex-shrink:0;
+}
+.topic-sec-meta{flex:1;min-width:0}
+.topic-sec-num{
+    font-size:10px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--accent);margin:0 0 3px;
+}
+.topic-sec-title{
+    font-size:22px!important;font-weight:800!important;color:var(--ink)!important;
+    margin:0 0 5px!important;
+    border-bottom:none!important;padding-bottom:0!important;
+}
+.topic-sec-brief{font-size:13.5px;color:var(--muted);margin:0;line-height:1.55}
 
 /* ── Footer ── */
 footer{margin-top:60px;padding:24px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--border)}
@@ -838,10 +889,9 @@ function bmUpdatePanel(id){
         if(footerLink){footerLink.href="#/region/"+id;footerLink.textContent="Open Full Region →";footerLink.style.display="block";}
         const col=panelGrads[id]||"#5B8EF8";
         if(subsEl&&reg.sub) subsEl.innerHTML=reg.sub.map(s=>{
-            const words=s.name.trim().split(/\s+/);
-            const ini=(words.length>=2?words[0][0]+words[1][0]:words[0].slice(0,2)).toUpperCase();
+            const emoji = TOPIC_EMOJI[s.id] || '🔬';
             return `<div class="ao-sub-card" onclick="location.hash='#/sub/${s.id}'">
-              <div class="ao-sub-initial" style="background:${col}">${ini}</div>
+              <div class="ao-sub-initial" style="background:${col};font-size:14px">${emoji}</div>
               <span class="ao-sub-name">${s.name}</span>
               <span class="ao-sub-arrow">›</span>
             </div>`;
@@ -972,6 +1022,49 @@ const TERMS = [
 /* ====================================================================
    REGIONS — main top-level regions with subregions and detailed pages
    ==================================================================== */
+
+const TOPIC_EMOJI = {
+  /* HEAD */
+  'scalp':'💆','cranial-nerves-overview':'🔌','parasympathetic-ganglia':'⚡',
+  'ganglia-passing-fibres':'🔀','v3-mandibular':'🦷','trigeminal-pressure-points':'📍',
+  'face-muscles':'😬','facial-n-branches':'🌿','head-veins':'🩸','tmj':'🔩',
+  'orbit':'👁️','eom':'🎯','parotid':'💧','retromandibular-fossa':'🏛️',
+  'infratemporal-fossa':'🕳️','pterygopalatine-fossa':'📡','dural-sinuses':'🌊',
+  'dural-reflections':'🪞','meninges':'🫧','skull-base-foramina':'⚫',
+  'ica-circle-of-willis':'⭕','maxillary-artery':'🌳','facial-tzbmc':'🗺️',
+  /* NECK */
+  'cervical-fascia':'🧅','punctum-nervosum':'📌','neck-skin-innervation':'🗾',
+  'neck-triangles':'📐','cervical-plexus':'🕸️','cervical-ansae':'🔗',
+  'brachial-plexus-checklist':'🌲','carotid-sheath':'🛡️','phrenic-nerve':'🫁',
+  'hyoid-muscles':'💪','styloid-septum':'🗡️','crico-tracheostomy':'⚕️',
+  'thyroid-gland':'🦋','brachiocephalic':'🌉','jugular-veins':'💙',
+  'lymphatic-drainage-neck':'💠','omohyoid-innervation':'🔋','rule-of-4':'4️⃣',
+  'subclavian-artery':'〰️','thyroid-blood-supply':'🩺','larynx':'🗣️',
+  'cervical-sympathetic':'⚡','eca-branches':'🌿',
+  /* CHEST */
+  'mediastinum-checklist':'📦','thoracic-duct-checklist':'🫧','lungs-pleura':'🫁',
+  'tracheal-bifurcation':'✂️','heart-overview':'❤️','fetal-circulation':'🐣',
+  'internal-thoracic-artery':'💉','thoracic-aorta':'〰️','diaphragm':'⛰️',
+  'vagus-thorax':'🔌','sympathetic-trunk-thorax':'⚡','azygos-system':'🔀',
+  'esophageal-constrictions':'🍽️','chest-tube':'🩹','sentinel-lns':'🛡️',
+  /* ABDOMEN */
+  'abdominal-aorta':'🌳','iliac-branches':'🌿','gut-arterial-anastomoses':'🔗',
+  'colon-anastomoses':'🔄','portal-system':'🫀','porto-caval':'🔀',
+  'ivc':'⬆️','cavo-caval':'↕️','projection-points-checklist':'📍',
+  'liver':'🟤','gallbladder':'💛','duodenum':'🔢','pancreas':'🥞',
+  'jejunum-ileum':'〰️','appendix':'🦠','large-intestine':'🪢',
+  'abdominal-wall-layers':'🧅','omenta':'🍃','omental-bursa':'📦',
+  'mesentery':'🌿','retroperitoneum-checklist':'📋','transpyloric-plane-checklist':'➖',
+  'kidneys':'🫘','ureter':'🔧','urinary-bladder':'💧',
+  /* PELVIS / RETROPERITONEUM */
+  'subperitoneal-organs':'🗂️','lumbar-plexus-checklist':'🕸️',
+  'sacral-plexus-checklist':'🌐','pelvic-pouches':'🪣',
+  'posterior-abdominal-muscles':'💪','uterus':'🌸','ovary':'🥚',
+  'hypogastric-plexuses':'⚡','testis-layers':'🫆','inguinal-canal':'🚪',
+  'femoral-triangle-hernias':'📐','umbilical-hernia':'🪢','umbilical-folds':'〰️',
+  'specimen-orientation':'🔍','topographic-method':'🏗️','id-nerves-arteries':'🔌',
+  're-anchor':'⚓','study-priority':'⭐',
+};
 
 const REGIONS = [
   {
@@ -5411,32 +5504,15 @@ function viewTopography(){
 }
 
 /* -------- Region (subregion picker) -------- */
+/* Jump to a topic section on the continuous region page */
+function jumpTo(topicId){
+    const el = document.getElementById('topic-'+topicId);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
 function viewRegion(id){
     const r = REGIONS.find(x=>x.id===id);
     if(!r) return `<p>Region not found.</p>`;
-    // Special handling for abdomen — show 4 quadrant SVG
-    let quadrantSvg = "";
-    if(id==="abdomen"){
-        quadrantSvg = `
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:480px;margin:18px auto;">
-            <div onclick="location.hash='#/sub/abdomen-ruq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
-                <h4>RUQ — Right Upper Quadrant</h4>
-                <p>Liver, gallbladder, pylorus, duodenum, head of pancreas, right kidney</p>
-            </div>
-            <div onclick="location.hash='#/sub/abdomen-luq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
-                <h4>LUQ — Left Upper Quadrant</h4>
-                <p>Stomach, spleen, pancreas (body/tail), left kidney</p>
-            </div>
-            <div onclick="location.hash='#/sub/abdomen-rlq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
-                <h4>RLQ — Right Lower Quadrant</h4>
-                <p>Cecum, appendix, ascending colon, terminal ileum, right ovary/ureter</p>
-            </div>
-            <div onclick="location.hash='#/sub/abdomen-llq'" class="subregion-card" style="background:linear-gradient(135deg,#1d2c4a,#2a3d68);text-align:center;cursor:pointer">
-                <h4>LLQ — Left Lower Quadrant</h4>
-                <p>Sigmoid colon, descending colon, left ovary/ureter</p>
-            </div>
-        </div>`;
-    }
     const regionGradients = {
         head:"linear-gradient(135deg,#5B8EF8,#3A7BF0)",
         neck:"linear-gradient(135deg,#00C9BD,#0099A8)",
@@ -5446,30 +5522,49 @@ function viewRegion(id){
         back:"linear-gradient(135deg,#52C490,#2A9D60)",
     };
     const grad = regionGradients[id] || regionGradients.head;
-    const subs = r.sub.map(s=>{
-        const words = s.name.trim().split(/\s+/);
-        const initials = (words.length >= 2 ? words[0][0]+words[1][0] : words[0].slice(0,2)).toUpperCase();
-        return `<div class="ao-reg-card" onclick="location.hash='#/sub/${s.id}'">
-            <div class="ao-reg-card-icon" style="background:${grad}">${initials}</div>
-            <div class="ao-reg-card-body">
-                <div class="ao-reg-card-title">${s.name}</div>
-                <div class="ao-reg-card-brief">${s.brief}</div>
-                <span class="ao-reg-card-cta">View details &rsaquo;</span>
+    const regIcon = REGION_IMAGES[id] ? REGION_IMAGES[id].icon : '🔬';
+
+    /* ── Jump nav ── */
+    const jumpNav = r.sub.map(s=>{
+        const emoji = TOPIC_EMOJI[s.id] || '🔬';
+        return `<button class="rj-btn" onclick="jumpTo('${s.id}')">${emoji} ${s.name}</button>`;
+    }).join('');
+
+    /* ── Inline topic sections ── */
+    const sections = r.sub.map((s,i)=>{
+        const d = DETAILS[s.id];
+        const emoji = TOPIC_EMOJI[s.id] || '🔬';
+        const num = String(i+1).padStart(2,'0');
+        const content = d ? renderBlocks(d.body) : `<p class="muted" style="padding:8px 0">Content coming soon.</p>`;
+        const title = d ? d.title : s.name;
+        return `
+        <section class="topic-section" id="topic-${s.id}">
+            <div class="topic-sec-head">
+                <div class="topic-sec-icon" style="background:${grad}">${emoji}</div>
+                <div class="topic-sec-meta">
+                    <div class="topic-sec-num">${r.name} &middot; ${num}</div>
+                    <h2 class="topic-sec-title">${title}</h2>
+                    <p class="topic-sec-brief">${s.brief}</p>
+                </div>
             </div>
-        </div>`;
-    }).join("");
+            <div class="section">${content}</div>
+        </section>`;
+    }).join('');
+
     return `
     <div class="crumbs"><a href="#/topography">Topography</a> &rsaquo; <span>${r.name}</span></div>
-    <div class="region-header" style="display:flex;align-items:center;gap:16px">
-        <div style="width:52px;height:52px;border-radius:14px;background:${grad};display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${REGION_IMAGES[id]?REGION_IMAGES[id].icon:""}</div>
+    <div class="region-header" style="display:flex;align-items:center;gap:16px;margin-bottom:0">
+        <div style="width:52px;height:52px;border-radius:14px;background:${grad};display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${regIcon}</div>
         <div>
             <h1 style="margin:0 0 4px">${r.name}</h1>
             <p style="margin:0;color:var(--muted);font-size:14px">${r.short}</p>
         </div>
     </div>
-    ${quadrantSvg}
-    <h2 style="margin-top:28px">Subregions <span style="font-size:14px;font-weight:400;color:var(--muted);margin-left:8px">${r.sub.length} topics</span></h2>
-    <div class="ao-reg-grid">${subs}</div>
+    <div class="rj-wrap"><div class="rj-inner">${jumpNav}</div></div>
+    ${sections}
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);display:flex;gap:10px">
+        <a class="btn alt" href="#/topography">← All regions</a>
+    </div>
     `;
 }
 
@@ -5478,20 +5573,36 @@ function viewSub(id){
     const d = DETAILS[id];
     if(!d) return `<p>Subregion not found: ${id}</p>`;
     const parent = REGIONS.find(x=>x.id===d.parent);
+    const emoji = TOPIC_EMOJI[id] || '🔬';
+    const regionGradients = {
+        head:"linear-gradient(135deg,#5B8EF8,#3A7BF0)",
+        neck:"linear-gradient(135deg,#00C9BD,#0099A8)",
+        chest:"linear-gradient(135deg,#FF8C8C,#D94F4F)",
+        abdomen:"linear-gradient(135deg,#FFB347,#D97C00)",
+        pelvis:"linear-gradient(135deg,#C47AE0,#9040C8)",
+        back:"linear-gradient(135deg,#52C490,#2A9D60)",
+    };
+    const grad = regionGradients[d.parent] || regionGradients.head;
+    const sub = parent ? parent.sub.find(s=>s.id===id) : null;
     return `
     <div class="crumbs">
         <a href="#/topography">Topography</a> &rsaquo;
         <a href="#/region/${d.parent}">${parent?parent.name:""}</a> &rsaquo;
         <span>${d.title}</span>
     </div>
-    <div class="region-header">
-        <h1>${d.title}</h1>
+    <div class="topic-sec-head" style="margin-bottom:20px">
+        <div class="topic-sec-icon" style="background:${grad}">${emoji}</div>
+        <div class="topic-sec-meta">
+            <div class="topic-sec-num">${parent?parent.name:''}</div>
+            <h1 class="topic-sec-title" style="font-size:28px!important">${d.title}</h1>
+            ${sub ? `<p class="topic-sec-brief">${sub.brief}</p>` : ''}
+        </div>
     </div>
     <div class="section">
         ${renderBlocks(d.body)}
     </div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn ghost" href="#/region/${d.parent}">← Back to ${parent?parent.name:""}</a>
+        <a class="btn ghost" href="#/region/${d.parent}">← ${parent?parent.name:""} — all topics</a>
         <a class="btn alt" href="#/topography">All regions</a>
     </div>
     `;
@@ -5542,10 +5653,10 @@ function cnsSelect(sec){
 
 function viewCnsPns(){
     return `
-<div class="ao-topo-wrap" style="height:520px">
+<div class="ao-topo-wrap">
 
   <!-- ── LEFT: photo-background + SVG overlay ── -->
-  <div class="ao-figure-panel">
+  <div class="ao-figure-panel" style="background:#f8f5f0">
     <div class="ao-toolbar">
       <button class="ao-tool-btn" onclick="cnsSelect('overview')" title="Reset to overview">↩</button>
     </div>
@@ -5565,116 +5676,105 @@ function viewCnsPns(){
       <svg id="cnsSvg" viewBox="0 0 200 125" preserveAspectRatio="xMidYMid meet"
            xmlns="http://www.w3.org/2000/svg" aria-label="Interactive CNS / PNS map">
 
-        <!-- ── Overview hotspots ── -->
+        <!-- ── Overview hotspots — same proportions as topography ── -->
         <g id="cns-overview-spots">
           <g onclick="cnsSelect('brain')" style="cursor:pointer">
-            <circle cx="100" cy="18" r="4.5" class="hot"/>
-            <text class="plus" x="100" y="18" font-size="5">+</text>
-            <rect x="106" y="15" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="117" y="18.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.2" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brain</text>
+            <circle cx="100" cy="18" r="3.5" class="hot"/>
+            <text class="plus" x="100" y="18">+</text>
+            <rect x="105" y="16.5" width="9.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="109.75" y="18" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brain</text>
           </g>
           <g onclick="cnsSelect('cn')" style="cursor:pointer">
-            <circle cx="110" cy="34" r="4" class="hot"/>
-            <text class="plus" x="110" y="34" font-size="5">+</text>
-            <rect x="116" y="31" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="129" y="34.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">CN I–XII</text>
+            <circle cx="110" cy="34" r="3.5" class="hot"/>
+            <text class="plus" x="110" y="34">+</text>
+            <rect x="115" y="32.5" width="13.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="121.75" y="34" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">CN I–XII</text>
           </g>
           <g onclick="cnsSelect('plexuses')" style="cursor:pointer">
-            <circle cx="82" cy="47" r="4" class="hot"/>
-            <text class="plus" x="82" y="47" font-size="5">+</text>
-            <rect x="60" y="44" width="20" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="70" y="47.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Plexuses</text>
+            <circle cx="82" cy="47" r="3.5" class="hot"/>
+            <text class="plus" x="82" y="47">+</text>
+            <rect x="67" y="45.5" width="10.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="72.25" y="47" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Plexuses</text>
           </g>
           <g onclick="cnsSelect('spinal')" style="cursor:pointer">
-            <circle cx="100" cy="66" r="4" class="hot"/>
-            <text class="plus" x="100" y="66" font-size="5">+</text>
-            <rect x="106" y="63" width="28" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="120" y="66.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Spinal Cord</text>
+            <circle cx="100" cy="66" r="3.5" class="hot"/>
+            <text class="plus" x="100" y="66">+</text>
+            <rect x="105" y="64.5" width="14.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="112.25" y="66" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Spinal Cord</text>
           </g>
           <g onclick="cnsSelect('ans')" style="cursor:pointer">
-            <circle cx="114" cy="85" r="4" class="hot"/>
-            <text class="plus" x="114" y="85" font-size="5">+</text>
-            <rect x="120" y="82" width="16" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="128" y="85.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">ANS</text>
+            <circle cx="114" cy="85" r="3.5" class="hot"/>
+            <text class="plus" x="114" y="85">+</text>
+            <rect x="119" y="83.5" width="7" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="122.5" y="85" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">ANS</text>
           </g>
         </g>
 
         <!-- ── Brain zoom hotspots ── -->
         <g id="cns-brain-spots" style="display:none;pointer-events:none">
-          <!-- Frontal lobe L — top-left quadrant -->
           <g onclick="location.hash='#/cns/frontal-lobe'" style="cursor:pointer">
-            <circle cx="65" cy="24" r="4" class="hot"/>
-            <text class="plus" x="65" y="24" font-size="5">+</text>
-            <rect x="71" y="21" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="82" y="24.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Frontal L</text>
+            <circle cx="65" cy="24" r="3" class="hot"/>
+            <text class="plus" x="65" y="24">+</text>
+            <rect x="69.5" y="22.5" width="11" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="75" y="24" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Frontal L</text>
           </g>
-          <!-- Frontal lobe R — label to the LEFT of circle -->
           <g onclick="location.hash='#/cns/frontal-lobe'" style="cursor:pointer">
-            <circle cx="135" cy="24" r="4" class="hot"/>
-            <text class="plus" x="135" y="24" font-size="5">+</text>
-            <rect x="107" y="21" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="118" y="24.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Frontal R</text>
+            <circle cx="135" cy="24" r="3" class="hot"/>
+            <text class="plus" x="135" y="24">+</text>
+            <rect x="120.5" y="22.5" width="11" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="126" y="24" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Frontal R</text>
           </g>
-          <!-- Parietal lobe — top center -->
           <g onclick="location.hash='#/cns/parietal-lobe'" style="cursor:pointer">
-            <circle cx="100" cy="10" r="4" class="hot"/>
-            <text class="plus" x="100" y="10" font-size="5">+</text>
-            <rect x="106" y="7" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="117" y="10.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Parietal</text>
+            <circle cx="100" cy="10" r="3" class="hot"/>
+            <text class="plus" x="100" y="10">+</text>
+            <rect x="104.5" y="8.5" width="10" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="109.5" y="10" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Parietal</text>
           </g>
-          <!-- Temporal L — far left mid -->
           <g onclick="location.hash='#/cns/temporal-lobe'" style="cursor:pointer">
-            <circle cx="18" cy="60" r="4" class="hot"/>
-            <text class="plus" x="18" y="60" font-size="5">+</text>
-            <rect x="24" y="57" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="37" y="60.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Temporal L</text>
+            <circle cx="18" cy="60" r="3" class="hot"/>
+            <text class="plus" x="18" y="60">+</text>
+            <rect x="22.5" y="58.5" width="12" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="28.5" y="60" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Temporal L</text>
           </g>
-          <!-- Temporal R — far right mid, label left -->
           <g onclick="location.hash='#/cns/temporal-lobe'" style="cursor:pointer">
-            <circle cx="182" cy="60" r="4" class="hot"/>
-            <text class="plus" x="182" y="60" font-size="5">+</text>
-            <rect x="150" y="57" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="163" y="60.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Temporal R</text>
+            <circle cx="182" cy="60" r="3" class="hot"/>
+            <text class="plus" x="182" y="60">+</text>
+            <rect x="166.5" y="58.5" width="12" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="172.5" y="60" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Temporal R</text>
           </g>
-          <!-- Cerebellum — bottom center -->
           <g onclick="location.hash='#/cns/cerebellum-structure'" style="cursor:pointer">
-            <circle cx="100" cy="103" r="4" class="hot"/>
-            <text class="plus" x="100" y="103" font-size="5">+</text>
-            <rect x="106" y="100" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="119" y="103.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Cerebellum</text>
+            <circle cx="100" cy="103" r="3" class="hot"/>
+            <text class="plus" x="100" y="103">+</text>
+            <rect x="104.5" y="101.5" width="12" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="110.5" y="103" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Cerebellum</text>
           </g>
-          <!-- Brainstem — very bottom center -->
           <g onclick="location.hash='#/cns/pons'" style="cursor:pointer">
-            <circle cx="100" cy="115" r="4" class="hot"/>
-            <text class="plus" x="100" y="115" font-size="5">+</text>
-            <rect x="106" y="112" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="119" y="115.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brainstem</text>
+            <circle cx="100" cy="115" r="3" class="hot"/>
+            <text class="plus" x="100" y="115">+</text>
+            <rect x="104.5" y="113.5" width="11" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="110" y="115" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brainstem</text>
           </g>
-          <!-- Vasculature — central, where Circle of Willis sits -->
           <g onclick="location.hash='#/cns/brain-vasculature'" style="cursor:pointer">
-            <circle cx="100" cy="80" r="4" class="hot"/>
-            <text class="plus" x="100" y="80" font-size="5">+</text>
-            <rect x="72" y="77" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="85" y="80.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Vasculature</text>
+            <circle cx="100" cy="80" r="3" class="hot"/>
+            <text class="plus" x="100" y="80">+</text>
+            <rect x="83.5" y="78.5" width="13" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="90" y="80" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Vasculature</text>
           </g>
-          <!-- Basal Ganglia — deep left hemisphere -->
           <g onclick="location.hash='#/cns/basal-ganglia'" style="cursor:pointer">
-            <circle cx="78" cy="46" r="4" class="hot"/>
-            <text class="plus" x="78" y="46" font-size="5">+</text>
-            <rect x="56" y="43" width="20" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="66" y="46.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Basal Ggl</text>
+            <circle cx="78" cy="46" r="3" class="hot"/>
+            <text class="plus" x="78" y="46">+</text>
+            <rect x="62.5" y="44.5" width="11" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="68" y="46" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Basal Ggl</text>
           </g>
-          <!-- Limbic — medial temporal / inner hemisphere -->
           <g onclick="location.hash='#/cns/limbic-system'" style="cursor:pointer">
-            <circle cx="75" cy="70" r="4" class="hot"/>
-            <text class="plus" x="75" y="70" font-size="5">+</text>
-            <rect x="53" y="67" width="20" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
-            <text x="63" y="70.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Limbic</text>
+            <circle cx="75" cy="70" r="3" class="hot"/>
+            <text class="plus" x="75" y="70">+</text>
+            <rect x="63.5" y="68.5" width="8" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="67.5" y="70" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Limbic</text>
           </g>
-          <!-- Back button -->
           <g onclick="cnsSelect('overview')" style="cursor:pointer">
-            <rect x="3" y="3" width="24" height="10" rx="5" fill="rgba(0,0,0,.65)" stroke="rgba(255,255,255,.4)" stroke-width="0.5"/>
-            <text x="15" y="8" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">← Back</text>
+            <rect x="2" y="2" width="14" height="5" rx="2.5" fill="rgba(0,0,0,.65)" stroke="rgba(255,255,255,.35)" stroke-width="0.4"/>
+            <text x="9" y="4.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">← Back</text>
           </g>
         </g>
       </svg>

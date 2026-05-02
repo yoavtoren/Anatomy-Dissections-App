@@ -338,15 +338,22 @@ strong.li-label{background:none;color:var(--ink);font-weight:800;letter-spacing:
 /* CNS SVG hotspots reuse #aoBodySvg rules via id override */
 #cnsSvg{width:100%;height:100%;display:block;user-select:none}
 #cnsSvg .hot{
-    fill:#5B8EF8;stroke:rgba(255,255,255,.55);stroke-width:2;
-    cursor:pointer;transition:fill .18s;
-    filter:drop-shadow(0 2px 8px rgba(0,0,0,.55));
+    fill:rgba(91,142,248,.12);stroke:#4A7ED8;stroke-width:1;
+    cursor:pointer;transition:fill .18s,stroke .18s;
 }
-#cnsSvg .hot:hover{fill:#3A6BD4;stroke:rgba(255,255,255,.9);stroke-width:2.5}
-#cnsSvg .plus{
-    fill:#fff;font-weight:800;font-size:6px;text-anchor:middle;
-    pointer-events:none;dominant-baseline:central;
+#cnsSvg .hot:hover{fill:rgba(91,142,248,.42);stroke:#1a4fa0;stroke-width:1.5}
+#cnsSvg .hot.cns-active{fill:rgba(91,142,248,.55);stroke:#1a4fa0;stroke-width:1.8}
+#cnsSvg .plus{font-size:0;pointer-events:none}
+.cns-panel .ao-tool-btn{background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.18);color:var(--ink)}
+.cns-panel .ao-tool-btn:hover{background:rgba(0,0,0,.13)}
+.cns-sec-card{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;border-radius:10px;border:1px solid var(--border);
+    background:var(--panel);cursor:pointer;margin-bottom:8px;
+    transition:border-color .15s,background .15s;
 }
+.cns-sec-card:hover{border-color:var(--accent);background:rgba(91,142,248,.06)}
+.cns-sec-card.cns-sec-active{border-color:var(--accent);background:rgba(91,142,248,.09)}
 
 /* ── Topic jump highlight ── */
 @keyframes topicFlash{0%{background:rgba(91,142,248,.13)}100%{background:transparent}}
@@ -5620,43 +5627,68 @@ function viewSub(id){
 }
 
 /* -------- CNS / PNS -------- */
+function cnsSectionCards(){
+    const icons = {brain:'🧠',spinal:'🫀',cn:'🔌',plexuses:'🕸️',ans:'⚡'};
+    const tags  = {brain:'CNS',spinal:'CNS',cn:'PNS',plexuses:'PNS',ans:'ANS'};
+    return Object.entries(CNS_PNS).map(([k,s])=>`
+        <div class="cns-sec-card" id="cns-card-${k}" onclick="cnsSelect('${k}')">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(91,142,248,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${icons[k]||'🔬'}</div>
+            <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                    <span style="font-size:13px;font-weight:700;color:var(--ink)">${s.title}</span>
+                    <span style="font-size:9px;background:rgba(91,142,248,.1);color:var(--accent);border-radius:99px;padding:1px 5px;font-weight:700;letter-spacing:.04em">${tags[k]||'NS'}</span>
+                </div>
+                <div style="font-size:11px;color:var(--muted)">${s.sub.length} topics</div>
+            </div>
+            <div style="color:var(--muted);font-size:14px;flex-shrink:0">›</div>
+        </div>`).join('');
+}
+
 function cnsSelect(sec){
     const isBrain = sec === 'brain';
-    // Swap image
+    // Swap image layers
     document.querySelectorAll('.ao-img-layer[id^="cns-layer-"]').forEach(el=>el.classList.remove('active'));
-    const layerId = 'cns-layer-' + (isBrain ? 'brain' : 'overview');
-    const layerEl = document.getElementById(layerId);
+    const layerEl = document.getElementById('cns-layer-' + (isBrain ? 'brain' : 'overview'));
     if(layerEl) layerEl.classList.add('active');
-    // Swap SVG viewBox + hotspot groups
-    const svg = document.getElementById('cnsSvg');
-    if(svg) svg.setAttribute('viewBox', '0 0 200 125');
+    // Swap SVG hotspot groups
     const ov = document.getElementById('cns-overview-spots');
     const br = document.getElementById('cns-brain-spots');
-    if(ov){ ov.style.display = isBrain?'none':'block'; }
-    if(br){ br.style.display = isBrain?'block':'none'; br.style.pointerEvents = isBrain?'auto':'none'; }
+    if(ov) ov.style.display = isBrain ? 'none' : 'block';
+    if(br){ br.style.display = isBrain ? 'block' : 'none'; br.style.pointerEvents = isBrain ? 'auto' : 'none'; }
+    // Active hotspot circle
+    document.querySelectorAll('#cns-overview-spots .hot').forEach(el=>el.classList.remove('cns-active'));
+    const spot = document.getElementById('cns-spot-'+sec);
+    if(spot) spot.classList.add('cns-active');
     // Badge
     const badge = document.getElementById('cns-badge');
-    if(badge) badge.textContent = CNS_PNS[sec] ? CNS_PNS[sec].title : '';
+    if(badge){ badge.textContent = CNS_PNS[sec] ? CNS_PNS[sec].title : ''; badge.classList.toggle('show', !!CNS_PNS[sec]); }
     // Right panel
     const panel = document.getElementById('cns-info-content');
     if(!panel) return;
     const info = CNS_PNS[sec];
-    if(!info){ panel.innerHTML = '<p class="muted" style="padding:16px">Click a region on the figure.</p>'; return; }
+    if(!info){
+        panel.innerHTML = `<div style="padding:10px 12px">${cnsSectionCards()}</div>`;
+        return;
+    }
+    const sLabel = {brain:'CNS',spinal:'CNS',cn:'PNS',plexuses:'PNS',ans:'ANS'}[sec]||'NS';
     panel.innerHTML = `
-        <div style="padding:16px 16px 8px">
-            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:4px">${sec}</div>
-            <div style="font-size:19px;font-weight:800;color:var(--ink);line-height:1.2">${info.title}</div>
-            <p style="font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.5">${info.intro}</p>
+        <div style="padding:12px 14px 8px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                <button onclick="cnsSelect('overview')" style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;flex-shrink:0;line-height:1.4">← All</button>
+                <span style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700">${sLabel}</span>
+            </div>
+            <div style="font-size:18px;font-weight:800;color:var(--ink);line-height:1.2">${info.title}</div>
+            <p style="font-size:12px;color:var(--muted);margin:5px 0 0;line-height:1.5">${info.intro}</p>
         </div>
-        <div style="height:1px;background:var(--border);margin:0 16px"></div>
-        <div style="overflow-y:auto;flex:1;padding:10px 12px">
+        <div style="height:1px;background:var(--border)"></div>
+        <div style="overflow-y:auto;flex:1;padding:8px 10px">
             ${info.sub.map(s=>`
                 <div class="cns-sub-card" onclick="location.hash='#/cns/${s.id}'">
                     <div style="flex:1;min-width:0">
                         <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3">${s.name}</div>
-                        <div style="font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4">${s.brief}</div>
+                        <div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35">${s.brief}</div>
                     </div>
-                    <div style="color:var(--accent);font-size:16px;flex-shrink:0;margin-left:8px">›</div>
+                    <div style="color:var(--accent);font-size:14px;flex-shrink:0;margin-left:8px">›</div>
                 </div>
             `).join('')}
         </div>`;
@@ -5667,7 +5699,7 @@ function viewCnsPns(){
 <div class="ao-topo-wrap">
 
   <!-- ── LEFT: photo-background + SVG overlay ── -->
-  <div class="ao-figure-panel" style="background:#f8f5f0">
+  <div class="ao-figure-panel cns-panel" style="background:#f8f5f0">
     <div class="ao-toolbar">
       <button class="ao-tool-btn" onclick="cnsSelect('overview')" title="Reset to overview">↩</button>
     </div>
@@ -5690,34 +5722,29 @@ function viewCnsPns(){
         <!-- ── Overview hotspots — same proportions as topography ── -->
         <g id="cns-overview-spots">
           <g onclick="cnsSelect('brain')" style="cursor:pointer">
-            <circle cx="100" cy="18" r="3.5" class="hot"/>
-            <text class="plus" x="100" y="18">+</text>
-            <rect x="105" y="16.5" width="9.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
-            <text x="109.75" y="18" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brain</text>
+            <circle id="cns-spot-brain" cx="100" cy="18" r="3" class="hot"/>
+            <rect x="104.5" y="16.5" width="9.5" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
+            <text x="109.25" y="18" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brain</text>
           </g>
           <g onclick="cnsSelect('cn')" style="cursor:pointer">
-            <circle cx="110" cy="34" r="3.5" class="hot"/>
-            <text class="plus" x="110" y="34">+</text>
-            <rect x="115" y="32.5" width="13.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
-            <text x="121.75" y="34" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">CN I–XII</text>
+            <circle id="cns-spot-cn" cx="110" cy="34" r="3" class="hot"/>
+            <rect x="114.5" y="32.5" width="15" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
+            <text x="122" y="34" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Cranial Nn.</text>
           </g>
           <g onclick="cnsSelect('plexuses')" style="cursor:pointer">
-            <circle cx="82" cy="47" r="3.5" class="hot"/>
-            <text class="plus" x="82" y="47">+</text>
-            <rect x="67" y="45.5" width="10.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
-            <text x="72.25" y="47" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Plexuses</text>
+            <circle id="cns-spot-plexuses" cx="82" cy="47" r="3" class="hot"/>
+            <rect x="66" y="45.5" width="12" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
+            <text x="72" y="47" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Plexuses</text>
           </g>
           <g onclick="cnsSelect('spinal')" style="cursor:pointer">
-            <circle cx="100" cy="66" r="3.5" class="hot"/>
-            <text class="plus" x="100" y="66">+</text>
-            <rect x="105" y="64.5" width="14.5" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
-            <text x="112.25" y="66" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Spinal Cord</text>
+            <circle id="cns-spot-spinal" cx="100" cy="66" r="3" class="hot"/>
+            <rect x="104.5" y="64.5" width="15" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
+            <text x="112" y="66" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Spinal Cord</text>
           </g>
           <g onclick="cnsSelect('ans')" style="cursor:pointer">
-            <circle cx="114" cy="85" r="3.5" class="hot"/>
-            <text class="plus" x="114" y="85">+</text>
-            <rect x="119" y="83.5" width="7" height="3" rx="1.5" fill="rgba(0,0,0,.65)" pointer-events="none"/>
-            <text x="122.5" y="85" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">ANS</text>
+            <circle id="cns-spot-ans" cx="114" cy="85" r="3" class="hot"/>
+            <rect x="118.5" y="83.5" width="7" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
+            <text x="122" y="85" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">ANS</text>
           </g>
         </g>
 
@@ -5802,13 +5829,8 @@ function viewCnsPns(){
     </div>
     <div class="ao-info-body" style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:0">
       <div id="cns-info-content" style="flex:1;overflow-y:auto;display:flex;flex-direction:column">
-        <div style="padding:16px">
-          <p class="muted" style="margin:0 0 14px">Click any <strong style="color:var(--accent)">+</strong> on the figure or choose a section:</p>
-          <div style="display:grid;gap:8px">
-            ${Object.entries(CNS_PNS).map(([k,sec])=>`
-              <button class="cns-ql-btn" onclick="cnsSelect('${k}')">${sec.title}</button>
-            `).join('')}
-          </div>
+        <div style="padding:10px 12px">
+          ${cnsSectionCards()}
         </div>
       </div>
     </div>

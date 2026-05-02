@@ -336,6 +336,7 @@ strong.li-label{background:none;color:var(--ink);font-weight:800;letter-spacing:
 }
 .cns-ql-btn:hover{border-color:var(--accent);background:rgba(91,142,248,.07)}
 /* CNS SVG hotspots reuse #aoBodySvg rules via id override */
+#cnsSvg{width:100%;height:100%;display:block;user-select:none}
 #cnsSvg .hot{
     fill:#5B8EF8;stroke:rgba(255,255,255,.55);stroke-width:2;
     cursor:pointer;transition:fill .18s;
@@ -5564,121 +5565,116 @@ function viewCnsPns(){
       <svg id="cnsSvg" viewBox="0 0 200 125" preserveAspectRatio="xMidYMid meet"
            xmlns="http://www.w3.org/2000/svg" aria-label="Interactive CNS / PNS map">
 
-        <!-- ── Overview hotspots — calibrated to 2000×1250 CNS full figure ── -->
+        <!-- ── Overview hotspots ── -->
         <g id="cns-overview-spots">
-          <!-- Brain (top-center of image) -->
           <g onclick="cnsSelect('brain')" style="cursor:pointer">
-            <circle cx="100" cy="13" r="9" class="hot"/>
-            <text class="plus" x="100" y="13" font-size="8">+</text>
-            <rect x="112" y="9" width="28" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="126" y="13" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="5.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brain</text>
+            <circle cx="100" cy="18" r="4.5" class="hot"/>
+            <text class="plus" x="100" y="18" font-size="5">+</text>
+            <rect x="106" y="15" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="117" y="18.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.2" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brain</text>
           </g>
-          <!-- Cranial nerves — brainstem exit -->
           <g onclick="cnsSelect('cn')" style="cursor:pointer">
-            <circle cx="113" cy="30" r="7" class="hot"/>
-            <text class="plus" x="113" y="30" font-size="7">+</text>
-            <rect x="123" y="26" width="30" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="138" y="30" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">CN I–XII</text>
+            <circle cx="110" cy="34" r="4" class="hot"/>
+            <text class="plus" x="110" y="34" font-size="5">+</text>
+            <rect x="116" y="31" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="129" y="34.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">CN I–XII</text>
           </g>
-          <!-- Plexuses — brachial level (nerves fanning out) -->
           <g onclick="cnsSelect('plexuses')" style="cursor:pointer">
-            <circle cx="83" cy="41" r="7" class="hot"/>
-            <text class="plus" x="83" y="41" font-size="7">+</text>
-            <rect x="64" y="37" width="16" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="72" y="41" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">PNS</text>
+            <circle cx="82" cy="47" r="4" class="hot"/>
+            <text class="plus" x="82" y="47" font-size="5">+</text>
+            <rect x="60" y="44" width="20" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="70" y="47.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Plexuses</text>
           </g>
-          <!-- Spinal cord — mid-thoracic -->
           <g onclick="cnsSelect('spinal')" style="cursor:pointer">
-            <circle cx="100" cy="63" r="7" class="hot"/>
-            <text class="plus" x="100" y="63" font-size="7">+</text>
-            <rect x="110" y="59" width="28" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="124" y="63" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Spinal Cord</text>
+            <circle cx="100" cy="66" r="4" class="hot"/>
+            <text class="plus" x="100" y="66" font-size="5">+</text>
+            <rect x="106" y="63" width="28" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="120" y="66.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Spinal Cord</text>
           </g>
-          <!-- ANS — alongside thoracolumbar cord -->
           <g onclick="cnsSelect('ans')" style="cursor:pointer">
-            <circle cx="114" cy="80" r="7" class="hot"/>
-            <text class="plus" x="114" y="80" font-size="7">+</text>
-            <rect x="124" y="76" width="20" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="134" y="80" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">ANS</text>
+            <circle cx="114" cy="85" r="4" class="hot"/>
+            <text class="plus" x="114" y="85" font-size="5">+</text>
+            <rect x="120" y="82" width="16" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="128" y="85.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">ANS</text>
           </g>
         </g>
 
-        <!-- ── Brain zoom hotspots — calibrated to 2000×1250 brain-detail image ── -->
+        <!-- ── Brain zoom hotspots ── -->
         <g id="cns-brain-spots" style="display:none;pointer-events:none">
-          <!-- Left frontal lobe -->
+          <!-- Frontal lobe L — top-left quadrant -->
           <g onclick="location.hash='#/cns/frontal-lobe'" style="cursor:pointer">
-            <circle cx="70" cy="22" r="7" class="hot"/>
-            <text class="plus" x="70" y="22" font-size="7">+</text>
-            <rect x="55" y="18" width="12" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="61" y="22" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Fr</text>
+            <circle cx="65" cy="24" r="4" class="hot"/>
+            <text class="plus" x="65" y="24" font-size="5">+</text>
+            <rect x="71" y="21" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="82" y="24.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Frontal L</text>
           </g>
-          <!-- Right frontal lobe -->
+          <!-- Frontal lobe R — label to the LEFT of circle -->
           <g onclick="location.hash='#/cns/frontal-lobe'" style="cursor:pointer">
-            <circle cx="130" cy="22" r="7" class="hot"/>
-            <text class="plus" x="130" y="22" font-size="7">+</text>
-            <rect x="140" y="18" width="22" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="151" y="22" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Frontal</text>
+            <circle cx="135" cy="24" r="4" class="hot"/>
+            <text class="plus" x="135" y="24" font-size="5">+</text>
+            <rect x="107" y="21" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="118" y="24.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Frontal R</text>
           </g>
-          <!-- Parietal (top center) -->
+          <!-- Parietal lobe — top center -->
           <g onclick="location.hash='#/cns/parietal-lobe'" style="cursor:pointer">
-            <circle cx="100" cy="14" r="6" class="hot"/>
-            <text class="plus" x="100" y="14" font-size="6">+</text>
-            <rect x="108" y="10" width="26" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="121" y="14" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Parietal</text>
+            <circle cx="100" cy="10" r="4" class="hot"/>
+            <text class="plus" x="100" y="10" font-size="5">+</text>
+            <rect x="106" y="7" width="22" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="117" y="10.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Parietal</text>
           </g>
-          <!-- Left temporal -->
+          <!-- Temporal L — far left mid -->
           <g onclick="location.hash='#/cns/temporal-lobe'" style="cursor:pointer">
-            <circle cx="23" cy="68" r="7" class="hot"/>
-            <text class="plus" x="23" y="68" font-size="7">+</text>
-            <rect x="33" y="64" width="28" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="47" y="68" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Temporal</text>
+            <circle cx="18" cy="60" r="4" class="hot"/>
+            <text class="plus" x="18" y="60" font-size="5">+</text>
+            <rect x="24" y="57" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="37" y="60.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Temporal L</text>
           </g>
-          <!-- Right temporal -->
+          <!-- Temporal R — far right mid, label left -->
           <g onclick="location.hash='#/cns/temporal-lobe'" style="cursor:pointer">
-            <circle cx="177" cy="68" r="7" class="hot"/>
-            <text class="plus" x="177" y="68" font-size="7">+</text>
-            <rect x="142" y="64" width="28" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="156" y="68" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Temporal</text>
+            <circle cx="182" cy="60" r="4" class="hot"/>
+            <text class="plus" x="182" y="60" font-size="5">+</text>
+            <rect x="150" y="57" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="163" y="60.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Temporal R</text>
           </g>
-          <!-- Cerebellum -->
+          <!-- Cerebellum — bottom center -->
           <g onclick="location.hash='#/cns/cerebellum-structure'" style="cursor:pointer">
-            <circle cx="152" cy="100" r="7" class="hot"/>
-            <text class="plus" x="152" y="100" font-size="7">+</text>
-            <rect x="137" y="96" width="12" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="143" y="100" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Cb</text>
+            <circle cx="100" cy="103" r="4" class="hot"/>
+            <text class="plus" x="100" y="103" font-size="5">+</text>
+            <rect x="106" y="100" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="119" y="103.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Cerebellum</text>
           </g>
-          <!-- Brainstem -->
+          <!-- Brainstem — very bottom center -->
           <g onclick="location.hash='#/cns/pons'" style="cursor:pointer">
-            <circle cx="100" cy="105" r="7" class="hot"/>
-            <text class="plus" x="100" y="105" font-size="7">+</text>
-            <rect x="110" y="101" width="36" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="128" y="105" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brainstem</text>
+            <circle cx="100" cy="115" r="4" class="hot"/>
+            <text class="plus" x="100" y="115" font-size="5">+</text>
+            <rect x="106" y="112" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="119" y="115.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brainstem</text>
           </g>
-          <!-- Circle of Willis (center blood vessels) -->
+          <!-- Vasculature — central, where Circle of Willis sits -->
           <g onclick="location.hash='#/cns/brain-vasculature'" style="cursor:pointer">
-            <circle cx="100" cy="78" r="7" class="hot"/>
-            <text class="plus" x="100" y="78" font-size="7">+</text>
-            <rect x="110" y="74" width="36" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="128" y="78" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Vasculature</text>
+            <circle cx="100" cy="80" r="4" class="hot"/>
+            <text class="plus" x="100" y="80" font-size="5">+</text>
+            <rect x="72" y="77" width="26" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="85" y="80.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Vasculature</text>
           </g>
-          <!-- Basal ganglia / limbic (mid-brain) -->
+          <!-- Basal Ganglia — deep left hemisphere -->
           <g onclick="location.hash='#/cns/basal-ganglia'" style="cursor:pointer">
-            <circle cx="80" cy="55" r="7" class="hot"/>
-            <text class="plus" x="80" y="55" font-size="7">+</text>
-            <rect x="63" y="51" width="14" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="70" y="55" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">BG</text>
+            <circle cx="78" cy="46" r="4" class="hot"/>
+            <text class="plus" x="78" y="46" font-size="5">+</text>
+            <rect x="56" y="43" width="20" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="66" y="46.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Basal Ggl</text>
           </g>
-          <!-- Limbic system -->
+          <!-- Limbic — medial temporal / inner hemisphere -->
           <g onclick="location.hash='#/cns/limbic-system'" style="cursor:pointer">
-            <circle cx="82" cy="90" r="6" class="hot"/>
-            <text class="plus" x="82" y="90" font-size="6">+</text>
-            <rect x="63" y="86" width="16" height="9" rx="4.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
-            <text x="71" y="90" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Lmb</text>
+            <circle cx="75" cy="70" r="4" class="hot"/>
+            <text class="plus" x="75" y="70" font-size="5">+</text>
+            <rect x="53" y="67" width="20" height="7" rx="3.5" fill="rgba(0,0,0,.72)" pointer-events="none"/>
+            <text x="63" y="70.5" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Limbic</text>
           </g>
           <!-- Back button -->
           <g onclick="cnsSelect('overview')" style="cursor:pointer">
-            <rect x="4" y="4" width="30" height="12" rx="6" fill="rgba(0,0,0,.6)" stroke="rgba(255,255,255,.4)" stroke-width="0.5"/>
-            <text x="19" y="10" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="5.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">← Back</text>
+            <rect x="3" y="3" width="24" height="10" rx="5" fill="rgba(0,0,0,.65)" stroke="rgba(255,255,255,.4)" stroke-width="0.5"/>
+            <text x="15" y="8" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="4.5" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">← Back</text>
           </g>
         </g>
       </svg>

@@ -591,41 +591,29 @@ const REGION_IMAGES = {
     desc:"Scalp, cranial base, fossae, cranial nerves, meninges, cerebral vasculature — 23 dissection topics.",
     vb:[65,0,270,145], fs:4.0,
     landmarks:[
-      // Scalp / dura — midline, very top
-      {x:200,y:7,  label:"Scalp (SCALP)",           dir:"l",sub:"#/sub/scalp"},
-      {x:200,y:17, label:"Dural reflections",        dir:"r",sub:"#/sub/dural-reflections"},
-      // Upper brain surface
-      {x:183,y:27, label:"Dural sinuses",            dir:"l",sub:"#/sub/dural-sinuses"},
-      {x:217,y:27, label:"Meninges + CSF",           dir:"r",sub:"#/sub/meninges"},
-      // Mid-brain / cerebrovascular
-      {x:183,y:37, label:"ICA + Circle of Willis",   dir:"l",sub:"#/sub/ica-circle-of-willis"},
-      {x:217,y:37, label:"Skull base foramina",      dir:"r",sub:"#/sub/skull-base-foramina"},
-      // Cranial nerve exit zone / pterygo region
-      {x:180,y:47, label:"Cranial nerves I–XII",     dir:"l",sub:"#/sub/cranial-nerves-overview"},
-      {x:220,y:47, label:"Maxillary artery",         dir:"r",sub:"#/sub/maxillary-artery"},
-      // Orbital level — dots at actual orbital margins
-      {x:157,y:57, label:"Orbit — borders",          dir:"l",sub:"#/sub/orbit"},
-      {x:243,y:57, label:"EOMs + palsies",           dir:"r",sub:"#/sub/eom"},
-      // Just below orbits — cheek / parasympathetic ganglia territory
-      {x:158,y:67, label:"Parasympathetic ganglia",  dir:"l",sub:"#/sub/parasympathetic-ganglia"},
-      {x:242,y:67, label:"Trigeminal press. points", dir:"r",sub:"#/sub/trigeminal-pressure-points"},
-      // Zygomatic arch level — infratemporal entrance, TMJ posterolateral
-      {x:150,y:77, label:"Ganglia passing fibres",   dir:"l",sub:"#/sub/ganglia-passing-fibres"},
-      {x:250,y:77, label:"TMJ",                      dir:"r",sub:"#/sub/tmj"},
-      // Below zygomatic arch — ITF, parotid space
-      {x:148,y:87, label:"Infratemporal fossa",      dir:"l",sub:"#/sub/infratemporal-fossa"},
-      {x:252,y:87, label:"Parotid gland",            dir:"r",sub:"#/sub/parotid"},
-      // Pterygopalatine fossa / facial nerve spread
-      {x:156,y:97, label:"Pterygopalatine fossa",    dir:"l",sub:"#/sub/pterygopalatine-fossa"},
-      {x:244,y:97, label:"Facial n. branches",       dir:"r",sub:"#/sub/facial-n-branches"},
-      // Mandible level — V3 / jugular / facial veins
-      {x:150,y:107,label:"Mandibular nerve V3",      dir:"l",sub:"#/sub/v3-mandibular"},
-      {x:250,y:107,label:"Head veins",               dir:"r",sub:"#/sub/head-veins"},
-      // Retromandibular fossa / facial nerve trunk + branches
-      {x:140,y:117,label:"Retromandibular fossa",    dir:"l",sub:"#/sub/retromandibular-fossa"},
-      {x:260,y:117,label:"Facial n. — TZBMC",        dir:"r",sub:"#/sub/facial-tzbmc"},
-      // Lower face — masticatory muscles (temporalis→masseter→pterygoids)
-      {x:200,y:130,label:"Face + masticatory mm.",   dir:"l",sub:"#/sub/face-muscles"},
+      {x:178,y:2,  label:"Scalp (SCALP)",           dir:"l",sub:"#/sub/scalp"},
+      {x:205,y:10, label:"Dural reflections",        dir:"r",sub:"#/sub/dural-reflections"},
+      {x:168,y:30, label:"Dural sinuses",            dir:"l",sub:"#/sub/dural-sinuses"},
+      {x:249,y:22, label:"Meninges + CSF",           dir:"r",sub:"#/sub/meninges"},
+      {x:195,y:51, label:"ICA + Circle of Willis",   dir:"l",sub:"#/sub/ica-circle-of-willis"},
+      {x:214,y:39, label:"Skull base foramina",      dir:"r",sub:"#/sub/skull-base-foramina"},
+      {x:187,y:64, label:"Cranial nerves I–XII",     dir:"l",sub:"#/sub/cranial-nerves-overview"},
+      {x:227,y:59, label:"Maxillary artery",         dir:"r",sub:"#/sub/maxillary-artery"},
+      {x:151,y:66, label:"Orbit — borders",          dir:"l",sub:"#/sub/orbit"},
+      {x:249,y:47, label:"EOMs + palsies",           dir:"r",sub:"#/sub/eom"},
+      {x:160,y:81, label:"Parasympathetic ganglia",  dir:"l",sub:"#/sub/parasympathetic-ganglia"},
+      {x:249,y:81, label:"Trigeminal press. points", dir:"r",sub:"#/sub/trigeminal-pressure-points"},
+      {x:160,y:93, label:"Ganglia passing fibres",   dir:"l",sub:"#/sub/ganglia-passing-fibres"},
+      {x:268,y:93, label:"TMJ",                      dir:"r",sub:"#/sub/tmj"},
+      {x:151,y:106,label:"Infratemporal fossa",      dir:"l",sub:"#/sub/infratemporal-fossa"},
+      {x:268,y:106,label:"Parotid gland",            dir:"r",sub:"#/sub/parotid"},
+      {x:151,y:115,label:"Pterygopalatine fossa",    dir:"l",sub:"#/sub/pterygopalatine-fossa"},
+      {x:276,y:120,label:"Facial n. branches",       dir:"r",sub:"#/sub/facial-n-branches"},
+      {x:160,y:126,label:"Mandibular nerve V3",      dir:"l",sub:"#/sub/v3-mandibular"},
+      {x:276,y:132,label:"Head veins",               dir:"r",sub:"#/sub/head-veins"},
+      {x:151,y:139,label:"Retromandibular fossa",    dir:"l",sub:"#/sub/retromandibular-fossa"},
+      {x:276,y:139,label:"Facial n. — TZBMC",        dir:"r",sub:"#/sub/facial-tzbmc"},
+      {x:200,y:139,label:"Face + masticatory mm.",   dir:"l",sub:"#/sub/face-muscles"},
     ]
   },
   neck:{

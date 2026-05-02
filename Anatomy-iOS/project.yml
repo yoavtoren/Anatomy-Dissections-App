@@ -5,7 +5,6 @@ options:
   deploymentTarget:
     iOS: "16.0"
   createIntermediateGroups: true
-  generateEmptyDirectories: true
 
 settings:
   base:
@@ -21,19 +20,14 @@ targets:
     type: application
     platform: iOS
     deploymentTarget: "16.0"
-    supportedDestinations:
-      - iOS
-      - macCatalyst
 
     sources:
       - path: Sources
         createIntermediateGroups: true
-
-    resources:
-      - path: ../index.html
-      - path: ../images
-        type: folder
       - path: Resources/Assets.xcassets
+      - path: WebContent/index.html
+      - path: WebContent/images
+        type: folder
 
     info:
       path: Resources/Info.plist
@@ -41,7 +35,7 @@ targets:
         CFBundleDisplayName: "Anatomy Atlas Assistant"
         CFBundleIconName: AppIcon
         CFBundleShortVersionString: "1.0"
-        CFBundleVersion: "3"
+        CFBundleVersion: "4"
         UILaunchScreen: {}
         UIRequiresFullScreen: false
         UISupportedInterfaceOrientations:

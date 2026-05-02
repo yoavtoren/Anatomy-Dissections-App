@@ -180,6 +180,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QNP44Q5Q3X;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -189,6 +190,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACCATALYST_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anatomyatlas.AnatomyAtlas;
 				PRODUCT_NAME = "Anatomy Atlas Assistant";
 				SDKROOT = iphoneos;
@@ -202,6 +204,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QNP44Q5Q3X;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -211,6 +214,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACCATALYST_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anatomyatlas.AnatomyAtlas;
 				PRODUCT_NAME = "Anatomy Atlas Assistant";
 				SDKROOT = iphoneos;

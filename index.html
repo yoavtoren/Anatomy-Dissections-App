@@ -5276,23 +5276,26 @@ function renderBlocks(blocks){
     let html = "";
     for(const b of blocks){
         if(b.h){
-            // Every heading block gets a side image slot
-            const imgFile = b.img || (_hSlug(b.h)+'.jpg');
-            let inner = `<h3>${b.h}</h3>`;
-            if(b.p) inner += `<p>${b.p}</p>`;
-            if(b.list){
-                inner += "<ul>";
-                for(const li of b.list) inner += `<li>${li}</li>`;
-                inner += "</ul>";
+            if(b.p || b.list){
+                html += `<h3>${b.h}</h3>`;
+                if(b.p) html += `<p>${b.p}</p>`;
+                if(b.list){
+                    html += "<ul>";
+                    for(const li of b.list) html += `<li>${li}</li>`;
+                    html += "</ul>";
+                }
+            } else {
+                html += `<h3>${b.h}</h3>`;
             }
-            html += `<div class="sec-with-img">
-              <div class="sec-content">${inner}</div>
-              ${_secFig(imgFile, b.h, _secUid++)}
-            </div>`;
         } else {
             if(b.p) html += `<p>${b.p}</p>`;
-            if(b.img) html += renderImagePlaceholder(b.img, b.caption);
+            if(b.list){
+                html += "<ul>";
+                for(const li of b.list) html += `<li>${li}</li>`;
+                html += "</ul>";
+            }
             if(b.div) html += `<div class="${b.div}">${b.text}</div>`;
+            // img blocks silently ignored — pictures removed
         }
     }
     return html;

@@ -321,6 +321,32 @@ strong.li-label{background:none;color:var(--ink);font-weight:800;letter-spacing:
 #img-lightbox .lb-close{position:absolute;top:16px;right:22px;color:#fff;font-size:32px;cursor:pointer;background:none;border:none;line-height:1;opacity:.7}
 #img-lightbox .lb-close:hover{opacity:1}
 
+/* ── CNS viewer sub-cards & quick-links ── */
+.cns-sub-card{
+    display:flex;align-items:center;gap:8px;padding:10px 12px;
+    border-radius:10px;cursor:pointer;
+    border:1px solid var(--border);background:var(--panel);
+    margin-bottom:6px;transition:border-color .15s,background .15s,transform .12s;
+}
+.cns-sub-card:hover{border-color:var(--accent);background:var(--panel-2);transform:translateX(2px)}
+.cns-ql-btn{
+    width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);
+    background:var(--panel);color:var(--ink);font-size:13px;font-weight:600;
+    cursor:pointer;text-align:left;transition:border-color .15s,background .15s;
+}
+.cns-ql-btn:hover{border-color:var(--accent);background:rgba(91,142,248,.07)}
+/* CNS SVG hotspots reuse #aoBodySvg rules via id override */
+#cnsSvg .hot{
+    fill:#5B8EF8;stroke:rgba(255,255,255,.55);stroke-width:2;
+    cursor:pointer;transition:fill .18s;
+    filter:drop-shadow(0 2px 8px rgba(0,0,0,.55));
+}
+#cnsSvg .hot:hover{fill:#3A6BD4;stroke:rgba(255,255,255,.9);stroke-width:2.5}
+#cnsSvg .plus{
+    fill:#fff;font-weight:800;font-size:16px;text-anchor:middle;
+    pointer-events:none;dominant-baseline:central;
+}
+
 /* ── Footer ── */
 footer{margin-top:60px;padding:24px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--border)}
 
@@ -4836,17 +4862,54 @@ const CNS_PNS = {
     intro:"The cerebrum, cerebellum, and brainstem form the supratentorial and infratentorial CNS components.",
     sub:[
       {id:"frontal-lobe", name:"Frontal lobe", brief:"Motor cortex, prefrontal cortex, Broca's area"},
-      {id:"parietal-lobe", name:"Parietal lobe", brief:"Somatosensory cortex, association areas"},
-      {id:"temporal-lobe", name:"Temporal lobe", brief:"Auditory cortex, Wernicke's area, hippocampus"},
-      {id:"occipital-lobe", name:"Occipital lobe", brief:"Primary visual cortex (Brodmann area 17)"},
+      {id:"frontal-lobe-motor", name:"Frontal lobe — motor areas", brief:"Primary motor (Brodmann 4), premotor (6), supplementary, FEF (8), Broca's area (44/45)"},
+      {id:"prefrontal-cortex", name:"Prefrontal cortex", brief:"Brodmann 9–12, personality, judgement, decision-making, planning"},
+      {id:"parietal-lobe", name:"Parietal lobe", brief:"Primary somatosensory (1/2/3), secondary (5/7), stereognosis, precuneus, body image"},
+      {id:"temporal-lobe", name:"Temporal lobe", brief:"Primary auditory (41/42), Heschl's gyrus, Wernicke's area (22), receptive aphasia"},
+      {id:"occipital-lobe", name:"Occipital lobe", brief:"V1 (Brodmann 17), stria of Gennari, V2/V3 (18/19), occipital eye field"},
+      {id:"other-cortical-areas", name:"Other cortical areas", brief:"Gustatory (43), vestibular, insula, three association regions, cerebral dominance"},
       {id:"cerebellum", name:"Cerebellum", brief:"Coordination, balance, motor learning"},
+      {id:"cerebellum-structure", name:"Cerebellum — structure", brief:"Three lobes, functional zones, deep nuclei, three-layer cortex, Purkinje cells"},
+      {id:"cerebellar-afferents", name:"Cerebellar afferent connections", brief:"Cortico-ponto-cerebellar, spinocerebellar tracts, vestibulo-cerebellar, peduncles"},
+      {id:"cerebellar-efferents", name:"Cerebellar efferent connections", brief:"Cerebello-rubral, dento-thalamic, fastigial-vestibular, ipsilateral net effect"},
       {id:"brainstem", name:"Brainstem", brief:"Midbrain, pons, medulla — origins of CNs III–XII"},
+      {id:"medulla-oblongata", name:"Medulla oblongata", brief:"Pyramids, olives, 4 cross-sections, reticular formation centres"},
+      {id:"pons", name:"Pons", brief:"Basilar groove, CN V–VIII, tegmentum vs basal part, trapezoid body"},
+      {id:"midbrain", name:"Midbrain", brief:"Cerebral peduncle, tectum, red nucleus, substantia nigra, CN III/IV"},
+      {id:"rhomboid-fossa", name:"Rhomboid fossa", brief:"Floor of 4th ventricle — facial colliculus, locus coeruleus, area postrema"},
+      {id:"reticular-formation", name:"Reticular formation", brief:"Three columns, raphe nuclei, locus coeruleus, reticular activating system"},
+      {id:"diencephalon", name:"Diencephalon overview", brief:"Thalamus, subthalamus, epithalamus, hypothalamus, pineal, habenular nuclei"},
+      {id:"thalamus", name:"Thalamus — nuclei & connections", brief:"Internal medullary lamina, VPL, VPM, MGB, LGB, anterior nuclei, Papez circuit"},
+      {id:"hypothalamus", name:"Hypothalamus", brief:"Anteroposterior subdivisions, nuclei, ANS control, temperature, circadian rhythms"},
+      {id:"hypothalamo-hypophyseal", name:"Hypothalamo-hypophyseal regulation", brief:"Hypothalamo-hypophyseal tract, portal system, ADH, oxytocin, anterior pituitary hormones"},
+      {id:"basal-ganglia", name:"Basal ganglia", brief:"Striatum, direct/indirect pathways, dopamine D1/D2, Parkinson, Huntington"},
+      {id:"white-matter-fibres", name:"White matter fibres", brief:"Corpus callosum, anterior/posterior commissures, fornix, long fasciculi, internal capsule"},
+      {id:"ventricles-csf", name:"Ventricles & CSF", brief:"Four ventricles, CSF circulation, choroid plexus, arachnoid granulations, hydrocephalus"},
+      {id:"brain-vasculature", name:"Brain vasculature & stroke", brief:"Circle of Willis, ICA/vertebral branches, BBB, ACA/MCA/PCA occlusion, stroke types"},
+      {id:"lemniscal-system", name:"Lemniscal (dorsal column) system", brief:"Fasciculi gracilis/cuneatus, medial lemniscus, Brown-Séquard, syringomyelia"},
+      {id:"anterolateral-system", name:"Anterolateral system & pain", brief:"Lateral/anterior spinothalamic, fast pain (A-delta), slow pain (C fibres), substance P"},
+      {id:"pyramidal-tract", name:"Pyramidal tract", brief:"Corticospinal origin/course, lateral/anterior divisions, corticonuclear, bilateral innervation"},
+      {id:"extrapyramidal-motor", name:"Extrapyramidal motor + lesions", brief:"Reticulospinal, tectospinal, rubrospinal, vestibulospinal, UMN vs LMN, paralysis types"},
+      {id:"auditory-pathway", name:"Auditory pathway", brief:"Spiral ganglion, cochlear nuclei, trapezoid body, inferior colliculus, MGB, Heschl's gyrus"},
+      {id:"visual-pathway", name:"Visual pathway & reflexes", brief:"5-neuron pathway, chiasmatic decussation, optic radiation, pupillary/corneal/accommodation reflexes"},
+      {id:"olfactory-gustatory", name:"Olfactory & gustatory pathways", brief:"Olfactory bulb, lateral stria, no thalamic relay; taste via CN VII/IX/X, nucleus solitarius, VPM"},
+      {id:"limbic-system", name:"Limbic system", brief:"Hippocampal formation, Papez circuit, amygdala, stria terminalis, emotion + memory"},
+      {id:"neurotransmitter-systems", name:"CNS neurotransmitter systems", brief:"ACh (Alzheimer's), 5-HT (raphe), NE (locus coeruleus), DA (Parkinson's), GABA, Glu"},
     ]
   },
   spinal:{
     title:"Spinal cord (CNS)",
     intro:"Continues caudally from the medulla; segmented (C1–Co1) and surrounded by meninges.",
     sub:[
+      {id:"neural-tube-development", name:"Neural tube development", brief:"Primary vesiculation, neuropore closure, cord topographic shift"},
+      {id:"neural-tube-defects", name:"Neural tube closure defects", brief:"Spina bifida occulta, meningocele, myelomeningocele, anencephaly"},
+      {id:"spinal-cord-segments", name:"Spinal cord segments", brief:"Conus medullaris, enlargements, cauda equina, Chipault's rule"},
+      {id:"spinal-cord-cross-section", name:"Spinal cord cross-section", brief:"Gray matter H-shape, Rexed laminae I–X, white matter funiculi"},
+      {id:"ascending-tracts", name:"Ascending tracts", brief:"Three-neuron rule, spinothalamic, spinocerebellar, posterior columns, medial lemniscus"},
+      {id:"descending-tracts", name:"Descending tracts", brief:"Corticospinal, tectospinal, vestibulospinal, reticulospinal, rubrospinal"},
+      {id:"spinal-meninges", name:"Spinal meninges & vasculature", brief:"Dura, arachnoid, pia, lumbar puncture, Adamkiewicz artery"},
+      {id:"spinal-nerve-structure", name:"Spinal nerve structure", brief:"Rami, rami communicantes, autonomic fibres, dorsal root ganglion"},
+      {id:"dermatomes-heads-zones", name:"Dermatomes & Head's zones", brief:"Key dermatomes, myotomes, referred pain maps, radicular pain"},
       {id:"cervical-cord", name:"Cervical enlargement (C5–T1)", brief:"Origin of the brachial plexus"},
       {id:"thoracic-cord", name:"Thoracic cord", brief:"Sympathetic outflow"},
       {id:"lumbar-cord", name:"Lumbar enlargement (L2–S3)", brief:"Origin of the lumbosacral plexus"},
@@ -4860,14 +4923,21 @@ const CNS_PNS = {
       {id:"cn-1", name:"CN I — Olfactory", brief:"Smell — through cribriform plate"},
       {id:"cn-2", name:"CN II — Optic", brief:"Vision — through optic canal"},
       {id:"cn-3", name:"CN III — Oculomotor", brief:"Most extraocular muscles, parasympathetics — SOF"},
+      {id:"cn-3-4-6", name:"CN III, IV, VI — Extraocular", brief:"Oculomotor, trochlear, abducens — cavernous sinus course, EOMs"},
       {id:"cn-4", name:"CN IV — Trochlear", brief:"Superior oblique — SOF"},
       {id:"cn-5", name:"CN V — Trigeminal", brief:"Facial sensation, mastication — SOF, FR, FO"},
+      {id:"trigeminal-v1-v2", name:"Trigeminal V1 + V2", brief:"Ophthalmic (frontal/lacrimal/nasociliary), maxillary (infraorbital), pterygopalatine ganglion"},
+      {id:"trigeminal-v3", name:"Trigeminal V3", brief:"Mandibular motor + sensory, auriculotemporal, inferior alveolar, lingual n."},
       {id:"cn-6", name:"CN VI — Abducens", brief:"Lateral rectus — SOF"},
       {id:"cn-7", name:"CN VII — Facial", brief:"Facial expression, parasympathetics, taste — IAM/stylomastoid"},
+      {id:"facial-nerve-detail", name:"Facial nerve — detail", brief:"Motor root, geniculate ganglion, chorda tympani, greater petrosal n., Bell's palsy"},
       {id:"cn-8", name:"CN VIII — Vestibulocochlear", brief:"Hearing & balance — IAM"},
       {id:"cn-9", name:"CN IX — Glossopharyngeal", brief:"Stylopharyngeus, parotid, taste — jugular foramen"},
+      {id:"glossopharyngeal-nerve", name:"CN IX — Glossopharyngeal detail", brief:"Lesser petrosal → otic ganglion → parotid, Jacobson's n., carotid body/sinus"},
       {id:"cn-10", name:"CN X — Vagus", brief:"Pharynx, larynx, viscera — jugular foramen"},
+      {id:"vagus-nerve-detail", name:"CN X — Vagus detail", brief:"Nucleus ambiguus, dorsal motor nucleus, recurrent laryngeal n., abdominal plexuses"},
       {id:"cn-11", name:"CN XI — Accessory", brief:"SCM, trapezius — jugular foramen"},
+      {id:"cn-11-12", name:"CN XI + XII detail", brief:"Accessory: SCM + trapezius; Hypoglossal: all tongue muscles except palatoglossus"},
       {id:"cn-12", name:"CN XII — Hypoglossal", brief:"Tongue muscles — hypoglossal canal"},
     ]
   },
@@ -4875,10 +4945,23 @@ const CNS_PNS = {
     title:"Peripheral plexuses (PNS)",
     intro:"Major somatic nerve plexuses formed by anterior rami of spinal nerves.",
     sub:[
+      {id:"neural-crest", name:"Neural crest derivatives", brief:"Cranial, trunk, vagal/sacral, cardiac neural crest; DRG, Schwann cells, melanocytes"},
+      {id:"sensory-receptors", name:"Sensory receptors", brief:"Free nerve endings, encapsulated, exteroceptors, interoceptors, proprioceptors"},
+      {id:"nerve-regeneration", name:"Peripheral nerve regeneration", brief:"Wallerian degeneration, bands of Büngner, endoneurial tube, growth 2–5 mm/day"},
+      {id:"head-neck-innervation", name:"Head & neck skin innervation", brief:"Face = trigeminal V1/V2/V3; cervical plexus sensory branches; Erb's point"},
       {id:"cervical-plexus", name:"Cervical plexus (C1–C4)", brief:"Lesser occipital, great auricular, transverse cervical, supraclavicular, ansa cervicalis, phrenic"},
+      {id:"cervical-plexus-detail", name:"Cervical plexus — detail", brief:"C1–C4, ansa cervicalis, phrenic n. (C3–C5), great auricular, lesser occipital, Erb's point"},
       {id:"brachial-plexus", name:"Brachial plexus (C5–T1)", brief:"Roots → trunks → divisions → cords → branches; supplies the upper limb"},
+      {id:"brachial-plexus-detail", name:"Brachial plexus — detail", brief:"C5–T1, roots/trunks/divisions/cords/branches, supraclavicular + terminal branches"},
+      {id:"axillary-nerve", name:"Axillary nerve", brief:"Posterior cord C5–C6, quadrangular space, deltoid + teres minor, regimental badge area"},
+      {id:"radial-nerve", name:"Radial nerve", brief:"Posterior cord C5–T1, radial groove, PIN, wrist drop, Saturday night palsy"},
+      {id:"median-nerve", name:"Median nerve", brief:"C5–T1 lateral + medial cords, carpal tunnel, Hand of Benediction, thenar atrophy"},
+      {id:"ulnar-nerve", name:"Ulnar nerve", brief:"Medial cord C8–T1, Guyon's canal, claw hand digits 4–5, funny bone"},
       {id:"lumbar-plexus", name:"Lumbar plexus (L1–L4)", brief:"Iliohypogastric, ilioinguinal, genitofemoral, lateral femoral cutaneous, obturator, femoral"},
+      {id:"lumbar-plexus-detail", name:"Lumbar plexus — detail", brief:"T12–L4, SIIGLOFL branches, iliohypogastric, ilioinguinal, genitofemoral, femoral, obturator"},
+      {id:"femoral-nerve", name:"Femoral nerve", brief:"L2–L4, lateral to psoas, quadriceps + sartorius, saphenous n. through adductor canal"},
       {id:"sacral-plexus", name:"Sacral plexus (L4–S4)", brief:"Sciatic, superior & inferior gluteal, pudendal, posterior femoral cutaneous"},
+      {id:"sacral-plexus-detail", name:"Sacral plexus & sciatic nerve — detail", brief:"L4–S4, sciatic n. branches, common fibular palsy (foot drop), pudendal n., tibial n."},
       {id:"coccygeal-plexus", name:"Coccygeal plexus (S4–Co1)", brief:"Anococcygeal nerve"},
     ]
   },
@@ -4887,8 +4970,13 @@ const CNS_PNS = {
     intro:"Visceral motor system controlling smooth muscle, cardiac muscle, and glands — sympathetic, parasympathetic, and enteric divisions.",
     sub:[
       {id:"sympathetic", name:"Sympathetic", brief:"T1–L2 outflow; paravertebral & prevertebral ganglia"},
+      {id:"cervical-thoracic-sympathetic", name:"Cervical + thoracic sympathetic", brief:"T1–L2, paravertebral ganglia, SCG, middle + inferior/stellate ganglia, cardiopulmonary splanchnics"},
+      {id:"abdominopelvic-sympathetic", name:"Abdominopelvic sympathetic", brief:"Greater/lesser/least/lumbar thoracic splanchnics, celiac/mesenteric/inferior mesenteric ganglia"},
       {id:"parasympathetic", name:"Parasympathetic", brief:"Cranial (III, VII, IX, X) and sacral (S2–S4) outflows"},
+      {id:"sacral-parasympathetic", name:"Sacral parasympathetic outflow", brief:"S2–S4, pelvic splanchnic nerves, detrusor, descending colon/rectum, erection"},
+      {id:"cranio-sacral-parasympathetic", name:"Cranio-sacral parasympathetic", brief:"CN III/VII/IX/X outflow, cranial ganglia, sacral outflow, Cannon-Bohm point"},
       {id:"enteric", name:"Enteric", brief:"Myenteric (Auerbach's) and submucosal (Meissner's) plexuses"},
+      {id:"abdominal-pelvic-plexuses", name:"Abdominal & pelvic autonomic plexuses", brief:"Celiac, superior/inferior mesenteric, superior/inferior hypogastric plexuses, enteric system"},
     ]
   },
 };
@@ -5409,122 +5497,213 @@ function viewSub(id){
 }
 
 /* -------- CNS / PNS -------- */
-function viewCnsPns(){
-    const blocks = Object.entries(CNS_PNS).map(([k,sec])=>`
-        <div class="card">
-            <h3 style="margin-top:0">${sec.title}</h3>
-            <p class="muted">${sec.intro}</p>
-            <div class="subregion-grid">
-                ${sec.sub.map(s=>`
-                    <div class="subregion-card" onclick="location.hash='#/cns/${s.id}'">
-                        <h4>${s.name}</h4>
-                        <p>${s.brief}</p>
+function cnsSelect(sec){
+    const isBrain = sec === 'brain';
+    // Swap image
+    document.querySelectorAll('.ao-img-layer[id^="cns-layer-"]').forEach(el=>el.classList.remove('active'));
+    const layerId = 'cns-layer-' + (isBrain ? 'brain' : 'overview');
+    const layerEl = document.getElementById(layerId);
+    if(layerEl) layerEl.classList.add('active');
+    // Swap SVG viewBox + hotspot groups
+    const svg = document.getElementById('cnsSvg');
+    if(svg) svg.setAttribute('viewBox', isBrain ? '0 0 400 310' : '0 0 300 720');
+    const ov = document.getElementById('cns-overview-spots');
+    const br = document.getElementById('cns-brain-spots');
+    if(ov){ ov.style.display = isBrain?'none':'block'; }
+    if(br){ br.style.display = isBrain?'block':'none'; br.style.pointerEvents = isBrain?'auto':'none'; }
+    // Badge
+    const badge = document.getElementById('cns-badge');
+    if(badge) badge.textContent = CNS_PNS[sec] ? CNS_PNS[sec].title : '';
+    // Right panel
+    const panel = document.getElementById('cns-info-content');
+    if(!panel) return;
+    const info = CNS_PNS[sec];
+    if(!info){ panel.innerHTML = '<p class="muted" style="padding:16px">Click a region on the figure.</p>'; return; }
+    panel.innerHTML = `
+        <div style="padding:16px 16px 8px">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:4px">${sec}</div>
+            <div style="font-size:19px;font-weight:800;color:var(--ink);line-height:1.2">${info.title}</div>
+            <p style="font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.5">${info.intro}</p>
+        </div>
+        <div style="height:1px;background:var(--border);margin:0 16px"></div>
+        <div style="overflow-y:auto;flex:1;padding:10px 12px">
+            ${info.sub.map(s=>`
+                <div class="cns-sub-card" onclick="location.hash='#/cns/${s.id}'">
+                    <div style="flex:1;min-width:0">
+                        <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3">${s.name}</div>
+                        <div style="font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4">${s.brief}</div>
                     </div>
-                `).join("")}
-            </div>
-        </div>
-    `).join("");
+                    <div style="color:var(--accent);font-size:16px;flex-shrink:0;margin-left:8px">›</div>
+                </div>
+            `).join('')}
+        </div>`;
+}
 
+function viewCnsPns(){
     return `
-    <h1>CNS / PNS</h1>
-    <p class="muted">Click any region of the brain map below or pick from the list. Each entry opens a structured detail page.</p>
+<div class="ao-topo-wrap" style="height:660px">
 
-    <div class="bodymap-wrap">
-        <div>
-            <svg class="bodymap" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" aria-label="Nervous system map">
-                <!-- Brain -->
-                <ellipse cx="200" cy="90" rx="80" ry="60" class="silhouette"/>
-                <text x="200" y="95" text-anchor="middle" fill="#9fb0d0" font-size="14">Brain</text>
+  <!-- ── LEFT: photo-background + SVG overlay ── -->
+  <div class="ao-figure-panel">
+    <div class="ao-toolbar">
+      <button class="ao-tool-btn" onclick="cnsSelect('overview')" title="Reset to overview">↩</button>
+    </div>
+    <div id="cns-badge" class="ao-region-badge"></div>
 
-                <!-- Spinal cord -->
-                <rect x="190" y="150" width="20" height="280" rx="10" class="silhouette"/>
-                <text x="220" y="295" fill="#9fb0d0" font-size="12">Spinal cord</text>
-
-                <!-- Plexuses (illustrative dots) -->
-                <circle cx="120" cy="180" r="10" class="silhouette-2"/>
-                <text x="60" y="184" fill="#9fb0d0" font-size="11">Cervical plexus</text>
-                <circle cx="120" cy="225" r="12" class="silhouette-2"/>
-                <text x="40" y="229" fill="#9fb0d0" font-size="11">Brachial plexus</text>
-                <circle cx="280" cy="365" r="12" class="silhouette-2"/>
-                <text x="295" y="369" fill="#9fb0d0" font-size="11">Lumbar plexus</text>
-                <circle cx="280" cy="410" r="12" class="silhouette-2"/>
-                <text x="295" y="414" fill="#9fb0d0" font-size="11">Sacral plexus</text>
-
-                <!-- Hotspots -->
-                <g onclick="document.getElementById('cns-brain').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
-                    <circle cx="200" cy="90" r="20" class="hot"/>
-                    <text class="plus" x="200" y="98">+</text>
-                </g>
-                <g onclick="document.getElementById('cns-spinal').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
-                    <circle cx="200" cy="295" r="14" class="hot"/>
-                    <text class="plus" x="200" y="303">+</text>
-                </g>
-                <g onclick="document.getElementById('cns-cn').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
-                    <circle cx="280" cy="90" r="14" class="hot"/>
-                    <text class="plus" x="280" y="97">+</text>
-                </g>
-                <g onclick="document.getElementById('cns-plexuses').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
-                    <circle cx="120" cy="225" r="14" class="hot"/>
-                    <text class="plus" x="120" y="232">+</text>
-                </g>
-            </svg>
-        </div>
-        <div class="legend">
-            <h3>Sections</h3>
-            <ul>
-                <li onclick="document.getElementById('cns-brain').scrollIntoView({behavior:'smooth'})"><b>Brain</b><br><span class="muted">Cerebrum, cerebellum, brainstem</span></li>
-                <li onclick="document.getElementById('cns-spinal').scrollIntoView({behavior:'smooth'})"><b>Spinal cord</b><br><span class="muted">Cervical → conus medullaris</span></li>
-                <li onclick="document.getElementById('cns-cn').scrollIntoView({behavior:'smooth'})"><b>Cranial nerves</b><br><span class="muted">CN I–XII</span></li>
-                <li onclick="document.getElementById('cns-plexuses').scrollIntoView({behavior:'smooth'})"><b>Peripheral plexuses</b><br><span class="muted">Cervical, brachial, lumbar, sacral, coccygeal</span></li>
-                <li onclick="document.getElementById('cns-ans').scrollIntoView({behavior:'smooth'})"><b>Autonomic NS</b><br><span class="muted">Sympathetic, parasympathetic, enteric</span></li>
-            </ul>
-        </div>
+    <!-- Full CNS / PNS overview image -->
+    <div class="ao-img-layer active" id="cns-layer-overview">
+      <img src="images/cns-pns-overview.png" class="ao-body-img" alt="CNS/PNS full figure" draggable="false"/>
+    </div>
+    <!-- Brain detail image (shown on brain zoom) -->
+    <div class="ao-img-layer" id="cns-layer-brain">
+      <img src="images/brain-detail.png" class="ao-body-img" alt="Brain detail — inferior view" draggable="false"/>
     </div>
 
-    <h2 id="cns-brain">${CNS_PNS.brain.title}</h2>
-    <div class="card">
-        <p class="muted">${CNS_PNS.brain.intro}</p>
-        ${renderImagePlaceholder("brain.jpg","Brain — lobes, cerebellum, brainstem")}
-        <div class="subregion-grid">
-            ${CNS_PNS.brain.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
-        </div>
+    <!-- Glass SVG overlay -->
+    <div class="ao-svg-wrap">
+      <svg id="cnsSvg" viewBox="0 0 300 720" preserveAspectRatio="xMidYMid meet"
+           xmlns="http://www.w3.org/2000/svg" aria-label="Interactive CNS / PNS map">
+
+        <!-- ── Overview hotspots (full CNS image) ── -->
+        <g id="cns-overview-spots">
+          <!-- Brain -->
+          <g onclick="cnsSelect('brain')" style="cursor:pointer">
+            <circle cx="150" cy="145" r="22" class="hot"/>
+            <text class="plus" x="150" y="145">+</text>
+            <rect x="176" y="138" width="36" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="194" y="145" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="8.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brain</text>
+          </g>
+          <!-- Cranial nerves — brainstem level -->
+          <g onclick="cnsSelect('cn')" style="cursor:pointer">
+            <circle cx="210" cy="210" r="14" class="hot"/>
+            <text class="plus" x="210" y="210">+</text>
+            <rect x="228" y="203" width="44" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="250" y="210" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">CN I–XII</text>
+          </g>
+          <!-- Spinal cord -->
+          <g onclick="cnsSelect('spinal')" style="cursor:pointer">
+            <circle cx="150" cy="390" r="16" class="hot"/>
+            <text class="plus" x="150" y="390">+</text>
+            <rect x="170" y="383" width="46" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="193" y="390" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Spinal Cord</text>
+          </g>
+          <!-- Plexuses — brachial level -->
+          <g onclick="cnsSelect('plexuses')" style="cursor:pointer">
+            <circle cx="90" cy="285" r="15" class="hot"/>
+            <text class="plus" x="90" y="285">+</text>
+            <rect x="108" y="278" width="46" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="131" y="285" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Plexuses</text>
+          </g>
+          <!-- ANS -->
+          <g onclick="cnsSelect('ans')" style="cursor:pointer">
+            <circle cx="210" cy="490" r="14" class="hot"/>
+            <text class="plus" x="210" y="490">+</text>
+            <rect x="228" y="483" width="26" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="241" y="490" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">ANS</text>
+          </g>
+        </g>
+
+        <!-- ── Brain zoom hotspots (brain-detail image, viewBox 0 0 400 310) ── -->
+        <g id="cns-brain-spots" style="display:none;pointer-events:none">
+          <!-- Frontal lobe left -->
+          <g onclick="location.hash='#/cns/frontal-lobe'" style="cursor:pointer">
+            <circle cx="112" cy="72" r="16" class="hot"/>
+            <text class="plus" x="112" y="72">+</text>
+            <rect x="132" y="65" width="42" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="153" y="72" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="8" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Frontal</text>
+          </g>
+          <!-- Temporal lobe left -->
+          <g onclick="location.hash='#/cns/temporal-lobe'" style="cursor:pointer">
+            <circle cx="68" cy="195" r="15" class="hot"/>
+            <text class="plus" x="68" y="195">+</text>
+            <rect x="87" y="188" width="50" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="112" y="195" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="8" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Temporal</text>
+          </g>
+          <!-- Temporal lobe right -->
+          <g onclick="location.hash='#/cns/temporal-lobe'" style="cursor:pointer">
+            <circle cx="332" cy="195" r="15" class="hot"/>
+            <text class="plus" x="332" y="195">+</text>
+            <rect x="268" y="188" width="50" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="293" y="195" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="8" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Temporal</text>
+          </g>
+          <!-- Occipital -->
+          <g onclick="location.hash='#/cns/occipital-lobe'" style="cursor:pointer">
+            <circle cx="200" cy="268" r="15" class="hot"/>
+            <text class="plus" x="200" y="268">+</text>
+            <rect x="219" y="261" width="52" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="245" y="268" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="8" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Occipital</text>
+          </g>
+          <!-- Cerebellum -->
+          <g onclick="location.hash='#/cns/cerebellum-structure'" style="cursor:pointer">
+            <circle cx="300" cy="252" r="14" class="hot"/>
+            <text class="plus" x="300" y="252">+</text>
+            <rect x="250" y="252" width="44" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="272" y="259" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Cerebellum</text>
+          </g>
+          <!-- Brainstem / pons -->
+          <g onclick="location.hash='#/cns/pons'" style="cursor:pointer">
+            <circle cx="200" cy="248" r="14" class="hot"/>
+            <text class="plus" x="200" y="248">+</text>
+            <rect x="218" y="241" width="58" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="247" y="248" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brainstem</text>
+          </g>
+          <!-- Circle of Willis / Vasculature -->
+          <g onclick="location.hash='#/cns/brain-vasculature'" style="cursor:pointer">
+            <circle cx="200" cy="185" r="13" class="hot"/>
+            <text class="plus" x="200" y="185">+</text>
+            <rect x="217" y="178" width="50" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="242" y="185" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Vasculature</text>
+          </g>
+          <!-- Basal ganglia / limbic -->
+          <g onclick="location.hash='#/cns/basal-ganglia'" style="cursor:pointer">
+            <circle cx="162" cy="158" r="13" class="hot"/>
+            <text class="plus" x="162" y="158">+</text>
+            <rect x="178" y="151" width="52" height="14" rx="7" fill="rgba(0,0,0,.65)" pointer-events="none"/>
+            <text x="204" y="158" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="7.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Basal Ganglia</text>
+          </g>
+          <!-- Back button -->
+          <g onclick="cnsSelect('overview')" style="cursor:pointer">
+            <rect x="8" y="8" width="52" height="20" rx="10" fill="rgba(0,0,0,.55)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+            <text x="34" y="18" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="9" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">← Back</text>
+          </g>
+        </g>
+      </svg>
     </div>
 
-    <h2 id="cns-spinal">${CNS_PNS.spinal.title}</h2>
-    <div class="card">
-        <p class="muted">${CNS_PNS.spinal.intro}</p>
-        ${renderImagePlaceholder("spinal-cord.jpg","Spinal cord segments and enlargements")}
-        <div class="subregion-grid">
-            ${CNS_PNS.spinal.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
-        </div>
-    </div>
+    <div id="cns-hint" class="ao-hint-bar">Click a region to explore the nervous system</div>
+  </div>
 
-    <h2 id="cns-cn">${CNS_PNS.cn.title}</h2>
-    <div class="card">
-        <p class="muted">${CNS_PNS.cn.intro}</p>
-        ${renderImagePlaceholder("cranial-nerves-overview.jpg","Cranial nerves I–XII overview")}
-        <div class="subregion-grid">
-            ${CNS_PNS.cn.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
-        </div>
+  <!-- ── RIGHT: info panel ── -->
+  <div class="ao-info-panel" style="display:flex;flex-direction:column;height:100%">
+    <div class="ao-info-header">
+      <span class="ao-info-tag">Nervous System</span>
+      <div class="ao-region-title-el">CNS / PNS Atlas</div>
     </div>
+    <div class="ao-info-body" style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:0">
+      <div id="cns-info-content" style="flex:1;overflow-y:auto;display:flex;flex-direction:column">
+        <div style="padding:16px">
+          <p class="muted" style="margin:0 0 14px">Click any <strong style="color:var(--accent)">+</strong> on the figure or choose a section:</p>
+          <div style="display:grid;gap:8px">
+            ${Object.entries(CNS_PNS).map(([k,sec])=>`
+              <button class="cns-ql-btn" onclick="cnsSelect('${k}')">${sec.title}</button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <h2 id="cns-plexuses">${CNS_PNS.plexuses.title}</h2>
-    <div class="card">
-        <p class="muted">${CNS_PNS.plexuses.intro}</p>
-        ${renderImagePlaceholder("peripheral-plexuses.jpg","Cervical, brachial, lumbar, sacral and coccygeal plexuses")}
-        <div class="subregion-grid">
-            ${CNS_PNS.plexuses.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
-        </div>
+<!-- ── All entries list below the interactive map ── -->
+<div style="margin-top:32px">
+  ${Object.entries(CNS_PNS).map(([k,sec])=>`
+    <h2 id="cns-${k}" style="margin-top:32px;border-bottom:2px solid var(--border);padding-bottom:10px">${sec.title}</h2>
+    <p class="muted" style="margin-bottom:16px">${sec.intro}</p>
+    <div class="subregion-grid">
+      ${sec.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join('')}
     </div>
-
-    <h2 id="cns-ans">${CNS_PNS.ans.title}</h2>
-    <div class="card">
-        <p class="muted">${CNS_PNS.ans.intro}</p>
-        ${renderImagePlaceholder("autonomic-ns.jpg","Autonomic nervous system — sympathetic, parasympathetic, enteric")}
-        <div class="subregion-grid">
-            ${CNS_PNS.ans.sub.map(s=>`<div class="subregion-card" onclick="location.hash='#/cns/${s.id}'"><h4>${s.name}</h4><p>${s.brief}</p></div>`).join("")}
-        </div>
-    </div>
+  `).join('')}
+</div>
     `;
 }
 
@@ -5809,6 +5988,1432 @@ const CNS_DETAILS = {
     {h:"Importance", p:"Capable of independent reflex function (the 'second brain'). Modulated by the parasympathetic and sympathetic systems."},
     {img:"enteric.jpg", caption:"Enteric nervous system layers"},
   ]},
+
+"neural-tube-development":{parent:"spinal",title:"Neural tube development & vesiculation",
+  body:[
+    {h:"Origin (week 3)", p:"Notochord & prechordal mesoderm release growth factors &rarr; ectoderm thickens (proliferation) &rarr; forms the neural plate (pseudostratified columnar neuroectoderm)."},
+    {h:"Neurulation", p:"Lateral edges of plate elevate as neural folds, with the depressed midline forming the neural groove. Folds approach midline, fuse &rarr; neural tube (closure complete by day 21)."},
+    {h:"Neuropores", p:"Anterior (cranial) neuropore closes day 25; posterior (caudal) neuropore closes day 27."},
+    {h:"Primary vesicles (weeks 4–5)", list:[
+      "Prosencephalon (forebrain) &rarr; Telencephalon (cerebral hemispheres) + Diencephalon (with optic outgrowth)",
+      "Mesencephalon (midbrain) &rarr; remains as midbrain",
+      "Rhombencephalon (hindbrain) &rarr; Metencephalon (pons + cerebellum) + Myelencephalon (medulla)"
+    ]},
+    {h:"Flexures", list:[
+      "Cephalic flexure — at midbrain",
+      "Cervical flexure — at hindbrain–spinal cord boundary",
+      "Pontine flexure — between metencephalon and myelencephalon"
+    ]},
+    {h:"Wall structure after closure", list:[
+      "Neuroepithelial cells &rarr; neuroblasts &rarr; mantle layer (future grey matter)",
+      "Basal plates (ventral) &rarr; motor (somatic + visceral efferent groups)",
+      "Alar plates (dorsal) &rarr; sensory (somatic + visceral afferent groups)",
+      "Sulcus limitans — groove between basal and alar plates",
+      "Roof plate + floor plate — pathways for crossing fibres, no neuroblasts",
+      "Intermediate horn — only T1–T12 + L2–L3 (sympathetic outflow)"
+    ]},
+    {h:"Cord topographic shift", p:"At 3rd month spinal cord = full vertebral column. Vertebral column then grows faster &rarr; cord shifts cranially. At birth ends at L3; in adult ends at L1–L2. Creates obliquely descending nerve roots (cauda equina) and the filum terminale + coccygeal ligament."},
+    {img:"neural-tube.jpg", caption:"Neural tube development & vesiculation"}
+  ]
+},
+
+"neural-tube-defects":{parent:"spinal",title:"Neural tube closure defects (spina bifida + brain defects)",
+  body:[
+    {h:"Spina bifida", p:"Vertebral arch fusion failure (4th week)."},
+    {h:"Types of spina bifida", list:[
+      "Spina bifida occulta — split arches at S1–S2; skin-covered, often with hair tuft; usually asymptomatic",
+      "Meningocele — meninges herniate; cord stays inside",
+      "Myelomeningocele — meninges + cord protrude; lumbosacral; neurological deficits, no intellectual disability"
+    ]},
+    {h:"Brain defects", list:[
+      "Holoprosencephaly — loss of midline; brain & face malformation; severe = single eye + undivided cerebrum; corpus callosum + olfactory tracts often absent",
+      "Anencephaly — cranial neural tube fails to close; calvaria absent; brain tissue degenerates; only brainstem remains",
+      "Hydrocephalus — typically blockage of cerebral aqueduct; head enlarges (sutures unfused) due to CSF accumulation"
+    ]},
+    {img:"neural-tube-defects.jpg", caption:"Neural tube closure defects"}
+  ]
+},
+
+"spinal-cord-segments":{parent:"spinal",title:"Spinal cord segments, positional changes, cauda equina & Chipault's rule",
+  body:[
+    {h:"Topography", p:"Continuation of medulla oblongata (foramen magnum) &rarr; ends at L1–L2 in adults (L3 at birth) as the conus medullaris &rarr; filum terminale (anchors cord) &rarr; coccygeal ligament. Occupies upper ~2/3 of vertebral canal."},
+    {h:"Enlargements", list:[
+      "Cervical enlargement (C4–T1) — origin of brachial plexus",
+      "Lumbar enlargement (T11–S1) — origin of lumbosacral plexi"
+    ]},
+    {h:"External markings", p:"Anterior median fissure (deep, ventral); posterior median sulcus (dorsal)."},
+    {h:"Spinal nerves (31 pairs)", p:"8 cervical (1st pair between occiput & atlas) · 12 thoracic · 5 lumbar · 5 sacral · 1 coccygeal."},
+    {h:"Roots", p:"Anterior (motor) + posterior (sensory, with dorsal root ganglion) &rarr; unite at intervertebral foramen &rarr; spinal nerve &rarr; divides into anterior ramus (limbs, anterolateral trunk; forms plexuses) and posterior ramus (deep back muscles + skin over vertebral column; segmental)."},
+    {h:"Cauda equina", p:"L2–S5 nerve roots descending below the conus inside the dural sac; lumbar puncture safe target below L2."},
+    {h:"Chipault's rule (vertebra to cord segment offset)", list:[
+      "Cranial cervical vertebrae — same segment",
+      "Caudal cervical — segment + 1 (e.g. C7 vertebra &rarr; C8 segment)",
+      "Cranial thoracic — segment + 2 (T3 vertebra &rarr; T5 segment)",
+      "Caudal thoracic — segment + 3",
+      "T10–T12 vertebrae &rarr; lumbar segments (L1–L4)",
+      "T12–L1 vertebrae &rarr; L5–S2 segments",
+      "L1–L2 vertebrae &rarr; S3–S5 + coccygeal"
+    ]},
+    {img:"spinal-cord-segments.jpg", caption:"Spinal cord segments & positional changes"}
+  ]
+},
+
+"spinal-cord-cross-section":{parent:"spinal",title:"Spinal cord cross-section (gray + white matter, Rexed laminae)",
+  body:[
+    {h:"Gray matter — H-shape", p:"Anterior + posterior horns connected by gray commissure (with central canal). Lateral horn = only T1–L2 (sympathetic) and S2–S4 (parasympathetic). Largest at cervical & lumbosacral enlargements."},
+    {h:"Anterior (motor) horn nuclei", list:[
+      "Medial motor neurons — axial muscles, neck, trunk (incl. intercostals + abdominals)",
+      "Central group — phrenic nucleus C3–C5 (diaphragm), accessory spinal nucleus C1–C5 (SCM + trapezius), Onuf's nucleus S2–S4 (external anal & urethral sphincters; erection/ejaculation muscles)",
+      "Lateral motor neurons — only in C5–T1 + L2–S3 — limb muscles (distal)"
+    ]},
+    {h:"Posterior (sensory) horn nuclei", list:[
+      "Posterior marginal nucleus (lamina I) — pain & temperature (A-delta fast pain)",
+      "Substantia gelatinosa of Rolandi (lamina II–III) — pain, temperature, touch (C-fibre slow pain); becomes spinal nucleus of CN V in medulla",
+      "Nucleus proprius (lamina IV) — 1st synapse of spinothalamic — touch, pain, temperature, vibration, proprioception",
+      "Nucleus dorsalis (Clarke's column, lamina VII core, C8–L3) — origin of spinocerebellar tracts"
+    ]},
+    {h:"Zona intermedia & lateral horn", p:"Intermediomedial nucleus (visceral efferent T1–L3, sympathetic). Lateral horn: intermediolateral cell column C8–L3 sympathetic preganglionics; S2–S4 parasympathetic preganglionics."},
+    {h:"Rexed laminae I–X", list:[
+      "I — apex of dorsal horn (spinothalamic; pain & temperature)",
+      "II + III — interneurons + 1st synapse of spinothalamic = substantia gelatinosa",
+      "IV + V — relay cells; origin of spinothalamic, spino-reticular, spino-tectal tracts",
+      "VI — origin of spinocerebellar + spino-olivary (proprioception); contains nucleus dorsalis",
+      "VII — largest; receives most descending tracts; contains interneurons",
+      "VIII — motor neurons + interneurons; vestibulospinal + reticulospinal tracts terminate here",
+      "IX — alpha motor neurons (limb movement); lateral motor nucleus",
+      "X — surrounds central canal; decussating fibres"
+    ]},
+    {h:"White matter", list:[
+      "Posterior funiculus — only ascending; highly myelinated (gracilis + cuneatus)",
+      "Anterior + lateral funiculi — both ascending and descending",
+      "Tract types: Ascending (sensory) · Descending (motor) · Intersegmental · Association · Commissural"
+    ]},
+    {img:"spinal-cord-cross-section.jpg", caption:"Spinal cord cross-section"}
+  ]
+},
+
+"ascending-tracts":{parent:"spinal",title:"Ascending tracts (overview + three-neuron rule)",
+  body:[
+    {h:"Three-neuron sensory pathway", list:[
+      "1st-order — dorsal root ganglion (PNS) &rarr; enters cord",
+      "2nd-order — dorsal horn (or medullary nucleus) &rarr; crosses",
+      "3rd-order — thalamus &rarr; sensory cortex"
+    ]},
+    {h:"Spinothalamic tracts", list:[
+      "Anterior spinothalamic (anterior column) — light touch & pressure; crosses in cord &rarr; spinal lemniscus",
+      "Lateral spinothalamic (lateral column) — pain & temperature; crosses in cord &rarr; spinal lemniscus",
+      "Spino-tectal (lateral) — spino-visual reflexes; crosses in cord &rarr; superior colliculus",
+      "Spinal lemniscus = anterior + lateral spinothalamic + spino-tectal; ascends together from medulla"
+    ]},
+    {h:"Other ascending tracts", list:[
+      "Spino-olivary (anterior + lateral) — cutaneous + proprioceptive; crosses in cord &rarr; inferior olive &rarr; cerebellum",
+      "Spino-reticular (lateral) — alertness; mostly uncrossed &rarr; reticular formation",
+      "Anterior spinocerebellar (lateral) — unconscious proprioception; crosses in cord, crosses back in cerebellum &rarr; superior cerebellar peduncle",
+      "Posterior spinocerebellar (lateral) — unconscious proprioception; uncrossed &rarr; inferior cerebellar peduncle"
+    ]},
+    {h:"Posterior column tracts", list:[
+      "Fasciculus cuneatus (posterior) — discrimination, vibration, conscious proprioception (upper limb + trunk); crosses in medulla",
+      "Fasciculus gracilis (posterior) — discrimination, vibration, conscious proprioception (lower limb + trunk); crosses in medulla"
+    ]},
+    {h:"Medial lemniscus", p:"Continuation of cuneatus + gracilis after their decussation in medulla &rarr; ascends to ventral posterolateral (VPL) thalamic nucleus &rarr; 3rd-order to postcentral gyrus."},
+    {img:"ascending-tracts.jpg", caption:"Ascending tracts overview"}
+  ]
+},
+
+"descending-tracts":{parent:"spinal",title:"Descending tracts (motor pathways)",
+  body:[
+    {h:"Three-neuron motor pathway", p:"Cortex (1st-order) &rarr; interneuron in ventral horn (2nd-order) &rarr; alpha-motor neuron (3rd-order) &rarr; muscle."},
+    {h:"Corticospinal tracts", list:[
+      "Lateral corticospinal (lateral column) — voluntary skilled limb movement; crosses at medullary pyramidal decussation (~75% of fibres)",
+      "Anterior corticospinal (anterior column) — voluntary axial trunk movement; crosses at level of synapse in cord (primitive system)"
+    ]},
+    {h:"Brainstem motor tracts", list:[
+      "Tecto-spinal (anterior) — head/neck reflex movements to visual & auditory stimuli; crosses in midbrain",
+      "Vestibulo-spinal (anterior) — extensor (anti-gravity) tone, balance; uncrossed (lateral vestibular nucleus)",
+      "Reticulo-spinal (anterior + lateral) — alpha/gamma motor neuron activity; mostly uncrossed",
+      "Rubro-spinal (lateral) — facilitates flexors, inhibits extensors (cerebellar indirect pathway); crosses in midbrain (red nucleus)",
+      "Interstitio-spinal (anterior) — eye–head/neck coordination; uncrossed; from interstitial nucleus of Cajal",
+      "Olivo-spinal (anterior) — from inferior olivary nucleus (medulla); existence sometimes disputed"
+    ]},
+    {img:"descending-tracts.jpg", caption:"Descending tracts (motor pathways)"}
+  ]
+},
+
+"medulla-oblongata":{parent:"brain",title:"Medulla oblongata (external + internal structure)",
+  body:[
+    {h:"External anatomy", list:[
+      "Connects pons (pontomedullary sulcus, sup) with spinal cord (pyramidal decussation, inf). Conical shape.",
+      "Pyramids — paired anterior swellings lateral to anterior median fissure; ~75% of fibres cross at decussation of the pyramids",
+      "Anterior external arcuate fibres — pass posterolaterally to cerebellum from arcuate nuclei",
+      "Olives — paired swellings posterolateral to pyramids; contain inferior olivary nuclei",
+      "CN XII (hypoglossal) rootlets — arise from ventrolateral sulcus",
+      "CN IX, X, XI (cranial roots) — arise in groove between olive and inferior cerebellar peduncle",
+      "Cuneate + gracile tubercles — posterior; formed by underlying nuclei"
+    ]},
+    {h:"Cross-section 1: decussation of pyramids", p:"Corticospinal fibres cross to lateral corticospinal tract; gracilis + cuneatus ascend; spinal nucleus of CN V continues; posterior + anterior spinocerebellar tracts; lateral spinothalamic tract visible."},
+    {h:"Cross-section 2: decussation of medial lemnisci", p:"Internal arcuate fibres emerge from gracilis + cuneatus nuclei &rarr; cross &rarr; form medial lemniscus ascending through medulla, pons, midbrain. Spinal lemniscus lateral."},
+    {h:"Cross-section 3: through the olives", p:"Olivary nuclear complex (inferior olivary nucleus + medial + dorsal accessory); cochlear nuclear complex; vestibular nuclei; nucleus ambiguus (somatic motor of CN IX, X, XI); arcuate nuclei; medial lemniscus next to midline; medial longitudinal fasciculus connecting CN III, IV, VI, VIII."},
+    {h:"Cross-section 4: superior olive", p:"Same as level 3 except inferior vestibular nucleus replaced by lateral vestibular nucleus."},
+    {h:"Reticular formation centres", p:"Cardiac, vasomotor, respiratory, GIT centres within medullary reticular formation."},
+    {img:"medulla.jpg", caption:"Medulla oblongata"}
+  ]
+},
+
+"pons":{parent:"brain",title:"Pons (external + internal structure)",
+  body:[
+    {h:"External anatomy", list:[
+      "Anterior to cerebellum, between medulla (medullopontine sulcus) and midbrain",
+      "Transverse pontine fibres converge laterally &rarr; middle cerebellar peduncle",
+      "Basilar groove — for basilar artery on anterior surface",
+      "CN V (trigeminal) arises anterolaterally — sensory root (larger, lateral) + motor root (smaller, medial)",
+      "In groove between pons and medulla (medial to lateral): CN VI, VII, VIII arise",
+      "Posterior surface: facial colliculus (CN VII fibres looping around CN VI nucleus), locus coeruleus (stress/panic), area vestibuli (vestibular nuclei)"
+    ]},
+    {h:"Internal — inferior section through facial colliculus", list:[
+      "Tegmentum: medial lemniscus; nucleus of CN VII whose fibres loop around abducens nucleus = internal genu; medial longitudinal fasciculus (beneath floor of 4th ventricle); trapezoid body (cochlear fibres decussate); spinal nucleus of CN V",
+      "Basilar part: pontine nuclei; transverse pontine fibres cross midline &rarr; contralateral cerebellum via middle cerebellar peduncle; intersect corticospinal + corticonuclear tracts"
+    ]},
+    {h:"Internal — superior section through trigeminal nucleus", p:"Additionally contains CN V nuclei — principal sensory nucleus (fine touch) + motor nucleus (muscles of mastication). Superior cerebellar peduncle posterolateral to trigeminal nuclei carrying anterior spinocerebellar tract fibres."},
+    {img:"pons.jpg", caption:"Pons — external and internal structure"}
+  ]
+},
+
+"midbrain":{parent:"brain",title:"Midbrain (mesencephalon — external + internal)",
+  body:[
+    {h:"External anatomy", list:[
+      "Connects pons + cerebellum with forebrain; ascends through tentorial notch",
+      "Posterior: 4 colliculi (paired superior + inferior); CN IV (trochlear) emerges below inferior colliculi — only CN to leave dorsal brainstem",
+      "Lateral: superior brachium (&rarr; lateral geniculate body); inferior brachium (&rarr; medial geniculate body)",
+      "Anterior: interpeduncular fossa; CN III (oculomotor) arises medial to each cerebral crus",
+      "Cerebral aqueduct runs through midbrain (3rd &rarr; 4th ventricle)"
+    ]},
+    {h:"Internal divisions", p:"Cerebral peduncle (anterior to aqueduct) split by substantia nigra into cerebral crus (corticospinal + corticonuclear in middle 2/3) + tegmentum. Tectum (posterior to aqueduct) = superior + inferior colliculi."},
+    {h:"Cross-section 1: through inferior colliculi", p:"Inferior colliculus receives lateral lemniscus terminals (auditory pathway). Trochlear nucleus in central gray. Decussation of superior cerebellar peduncles in tegmentum. Mesencephalic nucleus of CN V at lateral border of central gray."},
+    {h:"Cross-section 2: through superior colliculi", p:"Superior colliculus — visual reflexes. Pretectal nucleus — afferent end of pupillary light reflex. Oculomotor nucleus in central gray posterior to MLF. Red nucleus — large round mass (reddish from iron + vascularity); afferents from cerebral cortex, superior cerebellar peduncle, hypothalamus; efferents to spinal cord (rubrospinal), reticular formation, thalamus, substantia nigra."},
+    {img:"midbrain.jpg", caption:"Midbrain — external and internal"}
+  ]
+},
+
+"rhomboid-fossa":{parent:"brain",title:"Floor of 4th ventricle / rhomboid fossa",
+  body:[
+    {h:"Definition & borders", p:"Diamond-shape floor of the 4th ventricle. Borders of 4th ventricle: Sup — midbrain aqueduct; Inf — central canal of cord; Lateral — superior, middle, inferior cerebellar peduncles; Floor — posterior pons + posterior superior medulla; Roof — superior + inferior medullary vela."},
+    {h:"Connections", list:[
+      "Inferior — central canal",
+      "Superior — cerebral aqueduct",
+      "Foramen of Magendie (median) — cerebellomedullary cistern",
+      "Foramina of Luschka (lateral, paired) — cerebellopontine cisterns"
+    ]},
+    {h:"Surface structures (medial to lateral)", list:[
+      "Posterior median sulcus — midline",
+      "Medial eminence — lateral to midline",
+      "Facial colliculus — inferior swelling of medial eminence (CN VII fibres around CN VI nucleus)",
+      "Sulcus limitans — lateral to medial eminence",
+      "Locus coeruleus — superior end of sulcus limitans (norepinephrine, stress/panic)",
+      "Substantia ferruginea — within locus coeruleus (gray-blue pigmented cells)",
+      "Vestibular area — lateral to sulcus limitans (vestibular nuclei)",
+      "Stria medullaris — horizontal fibres from posterior median sulcus &rarr; cerebellum via inferior cerebellar peduncle"
+    ]},
+    {h:"Inferior triangles", list:[
+      "Hypoglossal triangle — medial; over hypoglossal nucleus",
+      "Vagal triangle — lateral; over dorsal vagal nucleus",
+      "Area postrema — between vagal triangle and lateral margin (chemoreceptor trigger zone — vomiting)"
+    ]},
+    {img:"rhomboid-fossa.jpg", caption:"Floor of 4th ventricle / rhomboid fossa"}
+  ]
+},
+
+"reticular-formation":{parent:"brain",title:"Reticular formation",
+  body:[
+    {h:"Definition", p:"Net-like structure of nerve cell bodies + fibres in the brainstem (medulla, pons, midbrain), strategically located next to important tracts and nuclei."},
+    {h:"Three longitudinal columns", list:[
+      "Median column — intermediate-sized neurons; raphe nuclei (serotonin; pain inhibition)",
+      "Medial column — large neurons; long connections",
+      "Lateral column — small neurons; connections to medial column"
+    ]},
+    {h:"Afferents", p:"Spinal cord (spino-reticular); cerebellum (cerebello-reticular); cerebral cortex (cortico-reticular); subthalamus; thalamus; hypothalamus; corpus striatum; limbic system; cranial nerve nuclei; medial lemniscus + spinothalamics."},
+    {h:"Efferents", p:"Cerebral cortex; spinal cord (reticulospinal); motor nuclei of cranial nerves; corpus striatum; cerebellum; substantia nigra; red nucleus; tectum; thalamus; subthalamus; hypothalamus."},
+    {h:"Functions", list:[
+      "Skeletal muscle control — reticulospinal modulates alpha + gamma motor neurons (tone, reflexes)",
+      "Emotion–facial expression linkage (limbic system bridge)",
+      "Modulation of somatic + visceral sensation (gating ascending tracts)",
+      "Endocrine influence (via hypothalamus); autonomic influence (sympathetic + parasympathetic outflows)",
+      "Reticular activating system — sensory input &rarr; cortex &rarr; wakefulness; ACh-rich",
+      "Raphe nuclei — serotonin &rarr; cognition, mood, sleep",
+      "Locus coeruleus — noradrenaline &rarr; sleep, cognition, mood",
+      "Respiratory (pneumotaxic) + cardiovascular centres in medullary reticular formation"
+    ]},
+    {img:"reticular-formation.jpg", caption:"Reticular formation"}
+  ]
+},
+
+"cerebellum-structure":{parent:"brain",title:"Cerebellum — structure, lobes, functional zones, nuclei",
+  body:[
+    {h:"Functions & overview", p:"Posture & balance, tone of muscles, coordination of movement. Works ipsilaterally. Located in posterior cranial fossa, beneath tentorium cerebelli, posterior to medulla, pons, and 4th ventricle."},
+    {h:"Three lobes", list:[
+      "Anterior lobe — superior surface; muscle tone; cerebral cortex connection. Separated from middle by primary fissure",
+      "Middle (posterior) lobe — largest; coordination; spinal cord connection. Separated from flocculonodular lobe by uvulonodular (posterolateral) fissures",
+      "Flocculonodular lobe — most primitive; balance; vestibular system connection"
+    ]},
+    {h:"Functional zones", list:[
+      "Vestibulocerebellum = flocculonodular lobe + lingula &rarr; vestibular nuclei &rarr; balance & ocular reflexes",
+      "Spinocerebellum = anterior lobe + accompanying vermis + pyramid + uvula &rarr; spinocerebellar tracts &rarr; proprioception",
+      "Cerebrocerebellum (largest) = middle/posterior lobe + part of vermis &rarr; planning, motor learning, coordination, visually guided movement"
+    ]},
+    {h:"Deep cerebellar nuclei (lateral to medial — 'Don't Eat Greasy Food')", list:[
+      "Dentate — largest",
+      "Emboliform",
+      "Globose",
+      "Fastigial — close to midline"
+    ]},
+    {h:"Cerebellar cortex (3 layers)", list:[
+      "Molecular (outer) — basket + stellate cells",
+      "Purkinje cell layer — Purkinje cells (dendrites into molecular; axons myelinated to deep nuclei)",
+      "Granular (inner) — granular cells + Golgi cells; granule cell axons enter molecular and bifurcate as parallel fibres"
+    ]},
+    {h:"Mechanism of cortex", list:[
+      "Climbing fibres (from inferior olive) — synapse with Purkinje dendrites; aspartate; 1 climbing fibre per Purkinje",
+      "Mossy fibres (all other afferents) — granular layer &rarr; synapse with granular cells; glutamate",
+      "Purkinje cells inhibit deep nuclei (GABA)",
+      "Inhibitory interneurons: basket + stellate inhibit Purkinje; Golgi inhibit granular",
+      "Net: incoming sensory excites deep nuclei &rarr; Purkinjes inhibit them shortly after &rarr; deep-nuclear efferents modulate coordination + muscle tone"
+    ]},
+    {img:"cerebellum.jpg", caption:"Cerebellum — structure and functional zones"}
+  ]
+},
+
+"cerebellar-afferents":{parent:"brain",title:"Cerebellar afferent connections",
+  body:[
+    {h:"From cerebral cortex", list:[
+      "Cortico-pontocerebellar — corticopontine fibres &rarr; corona radiata + internal capsule &rarr; pontine nuclei &rarr; transverse pontine fibres cross &rarr; contralateral cerebellar hemisphere via middle cerebellar peduncle",
+      "Cerebro-olivocerebellar — cortico-olivary &rarr; bilateral inferior olivary nuclei &rarr; olivocerebellar fibres cross &rarr; cerebellum via inferior cerebellar peduncle (form climbing fibres)",
+      "Cerebro-reticulo-cerebellar — cortico-reticular &rarr; reticular formation of pons + medulla (some cross) &rarr; reticulocerebellar via inferior cerebellar peduncle (ipsilateral)"
+    ]},
+    {h:"From spinal cord", list:[
+      "Posterior spinocerebellar (uncrossed) — unconscious proprioception from lower limb + trunk; nucleus dorsalis (Clarke C8–L3); ascends &rarr; inferior cerebellar peduncle &rarr; cerebellar cortex",
+      "Anterior spinocerebellar — unconscious proprioception trunk + lower + upper limb; most cross in cord; ascend through cord, medulla, pons &rarr; superior cerebellar peduncle &rarr; crossed fibres cross back (terminate ipsilaterally)"
+    ]},
+    {h:"Other afferent pathways", list:[
+      "Cuneo-cerebellar (uncrossed) — from nucleus cuneatus of medulla &rarr; inferior cerebellar peduncle &rarr; conscious proprioception upper limb + upper thorax",
+      "Vestibulo-cerebellar (uncrossed) — vestibular nerve fibres directly or via vestibular nuclei &rarr; inferior cerebellar peduncle &rarr; flocculonodular lobe",
+      "Small bundles from red nucleus + tectum"
+    ]},
+    {img:"cerebellar-afferents.jpg", caption:"Cerebellar afferent connections"}
+  ]
+},
+
+"cerebellar-efferents":{parent:"brain",title:"Cerebellar intrinsic + efferent connections + function",
+  body:[
+    {h:"Efferent pathways", list:[
+      "Cerebello-rubral — emboliform + globose nuclei &rarr; superior cerebellar peduncle &rarr; decussate at midbrain &rarr; contralateral red nucleus &rarr; rubrospinal tract &rarr; crosses again &rarr; ipsilateral spinal cord",
+      "Dento-thalamic — dentate nucleus &rarr; superior cerebellar peduncle &rarr; decussate &rarr; contralateral ventral lateral nucleus of thalamus &rarr; primary motor cortex. Net effect = ipsilateral side of body",
+      "Fastigial-vestibular — fastigial nucleus &rarr; bilateral lateral vestibular nuclei via inferior cerebellar peduncle &rarr; vestibulospinal (uncrossed) &rarr; ipsilateral extensor tone",
+      "Fastigial-reticular — fastigial nucleus &rarr; reticular formation (same side) via inferior cerebellar peduncle &rarr; reticulospinal"
+    ]},
+    {h:"Functional summary", list:[
+      "Receives cerebral cortex + spinal proprioception + vestibular afferents",
+      "Constantly compares cortex intended movement with actual proprioception",
+      "Corrects errors by adjusting alpha/gamma motor neuron firing through efferent pathways",
+      "Inhibits or facilitates antagonist muscle tone"
+    ]},
+    {img:"cerebellar-efferents.jpg", caption:"Cerebellar efferent connections"}
+  ]
+},
+
+"diencephalon":{parent:"brain",title:"Diencephalon — overview & subdivisions",
+  body:[
+    {h:"Definition & major parts", p:"Central inner core of the cerebrum. Forms boundaries of the 3rd ventricle. Four major parts: Thalamus · Subthalamus · Epithalamus · Hypothalamus."},
+    {h:"Surfaces", list:[
+      "Inferior (only exposed surface) — optic chiasm &rarr; optic tract; infundibulum + tuber cinereum + median eminence; mammillary bodies",
+      "Superior — hidden by fornix; roof of 3rd ventricle (ependyma) covered by tela choroidea &rarr; choroid plexus of 3rd ventricle",
+      "Lateral — internal capsule",
+      "Medial = lateral wall of 3rd ventricle; thalamus (sup) + hypothalamus (inf) separated by hypothalamic sulcus"
+    ]},
+    {h:"Subthalamus", p:"Narrow gray strip below thalamus, between thalamus and midbrain tegmentum. Contains subthalamic nuclei, zona incerta, and key white matter fields: fasciculus thalamicus (H1), fasciculus lenticularis (H2), ansa lenticularis, fasciculus subthalamicus."},
+    {h:"Epithalamus", list:[
+      "Habenular nuclei — afferents from amygdala via stria medullaris thalami + olfactory; efferents to tectum, thalamus, reticular formation",
+      "Pineal gland — conical, projects backward; endocrine; melatonin (circadian rhythm, sleep, gonads)"
+    ]},
+    {img:"diencephalon.jpg", caption:"Diencephalon — overview"}
+  ]
+},
+
+"thalamus":{parent:"brain",title:"Thalamus — nuclei, connections, function",
+  body:[
+    {h:"Anatomy", p:"Large ovoid mass on each side of 3rd ventricle. Posteriorly = pulvinar. Lateral geniculate body = small elevation on lower aspect of pulvinar. Internal medullary lamina = Y-shaped white matter dividing thalamus into anterior, medial, and lateral parts."},
+    {h:"Anterior thalamic nuclei", p:"Receive mammillothalamic tract from mammillary nuclei. Functions: emotional tone, recent memory. Part of Papez circuit: hippocampus &rarr; fornix &rarr; mammillary body &rarr; anterior thalamic nuclei &rarr; cingulate &rarr; hippocampus."},
+    {h:"Medial thalamic nuclei", p:"Large dorso-medial nucleus + smaller nuclei. Two-way connections with prefrontal cortex + hypothalamus + other thalamic nuclei. Function: integrates somatic, visceral, olfactory + relates to emotional state; behaviour modulation."},
+    {h:"Lateral thalamic — ventral tier (cranial to caudal)", list:[
+      "Ventral anterior — motor relay from basal ganglia",
+      "Ventral lateral — cerebellar + basal ganglia &rarr; motor cortex",
+      "Ventral posterolateral (VPL) — body sensation (lemniscal + spinothalamic)",
+      "Ventral posteromedial (VPM) — head sensation (trigeminal + taste)",
+      "Medial geniculate — auditory relay",
+      "Lateral geniculate — visual relay"
+    ]},
+    {h:"Function", p:"Cell station for all main sensory pathways (except olfactory). Important relay for sensorimotor loops involving cerebellum + basal nuclei. Every thalamic nucleus projects to specific cortical area + receives reciprocal cortical fibres."},
+    {img:"thalamus.jpg", caption:"Thalamus — nuclei and connections"}
+  ]
+},
+
+"hypothalamus":{parent:"brain",title:"Hypothalamus — subdivisions, connections, function",
+  body:[
+    {h:"Size & importance", p:"0.3% of brain mass; controls ANS + endocrine system; site of converging/diverging pathways at the centre of the limbic system."},
+    {h:"Anteroposterior subdivisions", list:[
+      "Anterior (chiasmatic) region — anterior cerebral + anterior communicating aa.",
+      "Middle (tuberal) region — posterior communicating a.",
+      "Posterior (mammillary) region — posterior communicating, posterior cerebral, basilar aa."
+    ]},
+    {h:"Key nuclei (medial zone)", p:"Preoptic · Anterior · Suprachiasmatic · Paraventricular · Supraoptic · Dorsomedial · Ventromedial · Infundibular (arcuate) · Posterior. Medial forebrain bundle (MFB) in lateral region — massive bidirectional pathway connecting hypothalamus to limbic system + brainstem."},
+    {h:"Afferent connections", list:[
+      "Somatic + visceral via lemniscal collaterals + tractus solitarius + reticular formation",
+      "Visual — retina &rarr; suprachiasmatic",
+      "Olfactory — via medial forebrain bundle",
+      "Hippocampo-hypothalamic — fornix &rarr; mammillary body (main limbic output)",
+      "Amygdalo-hypothalamic — stria terminalis + ventral amygdaloid pathway",
+      "Cortico-hypothalamic — frontal lobe"
+    ]},
+    {h:"Efferent connections", list:[
+      "Descending fibres — brainstem + spinal cord ANS preganglionics (T1–L2 sympathetic; S2–S4 parasympathetic)",
+      "Mammillothalamic tract — mammillary body &rarr; anterior thalamic nuclei &rarr; cingulate (Papez)",
+      "Mammillo-tegmental tract — mammillary body &rarr; midbrain reticular tegmentum"
+    ]},
+    {h:"Functions", list:[
+      "Autonomic control — anterior + preoptic = parasympathetic responses; posterior + lateral = sympathetic responses",
+      "Endocrine control — releasing/inhibiting hormones to anterior pituitary",
+      "Neurosecretion — ADH (supraoptic) + oxytocin (paraventricular) &rarr; posterior pituitary",
+      "Temperature regulation — anterior dilates skin vessels + sweating; posterior vasoconstriction + inhibits sweating",
+      "Food + water intake — lateral = hunger + thirst centres; medial = satiety centre",
+      "Circadian rhythms — suprachiasmatic nucleus receives retina input &rarr; modulates nuclei &rarr; habenular nuclei + pineal"
+    ]},
+    {img:"hypothalamus.jpg", caption:"Hypothalamus — subdivisions and function"}
+  ]
+},
+
+"hypothalamo-hypophyseal":{parent:"brain",title:"Hypothalamo-hypophyseal regulation",
+  body:[
+    {h:"Pituitary gland", p:"Small oval-shape in hypophyseal fossa, covered by diaphragm sellae. Adenohypophysis (anterior) = endocrine epithelial cells + sinusoids. Neurohypophysis (posterior) = pituicytes (glia) + axon terminations from supraoptic + paraventricular nuclei."},
+    {h:"Pathway 1 — hypothalamo-hypophyseal tract", p:"Nerve fibres from supraoptic + paraventricular nuclei &rarr; axonal transport &rarr; terminate in neurohypophysis as Herring bodies. Releases ADH (vasopressin) + oxytocin directly into capillary network."},
+    {h:"Pathway 2 — portal system", p:"Neurosecretory cells release releasing/inhibiting hormones from arcuate nuclei &rarr; median eminence &rarr; primary capillary plexus (from superior hypophyseal a.) &rarr; portal venules &rarr; secondary capillary plexus in adenohypophysis &rarr; modulate hormone release."},
+    {h:"Blood supply", list:[
+      "Superior hypophyseal a. — median eminence + infundibular stalk &rarr; primary plexus",
+      "Inferior hypophyseal a. — neurohypophysis; anastomosis with adenohypophyseal capillaries",
+      "Drainage of secondary plexus &rarr; superficial veins &rarr; cavernous sinus"
+    ]},
+    {h:"Anterior pituitary hormones", p:"ACTH · FSH · GH · LH · MSH · PRL · TSH."},
+    {h:"Posterior pituitary hormones", list:[
+      "ADH (vasopressin) — from supraoptic nucleus; vasoconstrictor + antidiuretic; supraoptic = osmoreceptor",
+      "Oxytocin — from paraventricular nucleus; uterine smooth muscle contraction; milk letdown (myoepithelial contraction)"
+    ]},
+    {h:"Tuberoinfundibular pathway", p:"Dopamine neurons in arcuate nucleus &rarr; median eminence &rarr; regulate prolactin secretion (inhibition)."},
+    {img:"hypothalamo-hypophyseal.jpg", caption:"Hypothalamo-hypophyseal regulation"}
+  ]
+},
+
+"basal-ganglia":{parent:"brain",title:"Basal ganglia + Parkinsonism",
+  body:[
+    {h:"Components", list:[
+      "Corpus striatum = caudate nucleus + lentiform nucleus",
+      "Striatum = caudate + putamen",
+      "Lentiform nucleus = globus pallidus + putamen",
+      "+ Amygdaloid nucleus + Claustrum"
+    ]},
+    {h:"Caudate nucleus", p:"Large C-shaped, lateral to thalamus, related to lateral ventricle. Head — lateral wall of anterior horn; Body — floor of lateral ventricle; Tail — posteroinferiorly in roof of inferior horn &rarr; ends at amygdaloid nucleus. Nucleus accumbens = ventral striatum; reward centre (addiction)."},
+    {h:"Lentiform nucleus", p:"Paler globus pallidus (myelinated) + putamen. Medially: internal capsule (separates from thalamus + caudate); laterally: external capsule."},
+    {h:"Afferents to striatum", list:[
+      "Cortico-striate — from all cortex (largest from sensorimotor); ipsilateral; glutamate",
+      "Thalamo-striate — from intralaminar thalamic nuclei",
+      "Nigro-striate — from substantia nigra; dopamine",
+      "Brainstem-striatal — from raphe; serotonin"
+    ]},
+    {h:"Direct pathway", p:"Cortex &rarr; Striatum &rarr; GPi/SNr &rarr; Thalamus &rarr; Cortex: striatum inhibits GPi/SNr &rarr; disinhibits thalamus &rarr; cortex excitation &rarr; enables movement (positive feedback)."},
+    {h:"Indirect pathway", p:"Cortex &rarr; Striatum &rarr; GPe &rarr; Subthalamic n. &rarr; GPi &rarr; Thalamus &rarr; Cortex: striatum inhibits GPe &rarr; disinhibits subthalamic &rarr; excites GPi &rarr; inhibits thalamus &rarr; suppresses unwanted movements."},
+    {h:"Dopamine effect (nigrostriatal from SNc)", list:[
+      "D1 receptors (direct pathway) — excited by dopamine &rarr; enables movement",
+      "D2 receptors (indirect pathway) — inhibited by dopamine &rarr; less suppression of movement"
+    ]},
+    {h:"Parkinsonism", p:"Degeneration of SNc &rarr; reduced dopamine in striatum &rarr; hypersensitivity of dopamine receptors &rarr; no inhibition of indirect, no stimulation of direct &rarr; tremor (rest), postural disturbance, rigidity (cog-wheel/lead-pipe), akinesia (difficulty initiating movement)."},
+    {h:"Huntington's disease (AD)", p:"Degeneration of cortex–striatum &rarr; dementia + chorea (involuntary, quick, clumsy). Hyperkinetic disorders = indirect-pathway dysfunction."},
+    {img:"basal-ganglia.jpg", caption:"Basal ganglia — pathways and Parkinsonism"}
+  ]
+},
+
+
+"frontal-lobe-motor":{parent:"brain",title:"Frontal lobe — motor cortex (primary, secondary, supplementary, FEF, Broca's)",
+  body:[
+    {h:"Primary motor cortex (Brodmann 4)", p:"Precentral gyrus + paracentral lobule. Controls muscles contralaterally. Afferents from premotor, thalamus, basal ganglia, sensory cortex. Final station — executes movement. Motor homunculus — proportional to skill (paracentral lobule = vesical + anal sphincters)."},
+    {h:"Secondary motor (premotor) cortex (Brodmann 6)", p:"Anterior part of precentral gyrus + posterior superior/middle/inferior frontal gyri. Stores motor programs from past experience. Afferents from thalamus, sensory cortex, basal ganglia. Most output to primary motor cortex; some directly to brainstem + spinal cord."},
+    {h:"Supplementary motor cortex (Brodmann 6 medial)", p:"Paracentral lobule + anterior to it; planning + organizing movement."},
+    {h:"Frontal eye field (Brodmann 8)", p:"Middle frontal gyrus; afferents from medial dorsal thalamic nucleus + sensory cortex; efferents to superior colliculus + pretectal area; horizontal conjugate eye movements (mostly away from stimulus) + voluntary scanning."},
+    {h:"Cingulate premotor area (Brodmann 23, 24)", p:"Cingulate gyrus; connects limbic + motor (motions tied to emotions); efferents to spinal interneurons."},
+    {h:"Broca's area (Brodmann 44, 45)", p:"Inferior frontal gyrus (pars opercularis + triangularis); word formation via efferents to primary motor cortex (larynx, mouth, tongue, respiration). Usually dominant on left hemisphere. Lesion &rarr; expressive (Broca's) aphasia — patient understands and writes, but cannot produce speech."},
+    {img:"frontal-motor.jpg", caption:"Frontal lobe motor areas"}
+  ]
+},
+
+"prefrontal-cortex":{parent:"brain",title:"Frontal lobe — prefrontal cortex (non-motor)",
+  body:[
+    {h:"Location", p:"Greater parts of superior, middle, inferior frontal gyri + anterior part of cingulate gyrus + orbital gyri (Brodmann 9, 10, 11, 12). Granular cortex."},
+    {h:"Connections", p:"Bidirectional with many cortical areas, hypothalamus, thalamus, corpus striatum; cerebellum via pontine nuclei. Genu + minor forceps of corpus callosum connect both sides."},
+    {h:"Function", p:"Personality, depth of feelings, judgement, decision-making, planning."},
+    {h:"Lesion", p:"Personality changes (classic — Phineas Gage type)."},
+    {img:"prefrontal.jpg", caption:"Prefrontal cortex"}
+  ]
+},
+
+"parietal-lobe":{parent:"brain",title:"Parietal lobe — somatosensory cortex + association",
+  body:[
+    {h:"Primary somatosensory cortex (Brodmann 1, 2, 3)", p:"Postcentral gyrus + posterior paracentral lobule. Afferents from VPL + VPM thalamic nuclei. Efferents to primary motor cortex, basal ganglia, thalamus, sensory CN nuclei, dorsal horn, reticular formation. Mostly contralateral. Sensory homunculus — area proportional to receptor density."},
+    {h:"Secondary somatosensory cortex (Brodmann 5, 7)", p:"Superior parietal lobule. Interpretation + integration with past experience; stereognosis (size, texture, shape from touch)."},
+    {h:"Posterior parietal area", p:"Integrates proprioception, touch, pressure, visual &rarr; body image."},
+    {h:"Precuneus", p:"Medial parietal lobe, rostral to parieto-occipital sulcus; integrates multiple sensory inputs; connections with prefrontal cortex; consciousness, self-awareness, problem-solving, planning."},
+    {img:"parietal-lobe.jpg", caption:"Parietal lobe — somatosensory cortex"}
+  ]
+},
+
+"temporal-lobe":{parent:"brain",title:"Temporal lobe — auditory + Wernicke's",
+  body:[
+    {h:"Primary auditory cortex (Brodmann 41, 42)", p:"Heschl's gyrus on superior temporal gyrus. Afferents from medial geniculate body (MGB) of thalamus. Tonotopic — anterior part = low frequencies; posterior = high frequencies. Bilateral input but contralateral dominant."},
+    {h:"Secondary auditory cortex (Brodmann 22)", p:"Surrounds primary posteriorly. Integration with other senses + cortical speech areas."},
+    {h:"Wernicke's area (Brodmann 22 posterior)", p:"Superior temporal gyrus extending around posterior end of lateral sulcus. Afferents from auditory cortex + visual cortex. Efferents to Broca's via arcuate fasciculus. Understanding of written + spoken language. Dominant hemisphere (typically left). Lesion &rarr; receptive (Wernicke's) aphasia — patient cannot understand language; produces fluent but nonsensical speech without awareness of error."},
+    {img:"temporal-lobe.jpg", caption:"Temporal lobe — auditory and Wernicke's area"}
+  ]
+},
+
+"occipital-lobe":{parent:"brain",title:"Occipital lobe + visual cortex",
+  body:[
+    {h:"Primary visual cortex (V1, Brodmann 17)", p:"Banks of calcarine sulcus; granular cortex; contains the stria of Gennari. Afferents from lateral geniculate body (LGB). Receives ipsilateral temporal retina + contralateral nasal retina. Inferior visual field &rarr; superior visual cortex; macula = posterior visual cortex; periphery = anterior visual cortex."},
+    {h:"Secondary visual cortex (Brodmann 18, 19)", p:"Surrounds V1; afferents from V1 + thalamus + cortex; connects new visual info with past experience."},
+    {h:"Occipital eye field", p:"Within secondary visual cortex; connected to contralateral OEF + superior colliculus; unconscious/reflexive conjugate eye movement following objects (compare with frontal eye field — voluntary)."},
+    {img:"occipital-lobe.jpg", caption:"Occipital lobe — visual cortex"}
+  ]
+},
+
+"other-cortical-areas":{parent:"brain",title:"Other cortical areas (gustatory, vestibular, insula) + association areas + cerebral dominance",
+  body:[
+    {h:"Gustatory area (Brodmann 43)", p:"Inferior part of postcentral gyrus + superior wall of lateral sulcus + adjoining insula. Solitary nucleus &rarr; VPM thalamus &rarr; here."},
+    {h:"Vestibular area", p:"Postcentral gyrus next to face area; head/neck position; eye + trunk muscle activity."},
+    {h:"Insula", p:"Cortex within lateral sulcus floor. Posterior = granular; anterior = agranular. Believed to plan movements for speech (and many other functions)."},
+    {h:"Three main association regions", list:[
+      "Anterior temporal area — stores past sensory experiences",
+      "Posterior parietal area — integrates proprioception + touch + pressure + visual &rarr; stereognosis + body image",
+      "Prefrontal cortex — personality + behaviour"
+    ]},
+    {h:"Cerebral dominance", p:"Hand control + speech + language are dominant on one hemisphere (left in most). Spatial perception, face recognition, music = non-dominant."},
+    {img:"other-cortex.jpg", caption:"Other cortical areas and association regions"}
+  ]
+},
+
+"white-matter-fibres":{parent:"brain",title:"White matter — association, commissural, projection fibres + internal capsule",
+  body:[
+    {h:"Commissural fibres", list:[
+      "Corpus callosum (largest) — rostrum (thin anterior end), genu (anterior), body (arches posteriorly), splenium (thick posterior end); forceps minor (frontal lobe), forceps major (occipital), radiation of corpus callosum, tapetum (roof + lateral wall of posterior horn)",
+      "Anterior commissure — connects 2 temporal lobes",
+      "Posterior commissure — pretectal area fibres for pupillary light reflex cross here",
+      "Fornix — myelinated fibres from hippocampus &rarr; mammillary bodies",
+      "Habenular commissure — connects habenular nuclei"
+    ]},
+    {h:"Association fibres (long fasciculi)", list:[
+      "Uncinate fasciculus — temporal lobe &rarr; inferior frontal lobe (motor speech)",
+      "Cingulum fasciculus — long curved, in cingulate gyrus &rarr; parahippocampal area",
+      "Superior longitudinal fasciculus (largest) — anterior frontal lobe &rarr; occipital + temporal lobes",
+      "Inferior longitudinal fasciculus — occipital &rarr; temporal",
+      "Vertical occipital fasciculus — within occipital lobe",
+      "Fronto-occipital fasciculus — frontal &rarr; occipital + temporal"
+    ]},
+    {h:"Internal capsule (projection fibres)", p:"White matter band between brainstem and cortex. Lateral to thalamus + caudate; medial to lentiform nucleus. Three parts: Anterior limb (lateral to head of caudate); genu; posterior limb (lateral to thalamus) — most posterior fibres = optic radiation + acoustic radiation. Ascending through corona radiata (all projecting fibres between cortex + internal capsule)."},
+    {h:"Septum pellucidum", p:"Between fornix + corpus callosum. 2 layers white + gray with central cavity. Partition between anterior horns of lateral ventricles."},
+    {img:"white-matter.jpg", caption:"White matter — fibre types and internal capsule"}
+  ]
+},
+
+"ventricles-csf":{parent:"brain",title:"Ventricles, CSF circulation, hydrocephalus",
+  body:[
+    {h:"Ventricle connections", list:[
+      "3rd &rarr; lateral ventricles via interventricular foramina of Monro",
+      "3rd &rarr; 4th ventricle via cerebral aqueduct of Sylvius",
+      "4th &rarr; central canal of spinal cord"
+    ]},
+    {h:"Lateral ventricles", p:"C-shaped, in each hemisphere. Body (parietal); Anterior (frontal) horn; Posterior (occipital) horn; Inferior (temporal) horn. Roof = corpus callosum; floor + lateral = caudate + thalamus; medial = septum pellucidum."},
+    {h:"3rd ventricle", p:"Between two thalami. Lateral wall = medial thalamus (sup) + hypothalamus (inf) separated by hypothalamic sulcus. Interthalamic adhesion crosses interior. Floor = optic chiasm, infundibulum, tuber cinereum, mammillary bodies, midbrain tegmentum. Recesses: supraoptic, infundibular, pineal, suprapineal."},
+    {h:"4th ventricle", p:"Between pons + superior medulla anteriorly, cerebellum posteriorly. Foramen of Magendie (median) &rarr; cerebellomedullary cistern. Foramina of Luschka (lateral, paired) &rarr; cerebellopontine cisterns."},
+    {h:"CSF", list:[
+      "Volume — 150 mL; clear, like blood but 1/2 glucose, very few cells (only lymphocytes)",
+      "Functions: cushion + buoyancy, metabolism support, hormone transport",
+      "Production — 0.5 mL/min via choroid plexus (each ventricle) + ependymal cells",
+      "Circulation: lateral ventricle &rarr; interventricular foramen &rarr; 3rd ventricle &rarr; cerebral aqueduct &rarr; 4th ventricle &rarr; Magendie + Luschka &rarr; subarachnoid space",
+      "Reabsorption — arachnoid granulations into dural sinuses (mainly superior sagittal sinus)"
+    ]},
+    {h:"Hydrocephalus", list:[
+      "Communicating hydrocephalus — flow between ventricles + subarachnoid OK; problem beyond",
+      "Non-communicating — block between choroid plexus and subarachnoid (e.g. aqueductal stenosis)",
+      "Hydrocephalus ex vacuo — ventricular expansion after brain atrophy (Alzheimer's, etc)",
+      "Treatment: address cause; ventriculoperitoneal shunt for drainage"
+    ]},
+    {img:"ventricles.jpg", caption:"Ventricles and CSF circulation"}
+  ]
+},
+
+"spinal-meninges":{parent:"spinal",title:"Spinal meninges, cord vasculature, lumbar puncture",
+  body:[
+    {h:"Three meninges", list:[
+      "Dura mater — most external; foramen magnum &rarr; filum terminale; epidural space (loose CT + internal vertebral venous plexus); dural sleeve fuses with epineurium at IV foramen",
+      "Arachnoid mater — delicate; subarachnoid space contains CSF; lumbar cistern distal to conus medullaris (LP target + spinal anesthesia)",
+      "Pia mater — innermost; covers cord, roots, vessels; denticulate ligaments between roots &rarr; suspend cord"
+    ]},
+    {h:"Lumbar puncture", p:"Needle inserted to lumbar cistern below L1/L2. Cauda equina nerves move out of needle's way. Use: diagnose meningitis, subarachnoid haemorrhage; spinal anesthesia."},
+    {h:"Vasculature", list:[
+      "Anterior spinal a. — from vertebral aa.; runs in anterior median fissure",
+      "Posterior spinal aa. (paired) — from vertebral or PICA; anastomose in pia",
+      "Great anterior medullary a. of Adamkiewicz — from aorta; supplies anterior 2/3 of cord (lumbar enlargement)",
+      "Segmental spinal aa. — from deep cervical, intercostal, lumbar aa."
+    ]},
+    {h:"Venous drainage", p:"3 anterior + 3 posterior spinal vv. &rarr; anastomose along surface &rarr; drain into internal + external vertebral plexuses &rarr; systemic segmental veins; internal plexus also drains into dural sinuses superiorly."},
+    {img:"spinal-meninges.jpg", caption:"Spinal meninges and vasculature"}
+  ]
+},
+
+"brain-vasculature":{parent:"brain",title:"Brain vessels, blood-brain barrier, vascular occlusion / stroke",
+  body:[
+    {h:"Arterial supply — Circle of Willis", p:"2 internal carotid + 2 vertebral aa. &rarr; anastomose in Circle of Willis."},
+    {h:"Internal carotid a. branches", list:[
+      "Ophthalmic a. — through optic canal; supplies eye (central retinal a.) + orbital structures",
+      "Posterior communicating a. — runs above CN III; joins PCA",
+      "Anterior choroidal a. — lateral geniculate, crus cerebri, optic tract, internal capsule",
+      "Anterior cerebral a. — into longitudinal fissure; pericallosal a.; cortical brs. &rarr; medial cortex up to parieto-occipital sulcus",
+      "Middle cerebral a. — laterally in lateral sulcus; cortical brs. &rarr; entire lateral hemisphere except superior strip + occipital pole; central brs. (lateral lenticulostriate) &rarr; internal capsule, lentiform, caudate"
+    ]},
+    {h:"Vertebral/basilar branches", list:[
+      "PICA — inferior cerebellum + central cerebellar nuclei + 4th-ventricle choroid + medulla",
+      "AICA — anterior + inferior cerebellum",
+      "Labyrinthine a. — inner ear",
+      "Superior cerebellar a. — superior cerebellum + pineal",
+      "Posterior cerebral a. — visual cortex + inferolateral + medial temporal lobe; thalamus, lentiform, pineal, medial geniculate"
+    ]},
+    {h:"Venous drainage", list:[
+      "Superficial cerebral veins &rarr; dural sinuses (superior sagittal, cavernous, transverse, petrosal)",
+      "Great cerebral vein of Galen (unpaired) = R + L internal cerebral; under splenium &rarr; straight sinus"
+    ]},
+    {h:"Blood-brain barrier (BBB)", p:"Endothelial tight junctions + thicker basement membrane + astrocytic foot processes. Gases + water pass; glucose + electrolytes less; plasma proteins almost impermeable. No-BBB regions: pineal · neurohypophysis · wall of optic recess · tuber cinereum · area postrema."},
+    {h:"Vascular occlusion / stroke", list:[
+      "ACA occlusion — contralateral hemiparesis (foot/leg) + hemisensory loss + apathy + personality change",
+      "MCA occlusion — contralateral hemiparesis + hemisensory loss (face + upper limb), aphasia (if dominant), visual problems",
+      "PCA occlusion — visual deficits, memory impairment",
+      "Stroke types: thrombosis (local clot), embolism (clot from elsewhere), hypoperfusion, hemorrhage"
+    ]},
+    {img:"brain-vasculature.jpg", caption:"Brain vessels, BBB, and stroke"}
+  ]
+},
+
+"lemniscal-system":{parent:"brain",title:"Lemniscal (dorsal column) system + sensory loss",
+  body:[
+    {h:"Modalities", p:"Discriminative touch · vibration · conscious proprioception · two-point discrimination."},
+    {h:"Tracts in dorsal funiculus", list:[
+      "Fasciculus gracilis — entire cord; lower limb + lower trunk",
+      "Fasciculus cuneatus — only above T6; upper limb + upper trunk + neck"
+    ]},
+    {h:"Pathway (3 neurons)", list:[
+      "1st-order: DRG &rarr; axons enter dorsal horn, ascend in posterior columns",
+      "2nd-order: synapse in nucleus gracilis + nucleus cuneatus (medulla); axons = internal arcuate fibres &rarr; cross at decussation of medial lemnisci &rarr; form medial lemniscus",
+      "3rd-order: VPL nucleus of thalamus &rarr; axons through posterior limb of internal capsule + corona radiata &rarr; postcentral gyrus"
+    ]},
+    {h:"Sensory loss syndromes", list:[
+      "Brown-Sequard syndrome (hemisection): ipsilateral spastic paralysis + discriminative/vibration loss; contralateral pain + temperature loss (2–3 segments below)",
+      "Syringomyelia — central canal abnormality; bilateral pain + temperature loss in injured dermatomes; LMN weakness in hands",
+      "Dorsal column syndrome — loss of conscious proprioception + impaired coordination + discrimination + vibration",
+      "Epiconus syndrome (L4–S2) — lower limb paraparesis; loss of sensation below knee; automatic bladder",
+      "Conus syndrome (S3–S5) — sphincter loss; saddle sensory loss",
+      "Cauda equina syndrome — root lesion below L2; low back pain + sciatica; saddle sensory loss; bladder/bowel dysfunction"
+    ]},
+    {img:"lemniscal-system.jpg", caption:"Lemniscal (dorsal column) system"}
+  ]
+},
+
+"anterolateral-system":{parent:"brain",title:"Anterolateral system (spinothalamic, spinoreticular, spinotectal) + pain",
+  body:[
+    {h:"Lateral spinothalamic tract", p:"Pain + temperature. A-delta fibres — fast pain (sharp); myelinated. C fibres — slow pain (aching/burning); unmyelinated. 1st-order DRG &rarr; dorsal horn &rarr; ascends/descends 1–2 segments &rarr; synapse in substantia gelatinosa &rarr; 2nd-order axons cross obliquely via anterior gray + white commissures &rarr; contralateral lateral spinothalamic. In tract: sacral fibres lateral, cervical medial; temperature posterior to pain."},
+    {h:"Anterior spinothalamic tract", p:"Light touch + pressure. 1st-order DRG &rarr; posterolateral tract of Lissauer &rarr; synapse in substantia gelatinosa 1–2 segments away &rarr; 2nd-order axons cross &rarr; anterior spinothalamic. Same brain pathway as lateral."},
+    {h:"Related tracts", list:[
+      "Spinotectal tract — afferents for spino-visual reflexes; cross &rarr; superior colliculus",
+      "Spinoreticular tract — alertness; mostly uncrossed &rarr; reticular formation of medulla, pons, midbrain",
+      "Spino-olivary tract — double-cross; cutaneous + proprioceptive to cerebellum via inferior olivary nucleus"
+    ]},
+    {h:"Pain pathways", list:[
+      "Fast pain — A-delta; mechanical/thermal; ~0.1 s; localized; sharp; skin only. Glutamate. 2nd-order crosses &rarr; lateral spinothalamic &rarr; VPL &rarr; postcentral gyrus",
+      "Slow pain — C fibres; mechanical/thermal/chemical; ~1 s; aching/burning; every tissue. Glutamate + substance P. Multiple relays &rarr; lateral spinothalamic &rarr; reticular formation; poor localization",
+      "Cortical pain processing: postcentral gyrus (interpretation), cingulate gyrus (emotional), insular gyrus (visceral organ pain — autonomic)"
+    ]},
+    {img:"anterolateral-system.jpg", caption:"Anterolateral system and pain pathways"}
+  ]
+},
+
+"pyramidal-tract":{parent:"brain",title:"Corticospinal + corticonuclear tracts (pyramidal)",
+  body:[
+    {h:"Origin of corticospinal fibres", list:[
+      "1/3 from primary motor cortex",
+      "1/3 from secondary motor cortex",
+      "1/3 from parietal lobe (net: 2/3 precentral, 1/3 postcentral)"
+    ]},
+    {h:"Course", p:"Corona radiata &rarr; posterior limb of internal capsule (cervical-controlling fibres closest to genu) &rarr; middle 1/3 of crus cerebri &rarr; broken into bundles in pons by transverse pontocerebellar fibres &rarr; pyramids in medulla &rarr; 75% cross at pyramidal decussation."},
+    {h:"Tracts", list:[
+      "Lateral corticospinal (entire cord) &rarr; ventral horn interneurons &rarr; alpha + some gamma motor neurons",
+      "Anterior corticospinal (anterior column) — uncrossed; eventually cross in cord &rarr; bilateral axial muscle innervation"
+    ]},
+    {h:"Corticonuclear (corticobulbar) tract", p:"Head + neck movement. From primary motor cortex &rarr; corona radiata &rarr; genu of internal capsule &rarr; middle 1/3 of crus cerebri &rarr; pons + medulla pyramids &rarr; CN motor nuclei."},
+    {h:"Innervation patterns of cranial nuclei", list:[
+      "Bilateral innervation: oculomotor, trigeminal motor, superior facial nucleus, nucleus ambiguus",
+      "Contralateral (crossed): hypoglossal, abducens, inferior facial nucleus",
+      "Ipsilateral (uncrossed): trochlear nucleus",
+      "Clinical: forehead muscles bilaterally innervated &rarr; spared in central facial palsy (UMN); peripheral (LMN, CN VII) &rarr; entire ipsilateral hemiface"
+    ]},
+    {img:"corticospinal.jpg", caption:"Pyramidal tract — corticospinal and corticonuclear"}
+  ]
+},
+
+"extrapyramidal-motor":{parent:"brain",title:"Extrapyramidal motor pathways + UMN/LMN lesions + paralysis types",
+  body:[
+    {h:"Extrapyramidal tracts", list:[
+      "Reticulospinal — alpha + gamma tone; pontine reticulospinal (pons &rarr; anterior column, mostly uncrossed); medullary reticulospinal (medulla &rarr; lateral column; some cross)",
+      "Tectospinal — reflex postural movements to visual stimuli; from superior colliculus &rarr; cross &rarr; anterior column next to MLF &rarr; upper cervical interneurons",
+      "Rubrospinal — facilitates flexors, inhibits extensors; from red nucleus &rarr; cross &rarr; lateral column &rarr; ventral horn interneurons",
+      "Vestibulospinal — extensor (anti-gravity) tone; from lateral vestibular nucleus &rarr; uncrossed &rarr; anterior column",
+      "Descending autonomic tracts — hypothalamus &rarr; reticulospinal &rarr; lateral horns (sympathetic T1–L2; parasympathetic S2–S4)",
+      "Interstitio-spinal — uncrossed; from interstitial nucleus of Cajal; coordinates eye + head/neck via III, IV, VI nuclei"
+    ]},
+    {h:"UMN lesion (corticospinal)", list:[
+      "Babinski (dorsiflexion of great toe to lateral sole stroke)",
+      "Absent superficial abdominal reflexes",
+      "Absent cremasteric reflex (L1)",
+      "Loss of fine skilled movements (especially distal limbs)"
+    ]},
+    {h:"UMN lesion (extrapyramidal)", list:[
+      "Severe paralysis with little/no atrophy",
+      "Spasticity/hypertonicity; legs extended, arms flexed",
+      "Clonus (rhythmic involuntary contractions)",
+      "Clasp-knife phenomenon"
+    ]},
+    {h:"LMN lesions", list:[
+      "Flaccid paralysis + absent tendon reflexes",
+      "Atrophy, loss of reflexes, antagonist muscle contracture"
+    ]},
+    {h:"Paralysis types", list:[
+      "Hemiplegia — one side (trunk + UE + LE)",
+      "Monoplegia — single limb",
+      "Paraplegia — both UE or both LE",
+      "Quadriplegia — all 4 limbs"
+    ]},
+    {img:"extrapyramidal.jpg", caption:"Extrapyramidal pathways and lesion patterns"}
+  ]
+},
+
+"auditory-pathway":{parent:"brain",title:"Auditory pathway",
+  body:[
+    {h:"Stages", list:[
+      "Hair cells of cochlea &rarr; bipolar cells of spiral ganglion (1st-order) &rarr; cochlear nerve (CN VIII cochlear division) &rarr; cochlear nuclei (anterior + posterior, in medulla; 2nd-order)",
+      "2nd-order axons &rarr; mostly cross in trapezoid body &rarr; ascend in lateral lemniscus of opposite side; some ascend ipsilaterally; some synapse in superior olivary nucleus + nucleus of trapezoid body",
+      "Inferior colliculus (3rd-order) &rarr; fibres via inferior brachium &rarr; medial geniculate body of thalamus (4th-order)",
+      "4th-order axons &rarr; acoustic radiation (sublentiform part of internal capsule) &rarr; primary auditory cortex (Heschl's gyrus, superior temporal gyrus, Brodmann 41/42)"
+    ]},
+    {h:"Tonotopic arrangement", p:"Frequency mapped at every level (cochlea, cochlear nuclei, inferior colliculus, MGB, primary cortex)."},
+    {h:"Other features", list:[
+      "Bilateral input — primary cortex receives both ears, contralateral dominant",
+      "Non-lemniscal pathways — branches to reflexes, attention, integration, emotion",
+      "Descending auditory pathway — feedback fibres from each level to lower nuclei + organ of Corti (suppress/enhance sounds)"
+    ]},
+    {img:"auditory-pathway.jpg", caption:"Auditory pathway"}
+  ]
+},
+
+"visual-pathway":{parent:"brain",title:"Visual pathway, cortical areas, reflexes",
+  body:[
+    {h:"5-neuron visual pathway", list:[
+      "1st — photoreceptor (rod/cone) in retina",
+      "2nd — bipolar neuron in retina",
+      "3rd — ganglion cell (retina); axons form optic nerve at optic disc",
+      "4th — lateral geniculate body (LGB) of thalamus",
+      "5th — visual cortex"
+    ]},
+    {h:"Course & decussation", p:"Optic n. &rarr; optic canal &rarr; optic chiasm (junction of floor + anterior wall of 3rd ventricle). Nasal (medial) half retina + macula cones cross at chiasm. Temporal (lateral) half retina + macula continue ipsilateral. Optic tract &rarr; postero-laterally around cerebral peduncle &rarr; LGB &rarr; optic radiation &rarr; V1."},
+    {h:"Image projection", list:[
+      "Right visual field &rarr; projects on left nasal half + right temporal half of retina &rarr; left optic tract carries image of right field",
+      "Upper visual field &rarr; lower retina &rarr; lower visual cortex; lower visual field &rarr; upper retina &rarr; upper visual cortex",
+      "Macula &rarr; most posterior visual cortex; periphery &rarr; anterior"
+    ]},
+    {h:"Visual reflexes", list:[
+      "Pupillary light reflex — optic tract fibres &rarr; pretectal nucleus &rarr; both Edinger-Westphal nuclei &rarr; CN III preganglionics &rarr; ciliary ganglion &rarr; short ciliary nn. &rarr; sphincter pupillae. Direct + consensual.",
+      "Corneal reflex — V1 (cornea/conjunctiva) &rarr; trigeminal sensory nucleus &rarr; MLF &rarr; motor nucleus of CN VII &rarr; orbicularis oculi &rarr; blink",
+      "Accommodation reflex — optic n. &rarr; chiasm &rarr; tract &rarr; LGB &rarr; visual cortex &rarr; precentral nucleus &rarr; CN III + Edinger-Westphal (convergence + pupil constriction + lens thickening)",
+      "Pupillary skin reflex — pain stimulus &rarr; lateral horn &rarr; preganglionic sympathetic &rarr; superior cervical ganglion &rarr; dilator pupillae"
+    ]},
+    {img:"visual-pathway.jpg", caption:"Visual pathway and reflexes"}
+  ]
+},
+
+"olfactory-gustatory":{parent:"brain",title:"Olfactory + gustatory pathways",
+  body:[
+    {h:"Gustatory pathway", list:[
+      "Tongue innervation: CN VII (chorda tympani) &rarr; anterior 2/3; CN IX &rarr; posterior 1/3; CN X (superior laryngeal n.) &rarr; small areas anterior to epiglottis",
+      "1st-order — geniculate ganglion (CN VII), inferior/petrosal ganglion (CN IX), inferior/nodose ganglion (CN X)",
+      "2nd-order — nucleus solitarius (medulla)",
+      "3rd-order — VPM thalamus (some relayed via parabrachial nuclei in pons; cross midline)",
+      "4th-order — gustatory area of cortex (Brodmann 43)",
+      "Collaterals to: hypothalamus (endocrine), dorsal vagal nucleus (gastric secretion), salivatory nuclei (saliva)"
+    ]},
+    {h:"Olfactory epithelium", p:"Olfactory cells (bipolar, with apical olfactory vesicle + non-motile cilia = chemoreceptors) + supporting columnar cells + basal stem cells (replace olfactory cells every 2–3 months) + Bowman's glands (serous)."},
+    {h:"Olfactory pathway", list:[
+      "CN I (olfactory) — axons from basal end of olfactory cells; unmyelinated; pass through cribriform foramina &rarr; synapse in olfactory bulb",
+      "Olfactory bulb — mitral cells synapse with olfactory n. fibres = synaptic glomeruli",
+      "Olfactory tract (myelinated) &rarr; anterior perforated substance &rarr; splits: medial olfactory stria (through anterior commissure to contralateral bulb) + lateral olfactory stria (to olfactory cortex)",
+      "Primary olfactory cortex — periamygdaloid + piriform",
+      "Secondary olfactory cortex — entorhinal area (Brodmann 28) — appreciation of smell",
+      "Note: Olfaction is the only sensory modality NOT relayed by the thalamus."
+    ]},
+    {img:"olfactory-gustatory.jpg", caption:"Olfactory and gustatory pathways"}
+  ]
+},
+
+"limbic-system":{parent:"brain",title:"Limbic system",
+  body:[
+    {h:"Functions", p:"Emotion, behaviour, drive; memory; rich connections to hypothalamus mediate physiological + biochemical changes from emotional state."},
+    {h:"Components", list:[
+      "Subcallosal gyrus",
+      "Cingulate gyrus",
+      "Parahippocampal gyrus",
+      "Hippocampal formation (hippocampus, dentate gyrus, subiculum, parahippocampal gyrus)",
+      "Amygdaloid nucleus",
+      "Mammillary bodies",
+      "Anterior thalamic nucleus",
+      "Connecting pathways: alveus + fimbria of fornix, mammillothalamic tract, stria terminalis"
+    ]},
+    {h:"Hippocampal formation", list:[
+      "Hippocampus — curved gray elevation along entire floor of inferior horn of lateral ventricle; anterior end = pes hippocampus",
+      "Alveus — thin layer of white matter on ventricular surface; converges to form fimbria",
+      "Dentate gyrus — narrow band between fimbria + parahippocampal gyrus; posteriorly continues as indusium griseum",
+      "Parahippocampal gyrus — between hippocampal fissure + collateral sulcus"
+    ]},
+    {h:"Papez circuit", p:"Hippocampus &rarr; fornix &rarr; mammillary body &rarr; anterior thalamic nucleus (via mammillothalamic tract) &rarr; cingulate gyrus &rarr; parahippocampal area &rarr; hippocampus. Also: mammillo-tegmental tract &rarr; reticular tegmentum; hippocampal efferents &rarr; nucleus accumbens (motor responses)."},
+    {h:"Amygdaloid nucleus", p:"Anterior + superior to inferior horn of lateral ventricle. Provides affective connotation to experience (especially social). Efferents = stria terminalis &rarr; wall of lateral ventricle &rarr; hypothalamus."},
+    {h:"Functional summary", p:"Information from world &rarr; parieto-occipital association areas &rarr; frontal association (planned behaviour) + inferior temporal (meaning) &rarr; amygdala (motivation/emotion) + hippocampal formation (episodic memory) &rarr; motor (via nucleus accumbens) + autonomic (via hypothalamus)."},
+    {img:"limbic-system.jpg", caption:"Limbic system and Papez circuit"}
+  ]
+},
+
+"neurotransmitter-systems":{parent:"brain",title:"Neurotransmitters in the CNS — main brain chemical systems",
+  body:[
+    {h:"Cholinergic system (ACh)", list:[
+      "Production: forebrain cholinergic nuclei (FCN) = septal nuclei + nucleus basalis of Meynert (substantia innominata) + diagonal band of Broca; reticular formation (brainstem)",
+      "Projections: FCN &rarr; hippocampus, olfactory bulb, amygdala, cerebral cortex; reticular formation &rarr; thalamus",
+      "Function: memory, learning, motor, emotion, mood",
+      "Dysfunction: Alzheimer's disease"
+    ]},
+    {h:"Serotonergic system (5-HT)", list:[
+      "Production: raphe nuclei (Raphael system) of reticular formation",
+      "Projections: raphe &rarr; essentially all brain + cord",
+      "Function: thermoregulation, emotion + mood, sensory perception",
+      "Dysfunction: excess &rarr; confusion, unconsciousness, increased HR + BP; deficit &rarr; depression + sleep disorders"
+    ]},
+    {h:"Noradrenergic system (NE)", list:[
+      "Production: locus coeruleus in pons",
+      "Projections: locus coeruleus &rarr; cortex, cerebellum, amygdala, hippocampus, hypothalamus, thalamus, brainstem, spinal cord",
+      "Function: nociception, regulation of circulation + respiration, negative emotional memory, anxiety"
+    ]},
+    {h:"Dopaminergic system (DA)", list:[
+      "Production: substantia nigra pars compacta + ventral tegmental area",
+      "Projections: SNc &rarr; striatum (nigrostriatal); VTA &rarr; nucleus accumbens, amygdala, hippocampus, olfactory bulb, prefrontal cortex (mesolimbic + mesocortical)",
+      "Function: emotion + mood, motor function, reward, sexual arousal",
+      "Dysfunction: Parkinsonism (loss); schizophrenia (excess in mesolimbic); tuberoinfundibular pathway regulates prolactin"
+    ]},
+    {h:"GABAergic system (GABA)", p:"Inhibitory; local interneurons in cerebellar cortex, thalamus, hippocampus, cerebral cortex. Striatum + globus pallidus efferents are GABAergic."},
+    {h:"Glutamatergic system (Glu)", p:"Excitatory (most common neurotransmitter in brain). Production: all cortical descending pathways. Projections: associative cortical pathways; dentothalamic tract; many descending brainstem tracts."},
+    {img:"neurotransmitters.jpg", caption:"CNS neurotransmitter systems"}
+  ]
+},
+
+
+"neural-crest":{parent:"plexuses",title:"Neural crest derivatives",
+  body:[
+    {h:"Origin", p:"Cells at the lateral border of neuroectoderm dissociate during neural fold elevation/fusion &rarr; epithelium-to-mesenchymal transition &rarr; migrate to periphery &rarr; differentiate into many cell types."},
+    {h:"Cranial neural crest", list:[
+      "Migrates dorsolaterally &rarr; craniofacial mesenchyme",
+      "Cranial ganglia + glial cells",
+      "Craniofacial skeleton",
+      "Odontoblasts"
+    ]},
+    {h:"Trunk neural crest", list:[
+      "Dorsal pathway (through dermis into ectoderm via basal lamina holes) &rarr; melanocytes",
+      "Ventral pathway (through anterior half of each somite &rarr; sclerotome) &rarr; dorsal root ganglia · sympathetic ganglia · Schwann cells · adrenal medulla chromaffin cells"
+    ]},
+    {h:"Vagal + sacral neural crest", p:"Enteric ganglia · parasympathetic ganglia."},
+    {h:"Cardiac neural crest", p:"Musculo-connective tissue of large arteries · part of conotruncal septum."},
+    {img:"neural-crest.jpg", caption:"Neural crest derivatives"}
+  ]
+},
+
+"spinal-nerve-structure":{parent:"spinal",title:"Spinal nerve structure (rami, rami communicantes, autonomic fibres)",
+  body:[
+    {h:"Fibre types in peripheral nerves", list:[
+      "Somatomotor (efferent) — striated body wall + limb muscles; voluntary",
+      "Somatosensory (afferent) — body wall + limb skin + muscle; mechano-, exterocep-, propriocep-, thermoreceptors",
+      "Visceromotor (efferent / autonomic) — smooth muscle, myocardium, glands, blood vessels",
+      "Viscerosensory (afferent) — viscera; baroreceptors, chemoreceptors, wall tension, pain, chemical stimuli"
+    ]},
+    {h:"Roots and trunk", list:[
+      "Anterior (motor) root — visceromotor + somatomotor &rarr; efferent",
+      "Posterior (sensory) root with dorsal root ganglion — viscerosensory + somatosensory &rarr; afferent",
+      "Dorsal root ganglion (DRG) — cluster of pseudo-unipolar neuronal cell bodies in intervertebral foramen; from neural crest cells"
+    ]},
+    {h:"Branches of trunk", list:[
+      "Meningeal branch — to spinal meninges; recurrent sensory branch to annulus fibrosus",
+      "Anterior branch (ventral ramus) — motor + sensory to anterior + lateral trunk + limbs; forms plexuses",
+      "Posterior branch (dorsal ramus) — smaller; deep back muscles, gluteal region, paravertebral skin; segmental",
+      "White ramus communicans — myelinated preganglionic axons &rarr; sympathetic chain ganglion. Only T1–L2",
+      "Gray ramus communicans — non-myelinated postganglionic axons; loops back into spinal nerve. All spinal nerves."
+    ]},
+    {h:"Autonomic fibre distribution", list:[
+      "Sympathetic — cell bodies in lateral horn T1–L2; preganglionic short &rarr; paravertebral ganglia; postganglionic long. Cervical spinal nerves carry NO autonomic fibres of their own; rely on ascending sympathetics.",
+      "Parasympathetic — long preganglionic, short postganglionic; ganglia near or in target organ. Cranial CN III, VII, IX, X + S2–S4 (craniosacral outflow)",
+      "Visceral afferents — cell bodies in DRG or sensory cranial ganglia"
+    ]},
+    {img:"spinal-nerve.jpg", caption:"Spinal nerve structure"}
+  ]
+},
+
+"sacral-parasympathetic":{parent:"ans",title:"Sacral parasympathetic outflow",
+  body:[
+    {h:"Cell bodies & pathway", p:"Gray matter S2–S4 (no lateral horns at this level). Axons leave via anterior ramus (visceromotor fibres) &rarr; form pelvic splanchnic nerves."},
+    {h:"Targets", list:[
+      "Distal 1/3 transverse colon, descending colon, sigmoid colon, rectum",
+      "Detrusor (bladder wall) contraction; internal urethral sphincter inhibition",
+      "Inhibits internal anal sphincter",
+      "Genital — 'Point and Shoot': Para = erection (point); Sympa = ejaculation (shoot)"
+    ]},
+    {h:"Synapse location", p:"Synapse near viscera in hypogastric plexus or in cranial ganglia (submandibular, pterygopalatine, otic, ciliary). Afferent fibres — DRG or sensory cranial ganglia."},
+    {img:"sacral-parasympathetic.jpg", caption:"Sacral parasympathetic outflow"}
+  ]
+},
+
+"dermatomes-heads-zones":{parent:"spinal",title:"Segmental innervation, dermatomes, Head's zones (referred pain)",
+  body:[
+    {h:"Dermatomes", p:"A skin area mainly supplied by a single dorsal root spinal nerve = dermatome. No C1 dermatome — first cervical typically lacks sensory root (no DRG); 30 dermatomes (C2–Co1)."},
+    {h:"Key dermatomes", list:[
+      "C2 — posterior scalp",
+      "C7 — middle finger",
+      "T4–T5 — line through nipples",
+      "T10 — umbilicus",
+      "L1–L2 — boundary at groin"
+    ]},
+    {h:"Dermatome arrangement", list:[
+      "Thorax — disc-like from posterior to anterior median plane",
+      "Limbs — longitudinal along the limb",
+      "Face — by trigeminal divisions",
+      "Posterior scalp + neck — by cervical nerves"
+    ]},
+    {h:"Overlap and clinical significance", p:"Adjacent dermatome overlap — must damage 3 adjacent spinal nerves to fully lose sensation. Radicular pain radiates along distribution of a spinal nerve root (compression/inflammation/herniated disc); sciatica = most common."},
+    {h:"Head's zones (referred pain)", list:[
+      "Diaphragm (C3–C5) &rarr; shoulder tip",
+      "Heart (C8–T4) &rarr; angina referred to left arm/shoulder/jaw",
+      "Esophagus (T4–T9) &rarr; middle of sternum",
+      "Stomach (T6–T10) &rarr; epigastrium + left thorax",
+      "Liver, gallbladder (T7–T9) &rarr; right subcostal, under right scapula, neck",
+      "Appendix (T11–T12)",
+      "Kidney (T10–L1)",
+      "Uterine cervix + prostate (S2–S4)"
+    ]},
+    {img:"dermatomes-heads-zones.jpg", caption:"Dermatomes and Head's zones"}
+  ]
+},
+
+"sensory-receptors":{parent:"plexuses",title:"Sensory receptors",
+  body:[
+    {h:"By complexity", list:[
+      "Free nerve endings — minimal/no specialization (nociception, temperature)",
+      "Encapsulated nerve endings — terminal CT capsule (Pacinian, Meissner, Ruffini, Krause)",
+      "Sense organs — special senses (vision, hearing, smell, taste, equilibrium)"
+    ]},
+    {h:"By location", list:[
+      "Exteroceptors — surface of body; tactile, pain, temperature; vision, hearing, smell, taste",
+      "Interoceptors (visceroceptors) — viscera + blood vessels; with ANS sensory fibres",
+      "Proprioceptors — skeletal muscle, tendons, ligaments, joints; body position + physical state"
+    ]},
+    {h:"By stimulus type", list:[
+      "Mechanoreceptors — physical force (pressure, stretch, blood pressure)",
+      "Photoreceptors — light",
+      "Thermoreceptors — temperature",
+      "Chemoreceptors — dissolved chemicals (taste, smell, blood gases, pH)",
+      "Nociceptors — tissue damage / pain stimuli"
+    ]},
+    {img:"sensory-receptors.jpg", caption:"Sensory receptors"}
+  ]
+},
+
+"nerve-regeneration":{parent:"plexuses",title:"Peripheral nerve regeneration (Wallerian degeneration)",
+  body:[
+    {h:"Capacity", p:"PNS regenerates significantly (CNS regeneration is poor)."},
+    {h:"Mechanism", list:[
+      "After injury &rarr; pro-growth gene activation &rarr; reformation of growth cone",
+      "Schwann cells secrete chemotactic factors guiding regrowth",
+      "Phagocytes + Schwann cells + macrophages migrate to lesion &rarr; clear inhibitory debris"
+    ]},
+    {h:"Definitions", list:[
+      "Proximal segment — connected to cell body. Swells, retrograde degeneration; once cleared, sprouts axons with growth cones",
+      "Distal segment — undergoes Wallerian degeneration within hours: axons + myelin degenerate, but endoneurium remains as a tube directing regrowth"
+    ]},
+    {h:"Regeneration", list:[
+      "Proximal axons regrow if cell body intact + endoneurial tube contacted",
+      "Schwann cells form bands of Bungner along endoneurial tube — preserve channel + guide axon",
+      "Schwann cells + macrophages release neurotrophic factors",
+      "Growth rate — 2 mm/day (small nerves), 5 mm/day (large nerves)"
+    ]},
+    {img:"nerve-regeneration.jpg", caption:"Peripheral nerve regeneration — Wallerian degeneration"}
+  ]
+},
+
+"cervical-plexus-detail":{parent:"plexuses",title:"Cervical plexus",
+  body:[
+    {h:"Origin & location", p:"Anterior rami C1–C4. Anteromedial to levator scapulae + middle scalene; deep to SCM (in posterior triangle)."},
+    {h:"Motor branches", list:[
+      "C1–C2 fibres travel briefly with CN XII then split: Thyrohyoid n. (thyrohyoid m.) + Geniohyoid n. (geniohyoid m.) + Superior root of ansa cervicalis",
+      "C2–C3 form the inferior root of ansa cervicalis",
+      "Ansa cervicalis branches: Superior omohyoid n. (sup. belly) · Sternothyroid n. · Sternohyoid n. · Inferior omohyoid n. (inf. belly)",
+      "Phrenic n. (C3–C5) — diaphragm; injury above C5 &rarr; respiratory failure"
+    ]},
+    {h:"Sensory branches ('Lets Go To Sleep')", list:[
+      "C2–C3: Great auricular n. — parotid + mastoid skin",
+      "C2–C3: Lesser occipital n. — posterior scalp",
+      "C2–C3: Transverse cervical n. — anterior cervical skin (over SCM)",
+      "C3–C4: Supraclavicular nn. — lower lateral + anterior chest skin"
+    ]},
+    {h:"Erb's point (punctum nervosum)", p:"Sensory cervical nerves emerge here (middle posterior border of SCM); regional anaesthesia landmark."},
+    {img:"cervical-plexus.jpg", caption:"Cervical plexus"}
+  ]
+},
+
+"brachial-plexus-detail":{parent:"plexuses",title:"Brachial plexus — supraclavicular and infraclavicular",
+  body:[
+    {h:"Origin & organization ('Real Texans Drink Cold Beer')", p:"Anterior rami C5–T1. Roots &rarr; Trunks &rarr; Divisions &rarr; Cords &rarr; Branches."},
+    {h:"Trunks, divisions & cords", list:[
+      "Trunks: superior (C5+C6) · middle (C7) · inferior (C8+T1) — in scalene fissure",
+      "Divisions: anterior + posterior of each trunk (behind clavicle)",
+      "Cords: lateral (anterior divisions of upper + middle) · posterior (all 3 posterior divisions) · medial (anterior division of lower trunk)"
+    ]},
+    {h:"Supraclavicular branches", list:[
+      "Dorsal scapular n. (C5) — levator scapulae + rhomboids",
+      "Long thoracic n. (C5–C7) — serratus anterior",
+      "Suprascapular n. (C5–C6) — supraspinatus + infraspinatus",
+      "N. to subclavius (C5–C6)"
+    ]},
+    {h:"Terminal (infraclavicular) branch distributions", list:[
+      "Musculocutaneous — cutaneous: lateral forearm; motor: coracobrachialis, brachialis, biceps brachii",
+      "Axillary — cutaneous: posterior + lateral border of deltoid; motor: deltoid + teres minor",
+      "Radial — cutaneous: posterior + lateral arm + dorsum of hand + thumb; motor: triceps + anconeus + brachioradialis + extensors",
+      "Median — cutaneous: ventral + lateral 2/3 hand + digits 2–3; motor: pronator teres + pronator quadratus + FCR + PL + FDS + radial half FDP + thenar mm.",
+      "Ulnar — cutaneous: ventral + dorsal 1/3 of hand; motor: adductor pollicis + ulnar half FDP + FCU + hypothenar mm."
+    ]},
+    {img:"brachial-plexus.jpg", caption:"Brachial plexus"}
+  ]
+},
+
+"axillary-nerve":{parent:"plexuses",title:"Axillary nerve + palsy",
+  body:[
+    {h:"Origin & course", p:"Posterior cord of brachial plexus (C5–C6). Through quadrangular space (teres major, teres minor, humerus, long head of triceps brachii) with the posterior circumflex humeral a.; circles surgical neck of humerus."},
+    {h:"Motor & sensory", list:[
+      "Motor: deltoid + teres minor",
+      "Sensory: superior lateral cutaneous n. of arm &rarr; lateral shoulder ('regimental badge' area)"
+    ]},
+    {h:"Palsy", list:[
+      "Loss of arm abduction (deltoid)",
+      "Sensory loss superolateral arm",
+      "Prolonged &rarr; atrophy + loss of dome shape of shoulder",
+      "Common cause: humeral fracture (surgical neck) + shoulder dislocation"
+    ]},
+    {img:"axillary-n.jpg", caption:"Axillary nerve and palsy"}
+  ]
+},
+
+"radial-nerve":{parent:"plexuses",title:"Radial nerve + palsy",
+  body:[
+    {h:"Origin & course", p:"Posterior cord (C5–T1). Axillary region &rarr; exits via triangular interval &rarr; radial groove (radial canal) with deep brachial vessels (between medial + lateral heads of triceps) &rarr; laterally &rarr; between brachialis and brachioradialis &rarr; cubital fossa &rarr; divides into: Deep branch (PIN — posterior interosseous n.) through supinator canal; Superficial branch — sensory of dorsal hand + lateral 3.5 digits."},
+    {h:"Branches", list:[
+      "Muscular — triceps + posterior + lateral compartment of forearm",
+      "Inferior lateral brachial cutaneous n. — distal deltoid",
+      "Posterior cutaneous n. of arm — posterior arm",
+      "Posterior cutaneous n. of forearm — posterior forearm",
+      "Superficial branch — dorsum of hand + lateral 3.5 digits"
+    ]},
+    {h:"Palsy", list:[
+      "Proximal (before division) — wrist drop (loss of brachial extensors + wrist extensors)",
+      "Deep branch (PIN) — inability to extend thumb + digits",
+      "Common cause: humeral midshaft fracture (radial groove); 'Saturday night palsy' (axilla compression); crutch palsy"
+    ]},
+    {img:"radial-n.jpg", caption:"Radial nerve and palsy"}
+  ]
+},
+
+"median-nerve":{parent:"plexuses",title:"Median nerve + palsy",
+  body:[
+    {h:"Origin & course", p:"C5–T1, from lateral + medial cords. Initially anterolateral to axillary a.; lateral to brachial a. through arm; crosses brachial a. at mid-humerus to lie medial; through cubital fossa. Beneath bicipital aponeurosis; leaves cubital fossa between two heads of pronator teres. Gives anterior interosseous branch. In forearm between FDS and FDP. Through carpal tunnel (deep to flexor retinaculum)."},
+    {h:"Terminal branches", list:[
+      "Recurrent muscular branch — thenar mm. (APB, FPB, opponens pollicis)",
+      "Palmar digital nerves — 1st + 2nd lumbricals + sensory (lateral 3.5 digits)",
+      "Palmar cutaneous branch — exits 5 cm proximal to wrist above retinaculum (spared in carpal tunnel syndrome)"
+    ]},
+    {h:"Palsy", list:[
+      "Loss of thumb abduction + opposition (thenar paralysis)",
+      "Hand of Benediction — when asked to make a fist, digits 2–3 cannot flex at MCP/IP (FDS, lateral half FDP)",
+      "Carpal tunnel syndrome — pressure in carpal tunnel; thenar atrophy + sensory loss palmar lateral 3.5 digits; palmar cutaneous spared"
+    ]},
+    {img:"median-n.jpg", caption:"Median nerve and palsy"}
+  ]
+},
+
+"ulnar-nerve":{parent:"plexuses",title:"Ulnar nerve + palsy",
+  body:[
+    {h:"Origin & course", p:"Medial cord (C8–T1). Medial to axillary a. &rarr; medial to brachial a. &rarr; leaves anterior compartment by piercing medial intermuscular septum at mid-humerus &rarr; posterior to medial humeral epicondyle &rarr; enters forearm between two heads of FCU. In hand: passes superficial to flexor retinaculum through Guyon's canal &rarr; divides at pisiform."},
+    {h:"Branches", list:[
+      "Superficial terminal branch — palmar; digital sensory; supplies palmaris brevis",
+      "Deep terminal branch — through hypothenar (between FDM + ADM); runs with deep palmar arch; ends in adductor pollicis",
+      "Dorsal cutaneous branch — 5 cm proximal to wrist; medial dorsum of hand + medial 1.5 digits"
+    ]},
+    {h:"Palsy", list:[
+      "Claw hand — digits 4 + 5 flexed at IP joints, extended at MCP; patient can't open palm",
+      "Loss of sensation of medial 1.5 digits",
+      "Compression at cubital tunnel (medial epicondyle) or at wrist (Guyon's canal)",
+      "'Funny bone' hit at medial epicondyle"
+    ]},
+    {img:"ulnar-n.jpg", caption:"Ulnar nerve and palsy"}
+  ]
+},
+
+"head-neck-innervation":{parent:"plexuses",title:"Skin + motor innervation of head and neck",
+  body:[
+    {h:"Skin of head", list:[
+      "Face — trigeminal: V1 (ophthalmic), V2 (maxillary), V3 (mandibular)",
+      "Greater occipital n. — posterior rami of spinal nerves",
+      "Cervical plexus — lesser occipital + great auricular nn.",
+      "Ear — small contribution from auricular branch of CN X (Arnold's n.)"
+    ]},
+    {h:"Skin of neck", list:[
+      "Posterior — posterior rami of spinal nerves",
+      "Anterior — transverse cervical n. (cervical plexus)",
+      "Upper lateral — lesser occipital + great auricular nn.",
+      "Lower lateral — supraclavicular nn.",
+      "All sensory cervical plexus nerves emerge through superficial fascia at Erb's point (middle of posterior border of SCM)"
+    ]},
+    {img:"head-neck-innervation.jpg", caption:"Head and neck skin innervation"}
+  ]
+},
+
+"lumbar-plexus-detail":{parent:"plexuses",title:"Lumbar plexus",
+  body:[
+    {h:"Roots", p:"Anterior branches of T12–L4 (some include L5 contribution to lumbosacral trunk). Branches run posterior to kidneys."},
+    {h:"Branches (SIIGLOFL)", list:[
+      "Subcostal n. (T12) — runs along 12th rib; lateral cutaneous branch toward iliac crest; abdominal mm.",
+      "Iliohypogastric n. (L1) — anterior cutaneous br. (abdomen) + lateral cutaneous br. (upper lateral hip)",
+      "Ilioinguinal n. (L1) — between internal oblique + transversus abdominis &rarr; enters inguinal canal",
+      "Genitofemoral n. (L1–L2) — genital br. (inside spermatic cord through inguinal canal) + femoral br. (vascular space of subinguinal area)",
+      "Lateral femoral cutaneous n. (L2–L3) — through muscular space of subinguinal area",
+      "Femoral n. (L2–L4) — lateral to psoas major; muscular space; motor + cutaneous; gives saphenous n. through adductor canal",
+      "Obturator n. (L2–L4) — medial to psoas major; inferiorly &rarr; obturator canal; motor + cutaneous",
+      "Lumbosacral trunk (L4–L5 contribution) — joins sacral plexus"
+    ]},
+    {img:"lumbar-plexus.jpg", caption:"Lumbar plexus"}
+  ]
+},
+
+"femoral-nerve":{parent:"plexuses",title:"Femoral nerve detail",
+  body:[
+    {h:"Course", p:"Lateral to psoas major; muscular space of subinguinal area &rarr; lateral to psoas major."},
+    {h:"Branches in subinguinal area", list:[
+      "Motor — quadriceps femoris (rectus femoris + 3 vasti), sartorius, iliacus, pectineus",
+      "Sensory — anterior thigh",
+      "Saphenous n. (medial) — runs in adductor canal; cutaneous in leg + foot (medial)"
+    ]},
+    {img:"femoral-n.jpg", caption:"Femoral nerve detail"}
+  ]
+},
+
+"sacral-plexus-detail":{parent:"plexuses",title:"Sacral plexus + branches + sciatic palsy",
+  body:[
+    {h:"Roots", p:"L4–S4 (lumbosacral trunk + S1–S4)."},
+    {h:"Branches", list:[
+      "Superior gluteal n. (L4–S1) — through suprapiriform foramen; gluteus medius/minimus + TFL",
+      "Inferior gluteal n. (L5–S2) — through infrapiriform foramen; gluteus maximus",
+      "Posterior cutaneous femoral n. (S1–S3) — infrapiriform foramen; posterior thigh skin",
+      "Pudendal n. (S2–S4) — infrapiriform foramen &rarr; around ischial spine &rarr; lesser sciatic foramen &rarr; ischio-anal fossa (in pudendal canal). Branches: inferior rectal n., perineal n., dorsal n. of penis/clitoris",
+      "Sciatic n. (L4–S3) — through infrapiriform foramen; runs on posterior thigh &rarr; enters popliteal fossa &rarr; divides into common fibular + tibial nn."
+    ]},
+    {h:"Sciatic nerve divisions", list:[
+      "Common fibular (peroneal) n. — superficial fibular (fibularis longus + brevis; cutaneous lateral lower leg); deep fibular (extensors of foot: TA, EHL, EDL, EDB)",
+      "Tibial n. — sural n. (cutaneous posterior lateral leg + foot); motor to soleus, gastrocnemius, tibialis posterior, FHL, FDL; divides into medial + lateral plantar nn. + medial calcaneal n."
+    ]},
+    {h:"Common fibular palsy", list:[
+      "Foot drop — loss of extensors + lateral muscles",
+      "Most common LE palsy due to superficial location + proximity to knee",
+      "Cause — fibular fracture (proximal) or knee over-extension"
+    ]},
+    {img:"sacral-plexus.jpg", caption:"Sacral plexus and sciatic nerve palsy"}
+  ]
+},
+
+
+"trigeminal-v1-v2":{parent:"cn",title:"Trigeminal nerve V1 (ophthalmic) + V2 (maxillary) + sensory nuclei",
+  body:[
+    {h:"Trigeminal nerve overview", p:"Largest CN; spans whole brainstem + extends into upper cervical cord. Contains somatomotor + somatosensory fibres. Trigeminal ganglion in trigeminal impression. Branches: V1 ophthalmic (sensory only); V2 maxillary (sensory only); V3 mandibular (sensory + motor)."},
+    {h:"Sensory nuclei", list:[
+      "Spinal nucleus of CN V (medulla + cervical cord C1–C3) — crude touch, pain, temperature, pressure, proprioception of face",
+      "Principal sensory nucleus (pons) — fine touch, vibration, some proprioception (jaw)",
+      "Mesencephalic nucleus (most dorsal, mesencephalon) — proprioception of masticatory, mimetic, extra-ocular muscles. Feedback loop with motor nucleus &rarr; optimal mastication tension + protective inhibition"
+    ]},
+    {h:"Motor nucleus (pons)", p:"Innervates muscles of 1st pharyngeal arch: muscles of mastication + tensor tympani + tensor veli palatini + anterior belly of digastric + mylohyoid."},
+    {h:"Ophthalmic nerve (V1)", list:[
+      "Sensory: upper face, dura mater, orbit + content, part of nasal mucosa + paranasal sinuses",
+      "Course: trigeminal ganglion &rarr; lateral wall of cavernous sinus &rarr; divides into 3 main branches through SOF: frontal, lacrimal, nasociliary",
+      "Frontal n. &rarr; supratrochlear n. (medial eyelid skin + forehead) + supraorbital n. (upper eyelid + forehead)",
+      "Lacrimal n. &rarr; lacrimal gland + adjacent skin. Receives parasympathetic from pterygopalatine ganglion via zygomatic n. (V2)",
+      "Nasociliary n. &rarr; communicating br. with ciliary ganglion + long ciliary nn. + posterior ethmoidal n. + anterior ethmoidal n. (frontal sinus, nasal mucosa, skin of nose tip + dorsum) + infratrochlear n.",
+      "Damage &rarr; sensation loss in upper face. Test = corneal reflex"
+    ]},
+    {h:"Maxillary nerve (V2)", list:[
+      "Sensory: middle face, upper teeth, parts of nasal/oral/nasopharyngeal mucosa",
+      "Course: trigeminal ganglion &rarr; lateral wall of cavernous sinus &rarr; through foramen rotundum &rarr; pterygopalatine fossa",
+      "Zygomatic n. &rarr; through inferior orbital fissure; divides into zygomaticotemporal n. (temporal fossa) + zygomaticofacial n. (upper cheek); carries parasympathetics from pterygopalatine ganglion &rarr; lacrimal n.",
+      "Infraorbital n. &rarr; through inferior orbital fissure &rarr; gives posterior/middle/anterior superior alveolar nn. (teeth + gingiva) &rarr; exits infraorbital foramen &rarr; skin between lower eyelid + upper lip",
+      "Pterygopalatine ganglion &rarr; receives parasympathetic via greater petrosal n. (CN VII) + sympathetic via deep petrosal n. &rarr; join as n. of pterygoid canal (Vidian) &rarr; nasal, palatine, lacrimal, pharyngeal glands"
+    ]},
+    {img:"cn5-v1-v2.jpg", caption:"Trigeminal nerve V1 and V2"}
+  ]
+},
+
+"trigeminal-v3":{parent:"cn",title:"Trigeminal V3 (mandibular) + parasympathetic ganglia (submandibular, otic)",
+  body:[
+    {h:"V3 overview", p:"Mixed: GSE (motor) + GSA (sensory). Sensory: skin of lower face, oral mucosa, lower teeth + gingiva. Motor: muscles of 1st pharyngeal arch (incl. all muscles of mastication). Leaves trigeminal ganglion as sensory only; through foramen ovale gains somatomotor fibres from ventral pons."},
+    {h:"Anterior division (mostly motor + buccal)", list:[
+      "Deep temporal nn. (SVE) — innervate temporalis m.",
+      "Lateral + medial pterygoid nn. (SVE) — pierce muscles",
+      "Masseteric n. (SVE) — over mandibular notch &rarr; masseter (and TMJ)",
+      "Buccal n. (SS only) — small skin area + buccal mucosa"
+    ]},
+    {h:"Posterior division (mostly sensory)", list:[
+      "Auriculotemporal n. — encircles middle meningeal a.; receives GVM parasympathetic from lesser petrosal n. via otic ganglion (CN IX origin) &rarr; parotid innervation",
+      "Inferior alveolar n. — lower teeth; through mandibular canal &rarr; mental foramen &rarr; mental n. (chin skin); contains motor for mylohyoid + anterior belly of digastric",
+      "Lingual n. — somatosensory anterior 2/3 of tongue; associated with submandibular ganglion"
+    ]},
+    {h:"Submandibular ganglion", p:"Above submandibular gland on hyoglossus, below lingual n. Parasympathetic preganglionic from CN VII via chorda tympani &rarr; joins lingual n. &rarr; ganglion. Postganglionic &rarr; submandibular + sublingual + lingual glands. Sympathetic — from facial a. plexus, no synapse."},
+    {h:"Otic ganglion", p:"In infratemporal fossa, medial to V3, below foramen ovale. Parasympathetic preganglionic from CN IX via lesser petrosal n. &rarr; ganglion &rarr; postganglionic via auriculotemporal br. of V3 &rarr; parotid gland. Sympathetic — from middle meningeal a. plexus, pass through."},
+    {img:"cn5-v3.jpg", caption:"Trigeminal nerve V3 and parasympathetic ganglia"}
+  ]
+},
+
+"cn-3-4-6":{parent:"cn",title:"Oculomotor (CN III) + Trochlear (CN IV) + Abducens (CN VI)",
+  body:[
+    {h:"Oculomotor (CN III)", list:[
+      "GSE — LPS + 4 of 6 EOMs (medial, superior, inferior recti + inferior oblique)",
+      "GVE preganglionic — ciliary ganglion &rarr; postganglionic &rarr; sphincter pupillae (constriction) + ciliary muscle (accommodation)",
+      "Nuclei (midbrain): oculomotor nucleus (GSE) + Edinger-Westphal nuclei (GVE/parasympathetic)",
+      "Course: midbrain &rarr; interpeduncular fossa &rarr; lateral wall of cavernous sinus &rarr; SOF within tendinous ring &rarr; divides into superior division (LPS + superior rectus) + inferior division",
+      "Damage: ptosis (LPS), mydriasis (parasympathetic loss), inability to move eye, double vision, 'down + out' eyeball position"
+    ]},
+    {h:"Trochlear (CN IV)", list:[
+      "Only somatomotor; nucleus posterior midbrain, just below oculomotor",
+      "Function: superior oblique m.",
+      "Course: exits dorsal aspect of midbrain (only CN to do so); longest intracranial course of any CN; lateral wall of cavernous sinus &rarr; SOF (superolateral to tendinous ring, outside it) &rarr; SO"
+    ]},
+    {h:"Abducens (CN VI)", list:[
+      "Only somatomotor; nucleus pons, near median plane; function: lateral rectus",
+      "Course: emerges between pons + medulla &rarr; pierces dura &rarr; bends over petrous ridge of temporal bone &rarr; through cavernous sinus (within sinus, alongside ICA — vulnerable in cavernous sinus syndromes) &rarr; SOF &rarr; through tendinous ring &rarr; LR"
+    ]},
+    {h:"Annulus of Zinn (tendinous ring)", p:"Common origin of 4 rectus muscles at orbital apex around optic n. CN III (superior + inferior divisions), CN VI, nasociliary n., and ophthalmic v. pass through it."},
+    {img:"cn-3-4-6.jpg", caption:"Oculomotor, trochlear, and abducens nerves"}
+  ]
+},
+
+"facial-nerve-detail":{parent:"cn",title:"Facial nerve (CN VII)",
+  body:[
+    {h:"Overview & nuclei", p:"Origin: 2nd pharyngeal arch. Innervates all facial muscles + others. Two roots emerge from pons near cerebellopontine angle: Motor root (somatomotor) + Intermediate nerve of Wrisberg (visceromotor + special sensory). Motor nucleus (in pons) — fibres arch around abducens nucleus forming facial colliculus. Superior salivatory nucleus — parasympathetic for lacrimal, nasal, palatine, submandibular, sublingual glands. Gustatory nucleus (part of nucleus solitarius) — taste from chorda tympani."},
+    {h:"Course", p:"Facial nerve &rarr; internal acoustic meatus &rarr; geniculate ganglion (special sensory) &rarr; facial canal &rarr; stylomastoid foramen &rarr; enters parotid gland &rarr; splits &rarr; forms parotid plexus &rarr; 5 terminal branches."},
+    {h:"Branches within facial canal", list:[
+      "Greater petrosal n. — at geniculate ganglion; parasympathetic + taste; joins deep petrosal &rarr; n. of pterygoid canal &rarr; pterygopalatine ganglion &rarr; nasal, palatine, lacrimal, pharyngeal glands",
+      "N. to stapedius — mastoid part of canal",
+      "Chorda tympani — through tympanic cavity &rarr; exits via petrotympanic fissure &rarr; joins lingual n. (V3) &rarr; submandibular ganglion &rarr; submandibular + sublingual glands; also taste anterior 2/3 of tongue"
+    ]},
+    {h:"Branches after stylomastoid foramen", list:[
+      "Posterior auricular n. — mastoid; occipital br. (occipitofrontalis) + auricular br. (auricular muscles)",
+      "Digastric branch — posterior belly of digastric + stylohyoid"
+    ]},
+    {h:"Parotid plexus terminal branches (TZBMC)", list:[
+      "Temporal — frontalis, orbicularis oculi (forehead/temple)",
+      "Zygomatic — orbicularis oculi (lower) + zygomatic muscles + nose",
+      "Buccal — buccinator + orbicularis oris + zygomatic + cheek",
+      "Marginal mandibular — chin + lower lip muscles",
+      "Cervical — platysma"
+    ]},
+    {h:"Facial nerve palsy", list:[
+      "Central (UMN) — paralysis of inferior facial muscles contralaterally; forehead spared (bilateral cortical innervation)",
+      "Peripheral (LMN, after chorda tympani) — all facial muscles affected ipsilaterally",
+      "At geniculate ganglion — taste loss + lacrimal loss + salivation loss + motor loss",
+      "Causes: tumor, inflammation, virus (herpes), temporal bone fracture; idiopathic = Bell's palsy"
+    ]},
+    {img:"cn-7.jpg", caption:"Facial nerve (CN VII)"}
+  ]
+},
+
+"glossopharyngeal-nerve":{parent:"cn",title:"Glossopharyngeal nerve (CN IX)",
+  body:[
+    {h:"Function & nuclei", p:"Sensory to middle ear, parts of tongue + pharynx; motor to pharyngeal muscles. Nuclei (medulla, behind olive, above vagus): Nucleus ambiguus (somatomotor &rarr; stylopharyngeus); Inferior salivatory nucleus (parasympathetic GVM &rarr; parotid + buccal glands); Nucleus of solitary tract (viscerosensory + taste); Spinal nucleus of CN V (somatosensory)."},
+    {h:"Course", p:"Medulla oblongata &rarr; jugular foramen (forms superior ganglion above + inferior/petrosal ganglion below) &rarr; between ICA + IJV &rarr; enters pharyngeal wall &rarr; forms pharyngeal plexus."},
+    {h:"Branches", list:[
+      "Tympanic br. (Jacobson's n.) — through petrous temporal bone &rarr; middle ear &rarr; tympanic plexus (innervates tympanic cavity + auditory tube mucosa). Continues as lesser petrosal n. &rarr; foramen ovale &rarr; otic ganglion &rarr; parotid gland",
+      "Stylopharyngeus br. — to stylopharyngeus",
+      "Pharyngeal br. — joins vagus + sympathetic trunk &rarr; pharyngeal plexus (motor + sensory pharyngeal muscles, mucosa, soft palate)",
+      "Tonsillar brs. — palatine tonsil + palatoglossal/palatopharyngeal arches (sensory)",
+      "Lingual br. — sensory + taste posterior 1/3 of tongue + vallate papillae",
+      "Carotid br. (Hering's n.) — carotid sinus (baroreceptor — mechanoreceptors) + carotid body (chemoreceptor — O2/CO2). Sends info to nucleus solitarius."
+    ]},
+    {img:"cn-9.jpg", caption:"Glossopharyngeal nerve (CN IX)"}
+  ]
+},
+
+"vagus-nerve-detail":{parent:"cn",title:"Vagus nerve (CN X)",
+  body:[
+    {h:"Function & nuclei", p:"Strongest parasympathetic nerve; innervates head + thorax + abdomen. Nuclei (medulla): Nucleus ambiguus (somatomotor &rarr; soft palate, pharynx, larynx); Posterior nucleus of vagus (dorsal motor — parasympathetic GVM &rarr; smooth muscle + glands + myocardium + cardiac conducting system); Nucleus of solitary tract (viscerosensory + special sensory — taste from epiglottis, vallecula, root of tongue); Spinal nucleus of CN V (somatosensory: parts of auricle, EAM, dura, mucosa of larynx + pharynx)."},
+    {h:"Course", p:"Behind olive &rarr; jugular foramen &rarr; forms superior (jugular) ganglion + inferior (nodose) ganglion below &rarr; carotid sheath with IJV + ICA &rarr; divides into cervical, thoracic, abdominal parts."},
+    {h:"Cervical part", list:[
+      "Superior ganglion — somatosensory cell bodies; branches: meningeal br. (posterior cranial fossa); auricular br. (Arnold's n. — ear skin)",
+      "Pharyngeal brs. — pharyngeal plexus (with CN IX + sympathetic). Motor to soft palate + pharyngeal muscles",
+      "Superior laryngeal n. — external branch (mixed; cricothyroid + parasympathetic + viscerosensory to thyroid + parathyroid); internal branch (sensory; mucosa of larynx above vocal folds, root of tongue, epiglottis)",
+      "Recurrent laryngeal n. — left over aortic arch; right across right subclavian a.; terminal = inferior laryngeal n. (laryngeal muscles except cricothyroid + laryngeal mucosa below vocal folds)",
+      "Cardiac brs. — superior cervical + inferior cervical + thoracic cardiac &rarr; cardiac plexus"
+    ]},
+    {h:"Thoracic part", list:[
+      "Bronchial brs. — viscerosensory + visceromotor for bronchial mucosa + glands + smooth muscle",
+      "Pulmonary plexus — mixed (sympathetic + parasympathetic)",
+      "Esophageal plexus — visceromotor + viscerosensory for esophageal mucosa + glands + muscle"
+    ]},
+    {h:"Abdominal part", p:"Anterior + posterior gastric brs.; hepatic brs.; renal brs.; celiac brs. Plexuses for adrenals, kidneys, pancreas, ovaries, testes, small intestine, cecum, ascending colon, 2/3 transverse colon (until Cannon-Bohm point where sacral parasympathetic takes over)."},
+    {img:"cn-10.jpg", caption:"Vagus nerve (CN X)"}
+  ]
+},
+
+"cn-11-12":{parent:"cn",title:"Accessory (CN XI) + Hypoglossal (CN XII)",
+  body:[
+    {h:"Accessory (CN XI)", list:[
+      "Exclusively somatomotor; union of cranial + spinal roots",
+      "Cranial root — from nucleus ambiguus; emerges from anterior medulla; joins spinal root",
+      "Spinal root — from anterior gray of cord C1–C5; ascends through foramen magnum &rarr; joins cranial root in posterior cranial fossa",
+      "Both leave skull through jugular foramen &rarr; separate: internal (cranial) branch &rarr; joins vagus &rarr; adds SVE fibres to laryngeal innervation; external (spinal) branch &rarr; descends posterior to IJV &rarr; SCM (innervates) &rarr; posterior triangle &rarr; trapezius (innervates)",
+      "Lesion — head tilt + arm cannot be lifted above horizontal plane"
+    ]},
+    {h:"Hypoglossal (CN XII)", list:[
+      "Exclusively somatomotor; tongue muscles",
+      "Nucleus — hypoglossal nucleus in medulla; 10–15 rootlets fuse + exit through hypoglossal canal",
+      "Cervical contribution — C1 + C2 fibres join hypoglossal after canal exit (NOT hypoglossal fibres); from these joining fibres branches the superior root of deep ansa cervicalis",
+      "Innervation: all intrinsic tongue muscles + most extrinsic (genioglossus, hyoglossus, styloglossus). Palatoglossus &rarr; supplied by CN X"
+    ]},
+    {img:"cn-11-12.jpg", caption:"Accessory (CN XI) and Hypoglossal (CN XII)"}
+  ]
+},
+
+"cervical-thoracic-sympathetic":{parent:"ans",title:"Cervical + thoracic sympathetic system",
+  body:[
+    {h:"General pathway", p:"Sympathetic = thoracolumbar (T1–L2). Largest part of ANS. Cell bodies in lateral horn T1–L2. Myelinated preganglionic axons leave lateral horn via anterior root &rarr; white communicating br. &rarr; paravertebral ganglia of sympathetic trunk (in front of transverse processes)."},
+    {h:"Sympathetic trunk ganglia", list:[
+      "3 cervical",
+      "10–12 thoracic",
+      "4 lumbar",
+      "4 sacral",
+      "1 unpaired ganglion impar on coccyx",
+      "All connected by interganglionic branches"
+    ]},
+    {h:"Distribution patterns", list:[
+      "Synapse + return — gray ramus communicans (non-myelinated) &rarr; spinal nerve &rarr; smooth muscle of vessels, sweat glands, arrector pili, skin",
+      "Ascending/descending — fibres ascend in trunk to cervical ganglia (cervical spinal nerves carry NO autonomic fibres of their own); after synapse, post-ganglionic fibres enter cervical spinal nerve via gray ramus",
+      "Bypass — preganglionic fibres pass through ganglion without synapsing &rarr; form splanchnic nerves &rarr; synapse in prevertebral ganglia &rarr; post-ganglionic to viscera"
+    ]},
+    {h:"Cervical ganglia", list:[
+      "Superior cervical ganglion (SCG) — largest; at C2–C3. Postganglionic axons hitchhike on internal + external carotid aa. &rarr; meninges, eyes, glands of head. Gives superior cardiac n.",
+      "Middle cervical ganglion — smallest; at C6. Targets heart + neck",
+      "Inferior cervical ganglion — usually fused with 1st thoracic = stellate ganglion (cervicothoracic). Postganglionic plexuses around subclavian + vertebral aa.; gives inferior cardiac n. Subclavian ansa (loop) between middle + inferior cervical over subclavian a."
+    ]},
+    {h:"Upper thoracic ganglia (T1–T4)", p:"Heart, lungs, glands (submandibular, sublingual, parotid, lacrimal). Innervation reaches thorax via cardiopulmonary splanchnic nerves &rarr; cardiac plexus + pulmonary plexus + esophageal plexus."},
+    {img:"cervical-thoracic-sympathetic.jpg", caption:"Cervical and thoracic sympathetic system"}
+  ]
+},
+
+"abdominopelvic-sympathetic":{parent:"ans",title:"Abdominopelvic sympathetic system + splanchnic nerves",
+  body:[
+    {h:"Splanchnic nerves overview", p:"Pre-ganglionic fibres bypassing sympathetic trunk &rarr; synapse in prevertebral ganglia around aorta. All sympathetic origins = T1–L2; some ascend/descend."},
+    {h:"Thoracic splanchnic nerves", list:[
+      "Greater thoracic splanchnic (T5–T9) &rarr; celiac ganglia",
+      "Lesser thoracic splanchnic (T10–T11) &rarr; superior mesenteric + aorticorenal ganglia",
+      "Least thoracic splanchnic (T12) &rarr; aorticorenal ganglia"
+    ]},
+    {h:"Lumbar + sacral splanchnic", list:[
+      "Lumbar splanchnic (L1–L2) &rarr; inferior mesenteric ganglia",
+      "Sacral splanchnic (post-ganglionic, from sacral sympathetic chain) &rarr; superior hypogastric ganglia",
+      "Note: sacral splanchnic = sympathetic; pelvic splanchnic = parasympathetic. Do not confuse."
+    ]},
+    {h:"Post-ganglionic distribution", p:"Post-ganglionic fibres travel along blood vessels to target organs (e.g. liver &rarr; celiac trunk &rarr; common hepatic &rarr; proper hepatic &rarr; right + left hepatic branches; sympathetic from celiac plexus follows)."},
+    {img:"abdominopelvic-sympathetic.jpg", caption:"Abdominopelvic sympathetic system"}
+  ]
+},
+
+"cranio-sacral-parasympathetic":{parent:"ans",title:"Cranial + sacral parasympathetic system",
+  body:[
+    {h:"Pre-synaptic cell bodies", list:[
+      "Brainstem gray (cranial outflow)",
+      "Sacral cord S2–S4 (sacral outflow)"
+    ]},
+    {h:"Cranial outflow nuclei", list:[
+      "CN III — Edinger-Westphal nucleus",
+      "CN VII — superior salivatory + lacrimatory nuclei",
+      "CN IX — inferior salivatory nucleus",
+      "CN X — dorsal nucleus of vagus"
+    ]},
+    {h:"Mechanism", p:"Pre-synaptic fibre — very long; each synapses with ~3 post-synaptic via ACh. Ganglion — very close to or embedded in target organ. Post-synaptic fibre — very short; releases ACh."},
+    {h:"Cranial outflow targets", list:[
+      "CN III — ciliary ganglion &rarr; sphincter pupillae + ciliary muscle",
+      "CN VII: greater petrosal n. &rarr; pterygopalatine ganglion &rarr; lacrimal gland + nasal/palatine/pharyngeal glands; chorda tympani &rarr; submandibular ganglion &rarr; submandibular + sublingual glands",
+      "CN IX — lesser petrosal n. &rarr; otic ganglion &rarr; parotid (via auriculotemporal n. of V3)",
+      "CN X — cervical part &rarr; cardiac branches &rarr; heart; thoracic part &rarr; pulmonary plexus, esophageal plexus; abdominal part &rarr; vagal trunks &rarr; abdominal viscera + myenteric + submucosal plexi"
+    ]},
+    {h:"Sacral outflow", p:"Pre-synaptic from S2–S4 &rarr; pelvic splanchnic nerves &rarr; synapse in inferior hypogastric plexus or pelvic ganglia. Function: GIT past Cannon-Bohm point (descending colon, sigmoid, rectum, anus); bladder; erectile bodies + internal genitalia."},
+    {h:"Cannon-Bohm point", p:"Splenic flexure; border between cranial (vagal) and sacral parasympathetic territories."},
+    {img:"cranio-sacral-parasympathetic.jpg", caption:"Cranio-sacral parasympathetic system"}
+  ]
+},
+
+"abdominal-pelvic-plexuses":{parent:"ans",title:"Abdominal + pelvic autonomic plexuses + enteric nervous system",
+  body:[
+    {h:"Aortic abdominal plexus", p:"Surrounds abdominal aorta; splits into 2 iliac plexuses at aortic bifurcation. Sympathetic input from greater splanchnic (T5–T9), lesser splanchnic (T10–T11), least splanchnic (T12), lumbar splanchnic (L1–L2). Parasympathetic input from CN X (celiac, gastric, hepatic, renal brs.)."},
+    {h:"Subplexuses of aortic abdominal plexus", list:[
+      "Celiac plexus — around celiac trunk; right + left celiac ganglia; follow branches: hepatic (liver), splenic, pancreatic, renal + suprarenal (aorticorenal ganglia)",
+      "Superior mesenteric plexus — at origin of SMA; small intestine + large intestine from major duodenal papilla &rarr; left colic flexure (Cannon-Bohm). Superior mesenteric ganglion (unpaired) at origin of artery",
+      "Inferior mesenteric plexus — at level of IMA. Parasympathetic fibres from sacral. Innervates descending colon, sigmoid, rectal ampulla. Inferior mesenteric ganglion at origin of artery",
+      "Testicular/ovarian plexus — innervates gonads, follows vessels",
+      "Ureteric plexus — ureters"
+    ]},
+    {h:"Pelvic plexuses", list:[
+      "Superior hypogastric plexus (presacral n.) — continuation of abdominal aortic plexus &rarr; splits into right + left hypogastric nn.; lumbar + sacral splanchnic L4–S1",
+      "Inferior hypogastric plexus (pelvic plexus) — mixed; lateral to rectum into lesser pelvis; sympathetic (hypogastric n. + sacral splanchnic) + parasympathetic (pelvic splanchnic S2–S4)"
+    ]},
+    {h:"Pelvic sub-plexuses", list:[
+      "Rectal plexus — rectum",
+      "Vesical + ureteric plexus — bladder + pelvic ureter",
+      "Prostatic plexus — prostate, prostatic urethra, urethra, seminal gland",
+      "Deferential plexus — ductus deferens",
+      "Uterovaginal plexus — ovaries, uterus, vagina",
+      "Cavernous plexus of clitoris/penis — cavernous bodies"
+    ]},
+    {h:"Enteric nervous system", list:[
+      "From esophagus to anus",
+      "Submucosal (Meissner's) plexus — in submucosa; controls glands + intestinal blood supply",
+      "Myenteric (Auerbach's) plexus — between inner circular + outer longitudinal smooth muscle; controls peristalsis",
+      "Can act independently; uses CNS-like neurotransmitters; more neurons than spinal cord ('second brain')",
+      "Cells: unipolar + bipolar neurons + supporting cells (astrocyte-like, from neural crest)"
+    ]},
+    {img:"abd-pelvic-plexuses.jpg", caption:"Abdominal and pelvic autonomic plexuses"}
+  ]
+},
+
 };
 
 function viewCnsSub(id){

@@ -338,11 +338,11 @@ strong.li-label{background:none;color:var(--ink);font-weight:800;letter-spacing:
 /* CNS SVG hotspots reuse #aoBodySvg rules via id override */
 #cnsSvg{width:100%;height:100%;display:block;user-select:none}
 #cnsSvg .hot{
-    fill:rgba(91,142,248,.12);stroke:#4A7ED8;stroke-width:1;
-    cursor:pointer;transition:fill .18s,stroke .18s;
+    fill:rgba(91,142,248,.28);stroke:#3a6bd4;stroke-width:0.4;
+    cursor:pointer;transition:fill .18s;
 }
-#cnsSvg .hot:hover{fill:rgba(91,142,248,.42);stroke:#1a4fa0;stroke-width:1.5}
-#cnsSvg .hot.cns-active{fill:rgba(91,142,248,.55);stroke:#1a4fa0;stroke-width:1.8}
+#cnsSvg .hot:hover{fill:rgba(91,142,248,.6);stroke:#1a4fa0;stroke-width:0.55}
+#cnsSvg .hot.cns-active{fill:rgba(91,142,248,.72);stroke:#1a4fa0;stroke-width:0.6}
 #cnsSvg .plus{font-size:0;pointer-events:none}
 .cns-panel .ao-tool-btn{background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.18);color:var(--ink)}
 .cns-panel .ao-tool-btn:hover{background:rgba(0,0,0,.13)}
@@ -5722,29 +5722,29 @@ function viewCnsPns(){
         <!-- ── Overview hotspots — same proportions as topography ── -->
         <g id="cns-overview-spots">
           <g onclick="cnsSelect('brain')" style="cursor:pointer">
-            <circle id="cns-spot-brain" cx="100" cy="18" r="3" class="hot"/>
-            <rect x="104.5" y="16.5" width="9.5" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
-            <text x="109.25" y="18" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Brain</text>
+            <circle id="cns-spot-brain" cx="100" cy="19" r="2.5" class="hot"/>
+            <rect x="103.8" y="17.6" width="9.5" height="2.8" rx="1.4" fill="rgba(15,20,50,.78)" pointer-events="none"/>
+            <text x="108.55" y="19" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.3" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Brain</text>
           </g>
           <g onclick="cnsSelect('cn')" style="cursor:pointer">
-            <circle id="cns-spot-cn" cx="110" cy="34" r="3" class="hot"/>
-            <rect x="114.5" y="32.5" width="15" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
-            <text x="122" y="34" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Cranial Nn.</text>
+            <circle id="cns-spot-cn" cx="100" cy="32" r="2.5" class="hot"/>
+            <rect x="103.8" y="30.6" width="17.5" height="2.8" rx="1.4" fill="rgba(15,20,50,.78)" pointer-events="none"/>
+            <text x="112.55" y="32" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.3" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Cranial Nn.</text>
           </g>
           <g onclick="cnsSelect('plexuses')" style="cursor:pointer">
-            <circle id="cns-spot-plexuses" cx="82" cy="47" r="3" class="hot"/>
-            <rect x="66" y="45.5" width="12" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
-            <text x="72" y="47" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Plexuses</text>
+            <circle id="cns-spot-plexuses" cx="80" cy="44" r="2.5" class="hot"/>
+            <rect x="63" y="42.6" width="14" height="2.8" rx="1.4" fill="rgba(15,20,50,.78)" pointer-events="none"/>
+            <text x="70" y="44" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.3" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Plexuses</text>
           </g>
           <g onclick="cnsSelect('spinal')" style="cursor:pointer">
-            <circle id="cns-spot-spinal" cx="100" cy="66" r="3" class="hot"/>
-            <rect x="104.5" y="64.5" width="15" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
-            <text x="112" y="66" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">Spinal Cord</text>
+            <circle id="cns-spot-spinal" cx="100" cy="63" r="2.5" class="hot"/>
+            <rect x="103.8" y="61.6" width="16" height="2.8" rx="1.4" fill="rgba(15,20,50,.78)" pointer-events="none"/>
+            <text x="111.8" y="63" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.3" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">Spinal Cord</text>
           </g>
           <g onclick="cnsSelect('ans')" style="cursor:pointer">
-            <circle id="cns-spot-ans" cx="114" cy="85" r="3" class="hot"/>
-            <rect x="118.5" y="83.5" width="7" height="3" rx="1.5" fill="rgba(15,20,50,.72)" pointer-events="none"/>
-            <text x="122" y="85" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.5" font-family="system-ui,sans-serif" font-weight="600" pointer-events="none">ANS</text>
+            <circle id="cns-spot-ans" cx="100" cy="82" r="2.5" class="hot"/>
+            <rect x="103.8" y="80.6" width="7" height="2.8" rx="1.4" fill="rgba(15,20,50,.78)" pointer-events="none"/>
+            <text x="107.3" y="82" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="2.3" font-family="system-ui,sans-serif" font-weight="700" pointer-events="none">ANS</text>
           </g>
         </g>
 

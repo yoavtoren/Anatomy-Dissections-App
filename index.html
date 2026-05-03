@@ -3191,7 +3191,7 @@ function renderDictGrid(){
     }).sort((a,b)=>a.headword.localeCompare(b.headword));
     if(bar){
         bar.innerHTML = filtered.length
-            ? `Showing <b>${filtered.length}</b> of ${window.DICT_ENTRIES.length} entries${_dictSec?" in "+_dictSec.replace("SECTION ","Section "):""}${q?" matching <em>""+q+""</em>":""}`
+            ? `Showing <b>${filtered.length}</b> of ${window.DICT_ENTRIES.length} entries${_dictSec?" in "+_dictSec.replace("SECTION ","Section "):""}${q?" matching <em>“"+q+"”</em>":""}`
             : "";
     }
     if(!filtered.length){

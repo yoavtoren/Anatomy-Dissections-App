@@ -896,104 +896,167 @@ footer{
     border-top: 1px solid var(--border);
 }
 .ch-bottom-nav .btn.ghost { padding: 12px 22px!important; font-size: 15px!important; border-radius: 12px!important; }
-/* ============================================================
-   READING EXPERIENCE — Topic content body overhaul
-   ============================================================ */
-.topic-content-body{margin-top:24px;max-width:860px}
+/* ════════════════════════════════════════════════════════════════
+   PREMIUM CONTENT DESIGN — elite reading experience
+   ════════════════════════════════════════════════════════════════ */
 
-/* Kill the outer wrapper's cramped inline-style box */
+/* ── Container ── */
+.topic-content-body{margin-top:0;max-width:100%}
+
+/* ── Reset inline-styled outer shell ── */
 .topic-content-body>div{
-    font-size:16px!important;line-height:1.78!important;
+    font-size:17px!important;line-height:1.82!important;color:#18202f!important;
     padding:0!important;background:transparent!important;
-    border-radius:0!important;font-family:inherit!important;
+    border-radius:0!important;font-family:-apple-system,BlinkMacSystemFont,"Inter",sans-serif!important;
 }
-/* Chapter color banner (top of each topic) */
+
+/* ── Chapter banner ── */
 .topic-content-body>div>div:first-child{
-    border-radius:14px!important;margin:0 0 32px!important;
-    padding:22px 28px!important;
+    background:linear-gradient(135deg,var(--cc,#5B8EF8) 0%,color-mix(in srgb,var(--cc,#5B8EF8) 70%,#0a0f1e) 100%)!important;
+    padding:28px 36px!important;border-radius:20px!important;
+    margin:0 0 44px!important;
+    box-shadow:0 10px 40px color-mix(in srgb,var(--cc,#5B8EF8) 30%,transparent)!important;
 }
 .topic-content-body>div>div:first-child h2{
-    font-size:20px!important;margin:0!important;line-height:1.3!important;
+    font-size:21px!important;font-weight:800!important;letter-spacing:-.3px!important;
+    margin:0!important;line-height:1.25!important;color:#fff!important;
 }
-/* Intro summary box (f1f5f9) */
+
+/* ── Key facts / intro box (f1f5f9) ── */
 .topic-content-body [style*="background:#f1f5f9"]{
-    padding:20px 24px!important;border-radius:14px!important;
-    font-size:16px!important;line-height:1.8!important;
-    margin-bottom:28px!important;
-    box-shadow:0 2px 14px rgba(0,0,0,.07)!important;
+    background:#fff!important;
+    border:none!important;border-left:5px solid var(--cc,#5B8EF8)!important;
+    border-radius:0 18px 18px 0!important;
+    padding:24px 30px!important;
+    font-size:17px!important;line-height:1.84!important;
+    margin-bottom:44px!important;
+    box-shadow:0 4px 24px rgba(0,0,0,.07)!important;
+    color:#18202f!important;
 }
-/* Info cards (f8fafc) */
+
+/* ── Section headers h3 ── */
+.topic-content-body h3{
+    font-size:18px!important;font-weight:700!important;
+    color:#18202f!important;
+    margin:28px 0 8px!important;padding:0!important;
+    border-bottom:none!important;line-height:1.3!important;
+    letter-spacing:-.1px!important;
+    border-left:3px solid var(--cc,#5B8EF8)!important;
+    padding-left:12px!important;
+}
+
+/* ── Info / definition blocks (f8fafc) — flowing, no card ── */
 .topic-content-body [style*="background:#f8fafc"]{
-    padding:16px 20px!important;border-radius:12px!important;
-    font-size:15.5px!important;line-height:1.72!important;
+    background:transparent!important;
+    border:none!important;
+    border-radius:0!important;
+    padding:0!important;
+    font-size:16.5px!important;line-height:1.82!important;
     margin-bottom:0!important;
-    box-shadow:0 2px 8px rgba(0,0,0,.05)!important;
+    box-shadow:none!important;
+    color:#18202f!important;
 }
-/* Red callout (fef2f2) */
+
+/* ── Red warning callout (fef2f2) ── */
 .topic-content-body [style*="background:#fef2f2"]{
-    padding:16px 20px!important;border-radius:0 12px 12px 0!important;
-    font-size:15.5px!important;line-height:1.72!important;margin-bottom:16px!important;
+    background:#fff!important;
+    border:none!important;border-left:5px solid #dc2626!important;
+    border-radius:0 14px 14px 0!important;
+    padding:18px 26px!important;
+    font-size:16px!important;line-height:1.76!important;
+    margin-bottom:20px!important;
+    box-shadow:0 3px 16px rgba(220,38,38,.09)!important;
+    color:#18202f!important;
 }
-/* Summary green box (f0fdf4) */
+
+/* ── Summary / key takeaways (f0fdf4) ── */
 .topic-content-body [style*="background:#f0fdf4"]{
-    padding:22px 28px!important;border-radius:14px!important;
-    font-size:15.5px!important;line-height:1.72!important;margin-top:40px!important;
+    background:#fff!important;
+    border:1px solid #e8ecf3!important;border-left:5px solid var(--cc,#5B8EF8)!important;
+    border-radius:0 20px 20px 0!important;
+    padding:28px 36px!important;
+    margin-top:56px!important;
+    box-shadow:0 6px 28px rgba(0,0,0,.07)!important;
+}
+.topic-content-body [style*="background:#f0fdf4"]>strong:first-child{
+    font-size:11px!important;font-weight:800!important;text-transform:uppercase!important;
+    letter-spacing:.12em!important;color:var(--cc,#5B8EF8)!important;
+    display:block!important;margin-bottom:14px!important;
 }
 .topic-content-body [style*="background:#f0fdf4"]>ul{margin:12px 0 0 22px!important}
-.topic-content-body [style*="background:#f0fdf4"] li{margin:9px 0!important;font-size:15.5px!important;line-height:1.72!important}
-/* Dashed illustration placeholder */
+.topic-content-body [style*="background:#f0fdf4"] li{
+    font-size:16px!important;line-height:1.76!important;margin:10px 0!important;
+    color:#18202f!important;
+}
+
+/* ── Yellow highlight spans ── */
+.topic-content-body [style*="background:#fef9c3"]{
+    background:rgba(255,193,7,.2)!important;
+    padding:1px 5px!important;border-radius:4px!important;color:#18202f!important;
+}
+/* ── Orange highlight spans (fed7aa) ── */
+.topic-content-body [style*="background:#fed7aa"]{
+    background:rgba(251,146,60,.2)!important;
+    padding:1px 5px!important;border-radius:4px!important;color:#18202f!important;
+}
+
+/* ── Illustration placeholder ── */
 .topic-content-body [style*="border:2px dashed"]{
-    padding:20px 24px!important;border-radius:14px!important;
-    margin:24px 0!important;min-height:auto!important;
+    background:#f8f9fc!important;
+    border:2px dashed #d0d7e3!important;
+    border-radius:18px!important;
+    padding:28px 36px!important;
+    margin:32px 0!important;min-height:auto!important;
 }
 .topic-content-body [style*="border:2px dashed"] p{
-    font-size:13px!important;line-height:1.6!important;margin:0!important;
+    font-size:13px!important;color:#8795ab!important;
+    font-style:italic!important;line-height:1.6!important;margin:0!important;
 }
-/* Grid layouts */
-.topic-content-body [style*="display:grid"]{gap:14px!important;margin-bottom:24px!important}
-/* h2 inside content */
+
+/* ── Grid layouts ── */
+.topic-content-body [style*="display:grid"]{gap:14px!important;margin-bottom:28px!important}
+
+/* ── h2 section dividers ── */
 .topic-content-body h2{
-    font-size:20px!important;margin:36px 0 16px!important;
-    padding-bottom:8px!important;border-bottom:1px solid var(--border)!important;
-    line-height:1.3!important;color:var(--ink)!important;
-}
-/* h3 section headers */
-.topic-content-body h3{
-    font-size:17px!important;margin:32px 0 14px!important;
-    padding-bottom:8px!important;line-height:1.3!important;font-weight:700!important;
-}
-/* Paragraphs */
-.topic-content-body p{font-size:16px!important;line-height:1.78!important;margin:0 0 12px!important}
-/* Lists */
-.topic-content-body ul,.topic-content-body ol{margin:10px 0 18px 22px!important;padding:0!important}
-.topic-content-body li{font-size:15.5px!important;line-height:1.72!important;margin:8px 0!important}
-
-/* Topic nav row — prominent footer navigation */
-.topic-nav-row{
-    display:flex;justify-content:space-between;align-items:center;gap:8px;
-    margin-top:48px;flex-wrap:wrap;
-    padding-top:28px;border-top:1px solid var(--border);
-}
-.topic-nav-row .btn.ghost{
-    padding:13px 24px!important;font-size:15px!important;
-    font-weight:600!important;border-radius:12px!important;
-    min-width:120px;text-align:center;
+    font-size:22px!important;font-weight:800!important;
+    color:#18202f!important;letter-spacing:-.3px!important;
+    margin:52px 0 18px!important;padding-bottom:12px!important;
+    border-bottom:2px solid #edf0f7!important;line-height:1.25!important;
 }
 
-/* Chapter detail header — larger, more spacious */
-.chapter-detail-header{
-    padding:24px 30px!important;margin:14px 0 30px!important;border-radius:14px!important;
+/* ── Paragraphs ── */
+.topic-content-body p{
+    font-size:17px!important;line-height:1.82!important;
+    margin:0 0 14px!important;color:#18202f!important;
 }
-.chapter-detail-header h1{
-    font-size:clamp(20px,2.8vw,28px)!important;line-height:1.3!important;margin:4px 0 0!important;
-}
-.chapter-detail-num{font-size:13px!important;letter-spacing:.06em!important}
 
-/* Topic list items — more spacious and readable */
-.topic-item{padding:14px 20px!important;font-size:15px!important;border-radius:12px!important}
-.topic-num{font-size:13px!important;min-width:42px!important}
-.topic-text{font-size:15px!important;line-height:1.5!important}
-.topic-arrow{font-size:20px!important;opacity:.5!important}
+/* ── Lists ── */
+.topic-content-body ul,.topic-content-body ol{
+    margin:12px 0 22px 24px!important;padding:0!important;
+}
+.topic-content-body li{
+    font-size:16px!important;line-height:1.76!important;
+    margin:10px 0!important;color:#18202f!important;
+}
+
+/* ── Bold/strong inside lists keep yellow marker but look clean ── */
+.topic-content-body li b,.topic-content-body li strong{
+    background:rgba(255,193,7,.22)!important;
+    padding:0 3px!important;border-radius:3px!important;font-weight:700!important;
+}
+
+/* ── Inline colored spans (blue terms) ── */
+.topic-content-body [style*="color:#1d4ed8"]{color:var(--cc,#5B8EF8)!important;}
+.topic-content-body [style*="color:#15803d"]{color:#16a34a!important;}
+.topic-content-body [style*="color:#dc2626"]{color:#dc2626!important;}
+.topic-content-body [style*="color:#6d28d9"]{color:#7c3aed!important;}
+
+/* ── Underlines within content ── */
+.topic-content-body u{
+    text-decoration:none!important;
+    border-bottom:2px solid color-mix(in srgb,var(--cc,#5B8EF8) 45%,transparent)!important;
+    padding-bottom:1px!important;
+}
 
 /* Question portal placeholder */
 .portal-placeholder {
@@ -1572,19 +1635,19 @@ const REGIONS = [
 
 /* Lab photo hotspot positions — original image coords (2488 x 1696) */
 const LAB_HOTSPOTS=[
-  {id:'ch7', cx:  87,cy: 378},   // arteries poster, far left wall
-  {id:'ch8', cx: 248,cy: 354},   // veins poster, second from left
-  {id:'ch9', cx: 856,cy: 335},   // green lymphatic poster, back center wall
+  {id:'ch7', cx: 190,cy: 760},   // arteries poster, far left wall
+  {id:'ch8', cx: 340,cy: 775},   // veins poster, second from left
+  {id:'ch9', cx:1120,cy: 405},   // green lymphatic poster, back center wall
   {id:'ch6', cx: 400,cy: 910},   // large heart, foreground left green table
-  {id:'ch10',cx: 230,cy:1120},   // brain model, foreground left green table
-  {id:'ch11',cx: 410,cy:1020},   // yellow nerve model, foreground left green table
-  {id:'ch3', cx: 730,cy: 560},   // torso/GI model, background center-left
-  {id:'ch1', cx:1220,cy: 880},   // reclining skeleton, central white pedestal
-  {id:'ch13',cx:1200,cy:1220},   // regional anatomy floor poster, center foreground
-  {id:'ch4', cx:1482,cy: 690},   // lung models, background right white table
-  {id:'ch5', cx:1624,cy: 690},   // kidney/repro models, same back-right table
-  {id:'ch12',cx:2010,cy: 840},   // sensory glass case & posters, far right wall
-  {id:'ch2', cx:2260,cy:1000},   // standing muscle man, far right green table
+  {id:'ch10',cx: 225,cy:1285},   // brain model, foreground left green table
+  {id:'ch11',cx: 515,cy:1120},   // yellow nerve model, foreground left green table
+  {id:'ch3', cx: 730,cy: 655},   // torso/GI model, background center-left
+  {id:'ch1', cx:1230,cy: 955},   // reclining skeleton, central white pedestal
+  {id:'ch13',cx:1240,cy:1385},   // regional anatomy floor poster, center foreground
+  {id:'ch4', cx:1465,cy: 655},   // lung models, background right white table
+  {id:'ch5', cx:1625,cy: 705},   // kidney/repro models, same back-right table
+  {id:'ch12',cx:2015,cy: 915},   // sensory glass case & posters, far right wall
+  {id:'ch2', cx:2245,cy:1085},   // standing muscle man, far right green table
 ];
 
 const CHAPTERS = [
@@ -3382,6 +3445,14 @@ function scrollToQ(q){
     const el = document.getElementById('ch-q-'+q);
     if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
+function stripH3Emojis(){
+    const emojiRe=/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}]/gu;
+    document.querySelectorAll('.topic-content-body h3').forEach(h=>{
+        h.childNodes.forEach(n=>{
+            if(n.nodeType===3) n.textContent=n.textContent.replace(emojiRe,'').trimStart();
+        });
+    });
+}
 
 /* -------- Chapter reading page — all questions continuous -------- */
 function viewChapter(id, jumpToQ){
@@ -3399,7 +3470,7 @@ function viewChapter(id, jumpToQ){
         const prev=ch.topics[idx-1];
         const next=ch.topics[idx+1];
         return `
-        <section class="ch-q-section" id="ch-q-${t.q}">
+        <section class="ch-q-section" id="ch-q-${t.q}" style="--cc:${ch.color}">
             <div class="ch-q-header" style="--cc:${ch.color}">
                 <div class="ch-q-num-badge">Q${t.q}</div>
                 <h2>${t.text}</h2>
@@ -3494,6 +3565,7 @@ function route(){
     setActiveNav();
     applyStoredImages();
     colorizeBlocks();
+    stripH3Emojis();
 
     if(h==="#/terminology" || h==="#/terms"){
         renderTermList();

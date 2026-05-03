@@ -1,4 +1,4 @@
-const CACHE = 'anatomy-atlas-v1';
+const CACHE = 'anatomy-atlas-v2';
 
 const PRECACHE = [
     './',

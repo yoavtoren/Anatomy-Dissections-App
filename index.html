@@ -164,138 +164,174 @@ hr{border:none;border-top:1px solid var(--border);margin:24px 0}
 @media(max-width:600px){.grid{grid-template-columns:1fr!important}}
 
 /* ════════════════════════════════════════════════
-   HERO — Atlas Welcome
+   HOME — Game-style welcome canvas
    ════════════════════════════════════════════════ */
-.hero{
-  background:linear-gradient(148deg,#0B1526 0%,#142038 52%,#0B1526 100%);
-  border-radius:var(--radius-xl);padding:0;
-  margin-bottom:44px;
-  box-shadow:0 28px 80px rgba(0,0,0,.3);
-  position:relative;overflow:hidden;
-  display:grid;grid-template-columns:1fr auto;align-items:stretch;
+.home-canvas{
+  position:relative;
+  min-height:calc(100vh - 130px);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#060D1A 0%,#0D1F35 50%,#060D1A 100%);
+  padding:52px 48px;
+  border-radius:var(--radius-xl);
+  box-shadow:0 32px 80px rgba(0,0,0,.35);
 }
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:radial-gradient(rgba(74,108,247,.09) 1px,transparent 1px);
-  background-size:26px 26px;pointer-events:none;
-}
-.hero::after{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 650px 420px at 72% -25%,rgba(74,108,247,.14),transparent 65%),
-    radial-gradient(ellipse 450px 320px at -2% 85%,rgba(82,196,144,.09),transparent 65%);
+.home-orb{
+  position:absolute;border-radius:50%;
+  filter:blur(90px);opacity:.18;
+  animation:home-drift linear infinite;
   pointer-events:none;
 }
-.hero-left{padding:68px 64px;position:relative;z-index:1}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(74,108,247,.18);border:1px solid rgba(74,108,247,.3);
-  border-radius:999px;padding:5px 15px;
-  color:#93B0FF;font-size:11.5px;font-weight:600;
-  letter-spacing:.07em;text-transform:uppercase;
-  margin-bottom:24px;
+.home-orb:nth-child(1){width:700px;height:700px;background:#4A6CF7;top:-20%;left:-15%;animation-duration:22s}
+.home-orb:nth-child(2){width:500px;height:500px;background:#5B8EF8;bottom:-15%;right:-10%;animation-duration:28s;animation-direction:reverse}
+.home-orb:nth-child(3){width:350px;height:350px;background:#52C490;top:35%;left:55%;animation-duration:19s;opacity:.12}
+.home-orb:nth-child(4){width:280px;height:280px;background:#C47AE0;bottom:25%;left:10%;animation-duration:24s;animation-direction:reverse;opacity:.12}
+@keyframes home-drift{
+  0%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(40px,-25px) scale(1.06)}
+  50%{transform:translate(15px,50px) scale(.94)}
+  75%{transform:translate(-35px,22px) scale(1.03)}
+  100%{transform:translate(0,0) scale(1)}
 }
-.hero h1{
+.home-grid-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(74,108,247,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(74,108,247,.045) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.home-scanline{
+  position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px
+  );
+}
+.home-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;max-width:960px;width:100%;
+  gap:0;
+}
+.home-eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(74,108,247,.14);
+  border:1px solid rgba(74,108,247,.32);
+  border-radius:999px;padding:6px 18px;
+  color:#93B0FF;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:22px;
+  animation:hf-up .6s ease both;
+}
+.home-eyebrow-dot{
+  width:7px;height:7px;background:#4A6CF7;border-radius:50%;
+  box-shadow:0 0 8px #4A6CF7;
+  animation:home-pulse 2.2s ease-in-out infinite;
+}
+@keyframes home-pulse{0%,100%{opacity:1;box-shadow:0 0 8px #4A6CF7}50%{opacity:.4;box-shadow:0 0 3px #4A6CF7}}
+.home-title{
   font-family:var(--font-display);
-  font-size:54px;margin:0 0 18px;
-  color:#fff;letter-spacing:-.3px;
-  line-height:1.08;font-weight:400;
+  font-size:76px;font-weight:400;line-height:1.03;
+  color:#fff;margin:0 0 16px;letter-spacing:-1.5px;
+  animation:hf-up .6s .1s ease both;
 }
-.hero h1 span{color:#93C5FD;font-style:italic}
-.hero p.lead{
-  font-size:16px;color:rgba(255,255,255,.52);
-  max-width:460px;line-height:1.72;margin:0 0 32px;
+.home-title-hl{
+  background:linear-gradient(135deg,#93C5FD 0%,#C4B5FD 50%,#86EFAC 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;font-style:italic;
 }
-.hero-stats{display:flex;gap:32px;margin-bottom:36px}
-.hero-stat{}
-.hero-stat-val{font-size:30px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.5px}
-.hero-stat-lbl{font-size:12px;color:rgba(255,255,255,.42);margin-top:4px;white-space:nowrap;letter-spacing:.02em}
-.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
-.hero-btns .btn{background:#4A6CF7;padding:12px 26px;font-size:14.5px;box-shadow:0 6px 22px rgba(74,108,247,.42)}
-.hero-btns .btn:hover{background:#3A5CE7;box-shadow:0 8px 28px rgba(74,108,247,.56)}
-.hero-btns .btn-outline{
-  padding:11px 22px;border-radius:10px;
-  border:1.5px solid rgba(255,255,255,.2);
-  color:rgba(255,255,255,.68);font-size:14px;
-  font-weight:600;cursor:pointer;text-decoration:none;
-  transition:border-color var(--t-fast),color var(--t-fast),background var(--t-fast);
-  display:inline-flex;align-items:center;gap:6px;
+.home-sub{
+  font-size:16px;color:rgba(255,255,255,.42);line-height:1.72;
+  margin:0 0 36px;max-width:520px;
+  animation:hf-up .6s .2s ease both;
 }
-.hero-btns .btn-outline:hover{border-color:rgba(255,255,255,.48);color:#fff;background:rgba(255,255,255,.06);text-decoration:none}
-.hero-right{
-  display:flex;flex-direction:column;justify-content:center;
-  gap:10px;padding:52px 56px 52px 0;position:relative;z-index:1;
+.home-stats{
+  display:flex;align-items:center;gap:0;
+  margin-bottom:40px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;padding:18px 40px;
+  backdrop-filter:blur(20px);
+  animation:hf-up .6s .3s ease both;
 }
-.hero-chip{
-  display:flex;align-items:center;gap:12px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.1);border-radius:13px;
-  padding:12px 18px;cursor:pointer;
-  transition:background var(--t-fast),border-color var(--t-fast),transform var(--t-fast);
+.home-stat-item{padding:0 32px;text-align:center}
+.home-stat-num{
+  font-size:40px;font-weight:800;color:#fff;
+  letter-spacing:-1.5px;line-height:1;
+  text-shadow:0 0 30px rgba(74,108,247,.5);
+}
+.home-stat-lbl{font-size:10.5px;color:rgba(255,255,255,.32);letter-spacing:.1em;text-transform:uppercase;margin-top:5px}
+.home-stat-sep{width:1px;height:44px;background:rgba(255,255,255,.08);flex-shrink:0}
+.home-nav{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  width:100%;margin-bottom:24px;
+  animation:hf-up .6s .4s ease both;
+}
+.home-nav-card{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:26px 22px 22px;
+  background:rgba(255,255,255,.025);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  cursor:pointer;text-decoration:none;color:inherit;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+}
+.home-nav-card::after{
+  content:'';position:absolute;inset:0;
+  background:var(--hc-glow,rgba(74,108,247,.06));
+  opacity:0;transition:opacity .25s ease;border-radius:inherit;pointer-events:none;
+}
+.home-nav-card:hover{
+  transform:translateY(-7px);
+  border-color:var(--hc-edge,rgba(74,108,247,.5));
+  box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 50px var(--hc-shadow,rgba(74,108,247,.18));
   text-decoration:none;
 }
-.hero-chip:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.24);transform:translateX(-3px);text-decoration:none}
-.hero-chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.hero-chip span{color:rgba(255,255,255,.75);font-size:13px;font-weight:500;white-space:nowrap}
-
-/* ── Feature spotlight ── */
-.topo-spot{
-  display:grid;grid-template-columns:1fr 1fr;
-  border-radius:var(--radius-lg);overflow:hidden;
-  cursor:pointer;box-shadow:var(--sh3);
-  border:1px solid var(--border);
-  margin-bottom:44px;
-  transition:box-shadow var(--t-mid),transform var(--t-mid);
+.home-nav-card:hover::after{opacity:1}
+.home-nav-badge{
+  position:absolute;top:14px;right:14px;
+  font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;
+  background:var(--hc-badge,rgba(74,108,247,.18));
+  color:var(--hc-text,#93B0FF);
+  border:1px solid var(--hc-edge,rgba(74,108,247,.28));
 }
-.topo-spot:hover{box-shadow:var(--sh4);transform:translateY(-3px)}
-.topo-spot-left{
-  background:linear-gradient(148deg,#0B1526,#19304E);
-  padding:56px 52px;display:flex;flex-direction:column;justify-content:center;
-}
-.topo-spot-left h2{
-  font-family:var(--font-display);
-  color:#fff;font-size:30px;margin:0 0 14px;
-  border:none;padding:0;font-weight:400;line-height:1.2;
-}
-.topo-spot-left p{color:rgba(255,255,255,.48);font-size:14px;line-height:1.68;margin:0 0 30px;max-width:340px}
-.topo-spot-right{position:relative;min-height:300px;overflow:hidden}
-.topo-spot-right img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block}
-
-/* ── Welcome tiles ── */
-.welcome-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:44px}
-.w-tile{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:var(--radius-lg);padding:32px 28px;
-  display:block;color:inherit;text-decoration:none;
-  transition:transform var(--t-mid),box-shadow var(--t-mid),border-color var(--t-mid);
-  position:relative;overflow:hidden;
-  box-shadow:var(--sh0);
-}
-.w-tile::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3.5px;
-  background:var(--tc,var(--accent));
-  transform:scaleX(0);transform-origin:left;
-  transition:transform var(--t-mid);
-}
-.w-tile:hover{transform:translateY(-5px);box-shadow:var(--sh3);border-color:rgba(74,108,247,.18);text-decoration:none;color:inherit}
-.w-tile:hover::before{transform:scaleX(1)}
-.w-tile-icon{
-  width:56px;height:56px;border-radius:14px;
+.home-nav-icon{
+  width:50px;height:50px;border-radius:14px;
+  background:var(--hc-icon,rgba(74,108,247,.14));
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:20px;
-  background:var(--ti,rgba(74,108,247,.1));
-  transition:transform var(--t-mid);
-  color:var(--tc,var(--accent));
+  font-size:22px;
+  box-shadow:0 0 22px var(--hc-shadow,rgba(74,108,247,.2));
+  position:relative;z-index:1;
+  transition:transform .25s ease,box-shadow .25s ease;
 }
-.w-tile:hover .w-tile-icon{transform:scale(1.07)}
-.w-tile h3{font-size:16px;font-weight:700;margin:0 0 9px;color:var(--ink)}
-.w-tile p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.62}
-.w-tile-arrow{
-  position:absolute;bottom:22px;right:22px;
-  color:var(--muted-2);font-size:18px;
-  opacity:0;transition:opacity var(--t-fast),transform var(--t-fast);
+.home-nav-card:hover .home-nav-icon{
+  transform:scale(1.12);
+  box-shadow:0 0 35px var(--hc-shadow,rgba(74,108,247,.45));
 }
-.w-tile:hover .w-tile-arrow{opacity:1;transform:translateX(4px)}
+.home-nav-card h3{font-size:17px;font-weight:700;color:#fff;margin:0;position:relative;z-index:1}
+.home-nav-card p{font-size:12.5px;color:rgba(255,255,255,.42);margin:0;line-height:1.62;position:relative;z-index:1}
+.home-nav-arrow{
+  margin-top:auto;font-size:18px;color:var(--hc-text,rgba(255,255,255,.3));
+  position:relative;z-index:1;
+  transition:transform .2s ease,color .2s ease;
+}
+.home-nav-card:hover .home-nav-arrow{transform:translateX(5px);color:var(--hc-text,#93B0FF)}
+.home-regions{
+  display:flex;gap:9px;flex-wrap:wrap;justify-content:center;
+  animation:hf-up .6s .5s ease both;
+}
+.home-region-pill{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:999px;padding:7px 15px;
+  font-size:12px;color:rgba(255,255,255,.55);font-weight:500;
+  text-decoration:none;transition:background .2s,border-color .2s,color .2s;
+}
+.home-region-pill:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);color:#fff;text-decoration:none}
+.home-region-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+@keyframes hf-up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
 .tile{
   background:var(--panel);border:1px solid var(--border);
@@ -593,15 +629,10 @@ footer{
   nav.menu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(249,247,244,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);flex-direction:column;gap:4px;padding:10px 28px calc(20px + env(safe-area-inset-bottom,0px));border-bottom:1px solid var(--border);box-shadow:0 10px 30px rgba(20,25,34,.1);z-index:100}
   nav.menu.open{display:flex}
   nav.menu a{padding:12px 14px;font-size:15px;border-radius:10px}
-  .hero{grid-template-columns:1fr}
-  .hero-right{display:none}
-  .hero-left{padding:44px 36px 40px}
-  .hero h1{font-size:38px}
-  .hero p.lead{font-size:14px;margin-bottom:28px}
-  .hero-stats{gap:22px}
-  .topo-spot{grid-template-columns:1fr}
-  .topo-spot-right{min-height:200px}
-  .welcome-tiles{grid-template-columns:repeat(2,1fr)}
+  .home-title{font-size:44px}
+  .home-nav{grid-template-columns:1fr}
+  .home-stats{padding:14px 20px}
+  .home-stat-item{padding:0 18px}
   .ao-figure-panel,.ao-info-panel{height:380px}
   .ao-info-panel{height:auto;max-height:380px}
   .sec-with-img{grid-template-columns:1fr}
@@ -660,45 +691,90 @@ footer{
 .region-tab-name{font-weight:600}
 .region-tab-count{font-size:11.5px;opacity:.62;background:rgba(0,0,0,.07);padding:1px 8px;border-radius:20px}
 
-/* Chapter cards */
-.chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.chapter-card{
-  display:flex;align-items:flex-start;gap:16px;
-  padding:22px 24px;border-radius:var(--radius);
-  border:1.5px solid var(--border);
-  background:var(--panel);color:inherit;text-decoration:none;
-  transition:border-color var(--t-mid),box-shadow var(--t-mid),transform var(--t-fast);
-  box-shadow:var(--sh0);position:relative;overflow:hidden;
+/* ═══════ Portal hero + search ═══════ */
+.portal-hero{
+  background:linear-gradient(135deg,#0d1b2e 0%,#0f2544 100%);
+  border-radius:20px;padding:40px 48px;margin-bottom:28px;
+  position:relative;overflow:hidden;
 }
-.chapter-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
-  background:var(--cc,var(--accent));
-  border-radius:4px 0 0 4px;
+.portal-hero::before{
+  content:'';position:absolute;right:-80px;top:-80px;width:380px;height:380px;border-radius:50%;
+  background:radial-gradient(circle,rgba(74,108,247,.18) 0%,transparent 70%);pointer-events:none;
 }
-.chapter-card:hover{
-  border-color:color-mix(in srgb,var(--cc,var(--accent)) 45%,var(--border));
-  box-shadow:0 8px 32px color-mix(in srgb,var(--cc,var(--accent)) 14%,rgba(0,0,0,.07));
-  transform:translateY(-3px);text-decoration:none;color:inherit;
+.portal-hero::after{
+  content:'';position:absolute;left:-40px;bottom:-60px;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(82,196,144,.12) 0%,transparent 70%);pointer-events:none;
 }
-.chapter-card-num{
-  flex-shrink:0;width:52px;height:52px;border-radius:13px;
-  background:color-mix(in srgb,var(--cc,var(--accent)) 13%,transparent);
-  color:var(--cc,var(--accent));font-size:11px;font-weight:800;
+.portal-hero h1{color:#fff;margin:0 0 6px;font-size:1.9rem;font-weight:800;letter-spacing:-.5px}
+.portal-hero>p{color:rgba(255,255,255,.6);margin:0 0 24px;font-size:.98rem}
+.portal-search-wrap{position:relative;max-width:520px}
+.portal-search-wrap .p-srch-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);pointer-events:none;color:rgba(255,255,255,.45)}
+.portal-search-input{
+  width:100%;padding:13px 18px 13px 48px;border-radius:12px;
+  border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.1);
+  color:#fff;font-size:14.5px;font-family:inherit;
+  backdrop-filter:blur(14px);transition:border-color .2s,background .2s,box-shadow .2s;
+  outline:none;box-sizing:border-box;
+}
+.portal-search-input::placeholder{color:rgba(255,255,255,.38)}
+.portal-search-input:focus{border-color:rgba(255,255,255,.38);background:rgba(255,255,255,.14);box-shadow:0 0 0 3px rgba(74,108,247,.35)}
+
+/* search results dropdown */
+.portal-search-results{
+  display:none;background:#fff;border-radius:16px;
+  box-shadow:0 12px 48px rgba(0,0,0,.18);border:1px solid rgba(226,232,240,.8);
+  overflow:hidden;max-height:460px;overflow-y:auto;margin-top:10px;
+}
+.search-group-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:#94a3b8;padding:12px 16px 5px}
+.search-result-ch{display:flex;align-items:center;gap:10px;padding:11px 16px;text-decoration:none;color:inherit;transition:background .12s;border-left:3px solid var(--cc,#4A6CF7)}
+.search-result-ch:hover{background:#f8fafc}
+.search-result-ch-num{font-size:10px;font-weight:800;padding:3px 9px;border-radius:6px;background:color-mix(in srgb,var(--cc,#4A6CF7) 11%,transparent);color:var(--cc,#4A6CF7);flex-shrink:0}
+.search-result-ch-title{font-weight:600;font-size:14px;flex:1}
+.search-result-ch-count{font-size:12px;color:#94a3b8;flex-shrink:0}
+.search-result-topic{display:flex;align-items:flex-start;gap:10px;padding:9px 16px;text-decoration:none;color:inherit;transition:background .12s;font-size:13px;border-top:1px solid #f1f5f9}
+.search-result-topic:hover{background:#f8fafc}
+.search-result-qnum{font-size:11px;font-weight:800;flex-shrink:0;margin-top:2px}
+.search-result-topic-text{flex:1;line-height:1.45}
+.search-result-ch-tag{font-size:10px;padding:2px 8px;border-radius:6px;background:#f1f5f9;color:#64748b;flex-shrink:0;white-space:nowrap;margin-top:2px}
+.search-mark{background:rgba(245,158,11,.22);border-radius:2px;font-weight:700}
+.search-empty{padding:28px;text-align:center;color:#94a3b8;font-size:14px;margin:0}
+
+/* ═══════ Visual chapter cards ═══════ */
+.chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.ch-vis-card{
+  position:relative;border-radius:18px;overflow:hidden;text-decoration:none;display:block;
+  height:224px;box-shadow:0 4px 24px rgba(0,0,0,.1);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+}
+.ch-vis-card:hover{transform:translateY(-6px) scale(1.015);box-shadow:0 20px 56px rgba(0,0,0,.18)}
+.ch-vis-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .45s ease}
+.ch-vis-card:hover .ch-vis-img{transform:scale(1.07)}
+.ch-vis-no-img{position:absolute;inset:0;background:linear-gradient(135deg,var(--cc,#4A6CF7) 0%,color-mix(in srgb,var(--cc,#4A6CF7) 55%,#0b1220) 100%)}
+.ch-vis-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,15,35,.93) 0%,rgba(8,15,35,.48) 55%,rgba(8,15,35,.08) 100%)}
+.ch-vis-tint{position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--cc,#4A6CF7) 30%,transparent) 0%,transparent 55%)}
+.ch-vis-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:16px 18px}
+.ch-vis-top{display:flex;justify-content:space-between;align-items:flex-start}
+.ch-vis-badge{
+  background:rgba(0,0,0,.52);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.18);color:#fff;
+  font-size:10.5px;font-weight:800;letter-spacing:.6px;padding:4px 11px;border-radius:8px;
+}
+.ch-vis-arrow{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.18);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.28);
   display:flex;align-items:center;justify-content:center;
-  text-align:center;line-height:1.2;letter-spacing:-.2px;
+  opacity:0;transform:translateX(-8px);transition:opacity .22s,transform .22s;
 }
-.chapter-card-body{flex:1;min-width:0}
-.chapter-card-body h3{margin:0 0 5px;font-size:16px;font-weight:700;line-height:1.3;color:var(--ink)}
-.chapter-card-focus{margin:0 0 10px;font-size:13px;color:var(--muted);line-height:1.5}
-.chapter-card-count{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:12px;font-weight:600;
-  color:var(--cc,var(--accent));
-  background:color-mix(in srgb,var(--cc,var(--accent)) 10%,transparent);
-  padding:3px 11px;border-radius:20px;
+.ch-vis-card:hover .ch-vis-arrow{opacity:1;transform:translateX(0)}
+.ch-vis-bottom{}
+.ch-vis-title{margin:0 0 5px;font-size:15px;font-weight:800;color:#fff;line-height:1.25;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.ch-vis-focus{margin:0 0 10px;font-size:11.5px;color:rgba(255,255,255,.7);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ch-vis-count{
+  display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#fff;
+  background:color-mix(in srgb,var(--cc,#4A6CF7) 60%,rgba(0,0,0,.5));
+  padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);
 }
-.chapter-card-arrow{flex-shrink:0;font-size:20px;opacity:.22;align-self:center;transition:opacity var(--t-fast),transform var(--t-fast)}
-.chapter-card:hover .chapter-card-arrow{opacity:.8;transform:translateX(4px)}
 
 /* ══════════════════════════════════════════════
    CHAPTER READING PAGE
@@ -2127,70 +2203,84 @@ function renderBlocks(blocks){
 
 /* -------- Welcome page -------- */
 function viewWelcome(){
+    const total = CHAPTERS.reduce((s,c)=>s+(c.topics?c.topics.length:0),0);
     return `
-    <section class="hero">
-      <div class="hero-left">
-        <div class="hero-eyebrow">Final Exam Study Companion</div>
-        <h1>Interactive<br><span>Anatomy Atlas</span></h1>
-        <p class="lead">13 chapters of exam-focused anatomical content — organized by body region for focused, efficient preparation.</p>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <div class="hero-stat-val">13</div>
-            <div class="hero-stat-lbl">Chapters</div>
+    <div class="home-canvas">
+      <div class="home-orb"></div>
+      <div class="home-orb"></div>
+      <div class="home-orb"></div>
+      <div class="home-orb"></div>
+      <div class="home-grid-bg"></div>
+      <div class="home-scanline"></div>
+
+      <div class="home-content">
+        <div class="home-eyebrow">
+          <div class="home-eyebrow-dot"></div>
+          Final Exam Study Companion
+        </div>
+
+        <h1 class="home-title">Interactive<br><span class="home-title-hl">Anatomy Atlas</span></h1>
+        <p class="home-sub">13 chapters of exam-focused anatomical content &mdash; organized by body region for focused, efficient preparation.</p>
+
+        <div class="home-stats">
+          <div class="home-stat-item">
+            <div class="home-stat-num">13</div>
+            <div class="home-stat-lbl">Chapters</div>
           </div>
-          <div class="hero-stat">
-            <div class="hero-stat-val">4</div>
-            <div class="hero-stat-lbl">Body Regions</div>
+          <div class="home-stat-sep"></div>
+          <div class="home-stat-item">
+            <div class="home-stat-num">4</div>
+            <div class="home-stat-lbl">Body Regions</div>
           </div>
-          <div class="hero-stat">
-            <div class="hero-stat-val" id="hero-q-count">—</div>
-            <div class="hero-stat-lbl">Questions</div>
+          <div class="home-stat-sep"></div>
+          <div class="home-stat-item">
+            <div class="home-stat-num">${total||211}</div>
+            <div class="home-stat-lbl">Questions</div>
           </div>
         </div>
-        <div class="hero-btns">
-          <a class="btn" href="#/topics">Atlas Map</a>
-          <a class="btn-outline" href="#/questions">Question Portal</a>
-          <a class="btn-outline" href="#/terminology">Terminology</a>
+
+        <div class="home-nav">
+          <a class="home-nav-card" href="#/topics"
+            style="--hc-glow:rgba(74,108,247,.08);--hc-edge:rgba(74,108,247,.52);--hc-shadow:rgba(74,108,247,.22);--hc-icon:rgba(74,108,247,.16);--hc-badge:rgba(74,108,247,.18);--hc-text:#93B0FF">
+            <div class="home-nav-badge">Interactive</div>
+            <div class="home-nav-icon">&#x1F5FA;&#xFE0F;</div>
+            <h3>Atlas Map</h3>
+            <p>Explore anatomy on an interactive lab map &mdash; click any exhibit to navigate its chapter.</p>
+            <span class="home-nav-arrow">&#x2192;</span>
+          </a>
+          <a class="home-nav-card" href="#/questions"
+            style="--hc-glow:rgba(196,122,224,.08);--hc-edge:rgba(196,122,224,.52);--hc-shadow:rgba(196,122,224,.22);--hc-icon:rgba(196,122,224,.16);--hc-badge:rgba(196,122,224,.18);--hc-text:#D4A8F0">
+            <div class="home-nav-badge">${total||211} Questions</div>
+            <div class="home-nav-icon">&#x1F9E0;</div>
+            <h3>Question Portal</h3>
+            <p>All 13 exam chapters across 4 body regions &mdash; every subtopic from the final syllabus.</p>
+            <span class="home-nav-arrow">&#x2192;</span>
+          </a>
+          <a class="home-nav-card" href="#/terminology"
+            style="--hc-glow:rgba(82,196,144,.08);--hc-edge:rgba(82,196,144,.52);--hc-shadow:rgba(82,196,144,.22);--hc-icon:rgba(82,196,144,.16);--hc-badge:rgba(82,196,144,.18);--hc-text:#86EFAC">
+            <div class="home-nav-badge">Terms</div>
+            <div class="home-nav-icon">&#x1F4D6;</div>
+            <h3>Terminology</h3>
+            <p>Every named fossa, pouch, triangle &amp; plane &mdash; searchable, borders-first formatting.</p>
+            <span class="home-nav-arrow">&#x2192;</span>
+          </a>
+        </div>
+
+        <div class="home-regions">
+          <a class="home-region-pill" href="#/questions/head-neck">
+            <div class="home-region-dot" style="background:#5B8EF8;box-shadow:0 0 6px #5B8EF8"></div>Head &amp; Neck &mdash; Ch. 10&ndash;13
+          </a>
+          <a class="home-region-pill" href="#/questions/torso">
+            <div class="home-region-dot" style="background:#FF8C8C;box-shadow:0 0 6px #FF8C8C"></div>Torso / Thorax &mdash; Ch. 4, 6&ndash;9
+          </a>
+          <a class="home-region-pill" href="#/questions/abdomen-pelvis">
+            <div class="home-region-dot" style="background:#FFB347;box-shadow:0 0 6px #FFB347"></div>Abdomen &amp; Pelvis &mdash; Ch. 3, 5
+          </a>
+          <a class="home-region-pill" href="#/questions/musculoskeletal">
+            <div class="home-region-dot" style="background:#52C490;box-shadow:0 0 6px #52C490"></div>Musculoskeletal &mdash; Ch. 1&ndash;2
+          </a>
         </div>
       </div>
-      <div class="hero-right">
-        <a class="hero-chip" href="#/questions/head-neck"><div class="hero-chip-dot" style="background:#5B8EF8"></div><span>Head &amp; Neck — Ch. 10–13</span></a>
-        <a class="hero-chip" href="#/questions/torso"><div class="hero-chip-dot" style="background:#FF8C8C"></div><span>Torso / Thorax — Ch. 4, 6–9</span></a>
-        <a class="hero-chip" href="#/questions/abdomen-pelvis"><div class="hero-chip-dot" style="background:#FFB347"></div><span>Abdomen &amp; Pelvis — Ch. 3, 5</span></a>
-        <a class="hero-chip" href="#/questions/musculoskeletal"><div class="hero-chip-dot" style="background:#52C490"></div><span>Musculoskeletal — Ch. 1–2</span></a>
-      </div>
-    </section>
-
-    <div class="topo-spot" onclick="location.hash='#/questions'">
-      <div class="topo-spot-left">
-        <h2>13-Chapter Exam Navigator</h2>
-        <p>Select a body region to browse exam chapters. Each chapter covers the full question list from the final examination syllabus — organized exactly how exams are set.</p>
-        <span class="btn" style="align-self:flex-start">Browse Questions &rarr;</span>
-      </div>
-      <div class="topo-spot-right">
-        <img src="images/region-pelvis.png" alt="Anatomy study preview"/>
-      </div>
-    </div>
-
-    <div class="welcome-tiles">
-      <a class="w-tile" href="#/topics" style="--tc:#4A6CF7;--ti:rgba(74,108,247,.1)">
-        <div class="w-tile-icon"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></div>
-        <h3>Interactive Anatomy Map</h3>
-        <p>Explore body regions on an interactive lab map — click any exhibit to navigate its chapter.</p>
-        <span class="w-tile-arrow">&rarr;</span>
-      </a>
-      <a class="w-tile" href="#/questions" style="--tc:#C47AE0;--ti:rgba(196,122,224,.1)">
-        <div class="w-tile-icon" style="color:#C47AE0"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-        <h3>Final Question Portal</h3>
-        <p>All 13 exam chapters across 4 body regions — every subtopic from the final syllabus, one click away.</p>
-        <span class="w-tile-arrow">&rarr;</span>
-      </a>
-      <a class="w-tile" href="#/terminology" style="--tc:#52C490;--ti:rgba(82,196,144,.1)">
-        <div class="w-tile-icon" style="color:#52C490"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-        <h3>Terminology &amp; Special Terms</h3>
-        <p>Every named fossa, pouch, triangle, and plane — searchable with borders-first formatting.</p>
-        <span class="w-tile-arrow">&rarr;</span>
-      </a>
     </div>
     `;
 }
@@ -2390,6 +2480,45 @@ function initLabHotspots(){
     });
 }
 
+/* -------- Portal search helpers -------- */
+function hlSearch(text, q){
+    if(!q) return text;
+    const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    return text.replace(re,'<mark class="search-mark">$1</mark>');
+}
+function searchPortal(query){
+    const q=(query||'').toLowerCase().trim();
+    const grid=document.getElementById('portal-chapter-grid');
+    const results=document.getElementById('portal-search-results');
+    const tabs=document.getElementById('portal-region-tabs');
+    if(!grid||!results) return;
+    if(!q){
+        grid.style.display='';results.style.display='none';
+        if(tabs) tabs.style.display='';return;
+    }
+    grid.style.display='none';if(tabs) tabs.style.display='none';
+    results.style.display='block';
+    const chMatches=CHAPTERS.filter(ch=>ch.title.toLowerCase().includes(q)||ch.focus.toLowerCase().includes(q));
+    const topicMatches=[];
+    CHAPTERS.forEach(ch=>ch.topics.forEach(t=>{if(t.text.toLowerCase().includes(q)) topicMatches.push({ch,t});}));
+    const chapHtml=chMatches.map(ch=>`
+        <a class="search-result-ch" href="#/chapter/${ch.id}" style="--cc:${ch.color}">
+            <span class="search-result-ch-num">Ch.&nbsp;${ch.num}</span>
+            <span class="search-result-ch-title">${hlSearch(ch.title,query)}</span>
+            <span class="search-result-ch-count">${ch.topics.length} topics&nbsp;→</span>
+        </a>`).join('');
+    const topHtml=topicMatches.slice(0,20).map(({ch,t})=>`
+        <a class="search-result-topic" href="#/chapter/${ch.id}" onclick="setTimeout(()=>scrollToQ(${t.q}),400)" style="--cc:${ch.color}">
+            <span class="search-result-qnum" style="color:${ch.color}">Q${t.q}</span>
+            <span class="search-result-topic-text">${hlSearch(t.text,query)}</span>
+            <span class="search-result-ch-tag">${ch.title}</span>
+        </a>`).join('');
+    results.innerHTML=
+        (chMatches.length?`<div class="search-group-label">Chapters (${chMatches.length})</div>${chapHtml}`:'')+
+        (topicMatches.length?`<div class="search-group-label">Topics (${topicMatches.length>20?'20+ shown':topicMatches.length})</div>${topHtml}`:'')+
+        (!chMatches.length&&!topicMatches.length?`<p class="search-empty">No results for "${query}"</p>`:'');
+}
+
 /* -------- Final Question Portal (13-chapter grid) -------- */
 function viewFinalTopics(regionFilter){
     const selRegion = regionFilter || null;
@@ -2405,23 +2534,39 @@ function viewFinalTopics(regionFilter){
             <span class="region-tab-count">${r.chapters.length} ch.</span>
         </a>`).join('');
 
-    const chapterCards = chaptersToShow.map(ch=>`
-        <a class="chapter-card" href="#/chapter/${ch.id}" style="--cc:${ch.color}">
-            <div class="chapter-card-num">Ch. ${ch.num}</div>
-            <div class="chapter-card-body">
-                <h3>${ch.title}</h3>
-                <p class="chapter-card-focus">${ch.focus}</p>
-                <div class="chapter-card-count">${ch.topics.length} questions</div>
+    const chapterCards = chaptersToShow.map(ch=>{
+        const ex=EXHIBIT_DATA[ch.id];
+        const imgStyle=ex&&ex.img?`style="background-image:url('${ex.img}')"`:'' ;
+        return `
+        <a class="ch-vis-card" href="#/chapter/${ch.id}" style="--cc:${ch.color}">
+            ${imgStyle?`<div class="ch-vis-img" ${imgStyle}></div>`:`<div class="ch-vis-no-img"></div>`}
+            <div class="ch-vis-overlay"></div>
+            <div class="ch-vis-tint"></div>
+            <div class="ch-vis-content">
+                <div class="ch-vis-top">
+                    <span class="ch-vis-badge">Ch.&nbsp;${ch.num}</span>
+                    <div class="ch-vis-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                </div>
+                <div class="ch-vis-bottom">
+                    <h3 class="ch-vis-title">${ch.title}</h3>
+                    <p class="ch-vis-focus">${ch.focus}</p>
+                    <span class="ch-vis-count">${ch.topics.length} questions</span>
+                </div>
             </div>
-            <div class="chapter-card-arrow">→</div>
-        </a>`).join('');
+        </a>`;
+    }).join('');
 
     return `
-    <div class="topics-header">
+    <div class="portal-hero">
         <h1>Final Question Portal</h1>
-        <p class="muted">Navigate 13 exam chapters organized by body region. Click a chapter to view all subtopics.</p>
+        <p>Navigate 13 exam chapters. Search by topic name, keyword, or question number.</p>
+        <div class="portal-search-wrap">
+            <svg class="p-srch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="portal-search-input" id="portal-search" type="search" placeholder="Search topics, chapters, Q-numbers…" oninput="searchPortal(this.value)" autocomplete="off" spellcheck="false"/>
+        </div>
+        <div class="portal-search-results" id="portal-search-results"></div>
     </div>
-    <div class="region-tabs">
+    <div id="portal-region-tabs" class="region-tabs">
         <a class="region-tab${!selRegion?' active':''}" href="#/questions" style="--tc:#888">
             <span class="region-tab-icon">🔬</span>
             <span class="region-tab-name">All Chapters</span>
@@ -2429,10 +2574,9 @@ function viewFinalTopics(regionFilter){
         </a>
         ${regionTabs}
     </div>
-    <div class="chapter-grid">
+    <div class="chapter-grid" id="portal-chapter-grid">
         ${chapterCards}
-    </div>
-    `;
+    </div>`;
 }
 
 /* -------- Scroll to a question section within chapter page -------- */
@@ -2610,6 +2754,8 @@ if('serviceWorker' in navigator){
 }
 </script>
 <script src="js/cns-content.js"></script>
+<script src="js/ch1-content.js"></script>
+<script src="js/ch11-content.js"></script>
 
 <!-- Lightbox overlay -->
 <div id="img-lightbox" onclick="closeLightbox()">

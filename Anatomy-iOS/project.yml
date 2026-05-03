@@ -26,7 +26,7 @@ targets:
         createIntermediateGroups: true
       - path: Resources/Assets.xcassets
       - path: WebContent/index.html
-      - path: WebContent/images
+      - path: ../images
         type: folder
       - path: ../js
         type: folder

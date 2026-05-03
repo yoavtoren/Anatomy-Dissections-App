@@ -12,15 +12,15 @@
 		8F3C7CB49E787707C9D13839 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 734445CAE3F3EAAFDDE72F29 /* WebKit.framework */; };
 		9CD584DDAB6DDCBEEF714244 /* js in Resources */ = {isa = PBXBuildFile; fileRef = 947C7EA6E76D0DF621E40CCE /* js */; };
 		A81B5FFFDEF280CEEE72D183 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F19C83169725DCC353715F2 /* AppDelegate.swift */; };
-		BA455E6EEA7784349C1E6C46 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 13F18A68D4BD3CC4F5C0E0BD /* images */; };
 		E16F750D8777591A0BB9EDAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BFFD691D29E09F5691C7DF /* Assets.xcassets */; };
+		EDBFCF549F8091B44511E88C /* images in Resources */ = {isa = PBXBuildFile; fileRef = 1B9BAF8478C4591E7FA651B0 /* images */; };
 		F401058F5DCA61D3D52E989F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 28004E6D549970FA943C906B /* index.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		03BFFD691D29E09F5691C7DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		13F18A68D4BD3CC4F5C0E0BD /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = WebContent/images; sourceTree = SOURCE_ROOT; };
-		1B90CFD3AD1021723EC14042 /* AnatomyAtlasAssistant.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AnatomyAtlasAssistant.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B90CFD3AD1021723EC14042 /* Anatomy Atlas Assistant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Anatomy Atlas Assistant.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B9BAF8478C4591E7FA651B0 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../images; sourceTree = SOURCE_ROOT; };
 		28004E6D549970FA943C906B /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		3BA69368D37986DADFFA2836 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		734445CAE3F3EAAFDDE72F29 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -54,7 +54,6 @@
 		7C6DE1ED6E8C71F42A2235DA /* WebContent */ = {
 			isa = PBXGroup;
 			children = (
-				13F18A68D4BD3CC4F5C0E0BD /* images */,
 				28004E6D549970FA943C906B /* index.html */,
 			);
 			path = WebContent;
@@ -91,6 +90,7 @@
 		C027B2B06757797167D1FFCB /* Interactive Anatomy App */ = {
 			isa = PBXGroup;
 			children = (
+				1B9BAF8478C4591E7FA651B0 /* images */,
 				947C7EA6E76D0DF621E40CCE /* js */,
 			);
 			name = "Interactive Anatomy App";
@@ -100,7 +100,7 @@
 		CE30664EAFE4CB767EC8F41A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1B90CFD3AD1021723EC14042 /* AnatomyAtlasAssistant.app */,
+				1B90CFD3AD1021723EC14042 /* Anatomy Atlas Assistant.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,7 +124,7 @@
 			packageProductDependencies = (
 			);
 			productName = AnatomyAtlasAssistant;
-			productReference = 1B90CFD3AD1021723EC14042 /* AnatomyAtlasAssistant.app */;
+			productReference = 1B90CFD3AD1021723EC14042 /* Anatomy Atlas Assistant.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -137,7 +137,6 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					FDAA811CC5246CA5FE8D6F0F = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -167,7 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E16F750D8777591A0BB9EDAD /* Assets.xcassets in Resources */,
-				BA455E6EEA7784349C1E6C46 /* images in Resources */,
+				EDBFCF549F8091B44511E88C /* images in Resources */,
 				F401058F5DCA61D3D52E989F /* index.html in Resources */,
 				9CD584DDAB6DDCBEEF714244 /* js in Resources */,
 			);
@@ -194,6 +193,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = QNP44Q5Q3X;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -202,6 +202,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACCATALYST_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anatomyatlas.AnatomyAtlas;
 				PRODUCT_NAME = "Anatomy Atlas Assistant";
 				SDKROOT = iphoneos;
@@ -215,6 +216,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = QNP44Q5Q3X;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -223,6 +225,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACCATALYST_DEPLOYMENT_TARGET = 13.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anatomyatlas.AnatomyAtlas;
 				PRODUCT_NAME = "Anatomy Atlas Assistant";
 				SDKROOT = iphoneos;

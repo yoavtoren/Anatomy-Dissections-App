@@ -1452,6 +1452,11 @@ footer{
 .hard-flag-btn:hover{border-color:var(--warn);color:var(--warn);background:rgba(245,158,11,.07)}
 .hard-flag-btn.flagged{border-color:var(--warn);background:rgba(245,158,11,.12);color:var(--warn)}
 .hard-flag-btn.flagged:hover{background:rgba(245,158,11,.2)}
+
+/* ── Page-transition swoosh ── */
+#app.pg-exit{opacity:0;transform:translateY(-7px) scale(.99);transition:opacity .14s ease,transform .14s ease;pointer-events:none}
+@keyframes pgSwoopIn{from{opacity:0;transform:translateY(13px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+#app.pg-in{animation:pgSwoopIn .3s cubic-bezier(.22,1,.36,1) both}
 </style>
 </head>
 <body>
@@ -3623,6 +3628,7 @@ function viewTerminology(){
 /* ====================================================================
    ROUTER
    ==================================================================== */
+let _routeTimer = null;
 function route(){
     const h = location.hash || "#/welcome";
     const app = document.getElementById("app");
@@ -3651,30 +3657,41 @@ function route(){
     const isWelcome = h==="#/welcome"||h==="#/"||h===""||
         (h!="#/terminology"&&h!="#/terms"&&h!="#/topics"&&h!="#/questions"&&h!="#/settings"&&
          !h.startsWith("#/questions/")&&!h.startsWith("#/chapter/"));
-    if(window._homeParticlesCleanup) window._homeParticlesCleanup();
-    document.body.classList.toggle('home-mode', isWelcome);
-    document.body.classList.toggle('atlas-mode', h==="#/topics");
-    app.innerHTML = html;
-    setActiveNav();
-    applyStoredImages();
-    colorizeBlocks();
-    stripH3Emojis();
-    if(h==="#/topics") initLabHotspots();
-    if(isWelcome) setTimeout(initHomeParticles, 0);
-    if(h.startsWith("#/chapter/") && h.includes("/q/")) {
-        const parts=h.replace("#/chapter/","").split("/q/");
-        trackView();
-    }
-    // Update hero question count
-    const qEl = document.getElementById('hero-q-count');
-    if(qEl){ const tot = CHAPTERS.reduce((s,c)=>s+c.topics.length,0); qEl.textContent=tot; }
 
-    if(h==="#/terminology" || h==="#/terms"){
-        afterTermsRoute();
-    }
+    // Cancel any in-flight transition
+    if(_routeTimer) clearTimeout(_routeTimer);
 
-    window.scrollTo({top:0, behavior:"instant"});
-    playSound('swoosh');
+    // Exit swoosh
+    app.classList.remove('pg-in');
+    app.classList.add('pg-exit');
+
+    _routeTimer = setTimeout(()=>{
+        if(window._homeParticlesCleanup) window._homeParticlesCleanup();
+        document.body.classList.toggle('home-mode', isWelcome);
+        document.body.classList.toggle('atlas-mode', h==="#/topics");
+        app.innerHTML = html;
+        app.classList.remove('pg-exit');
+        app.classList.add('pg-in');
+        setActiveNav();
+        applyStoredImages();
+        colorizeBlocks();
+        stripH3Emojis();
+        if(h==="#/topics") initLabHotspots();
+        if(isWelcome) setTimeout(initHomeParticles, 0);
+        if(h.startsWith("#/chapter/") && h.includes("/q/")) {
+            const parts=h.replace("#/chapter/","").split("/q/");
+            trackView();
+        }
+        // Update hero question count
+        const qEl = document.getElementById('hero-q-count');
+        if(qEl){ const tot = CHAPTERS.reduce((s,c)=>s+c.topics.length,0); qEl.textContent=tot; }
+        if(h==="#/terminology" || h==="#/terms"){
+            afterTermsRoute();
+        }
+        window.scrollTo({top:0, behavior:"instant"});
+        playSound('swoosh');
+        _routeTimer = setTimeout(()=>app.classList.remove('pg-in'), 320);
+    }, 150);
 }
 
 window.addEventListener("hashchange", route);

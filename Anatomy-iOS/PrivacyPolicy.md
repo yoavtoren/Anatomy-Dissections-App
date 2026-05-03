@@ -25,4 +25,4 @@ The App does not knowingly collect data from children or any user.
 If this policy changes, the "last updated" date above will be revised. Because no data is collected, changes are unlikely.
 
 ## Contact
-For any questions: [your email or website]
+For any questions: [yoavtoren@gmail.com](mailto:yoavtoren@gmail.com)
